@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "outDir": "./lib",
+    "target": "es5",
+    "moduleResolution": "node",
+    "removeComments": false,
+    "preserveConstEnums": true,
+    "strict": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": false,
+    "experimentalDecorators": true,
+    "baseUrl": "."
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.umd.ts"
+  ]
+}

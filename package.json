@@ -1,0 +1,39 @@
+{
+  "name": "ripplet",
+  "version": "0.0.0",
+  "description": "Most lightweight material design ripple effect generator",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "module": "./es/index.js",
+  "jsnext:main": "./es/index.js",
+  "files": [
+    "dist",
+    "es",
+    "lib",
+    "src"
+  ],
+  "scripts": {
+    "rebuild": "npm run clean && npm run build",
+    "build": "npm run lint && npm run build:dist && npm run build:lib && npm run build:es",
+    "build:dist": "rollup -c && uglifyjs -m -o dist/index.min.js dist/index.js",
+    "build:lib": "tsc -p . -d",
+    "build:es": "tsc -p . -t ES2015 --outDir ./es",
+    "watch": "rollup -c -w",
+    "clean": "rimraf dist lib es",
+    "lint": "tslint -p . --type-check",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["ripplet", "ripple", "material", "material design", "mdc", "mdl"],
+  "author": "",
+  "license": "WTFPL",
+  "repository": "luncheon/ripplet",
+  "devDependencies": {
+    "rimraf": "2.6.2",
+    "rollup": "0.50.0",
+    "tslint": "5.7.0",
+    "typescript": "2.5.3",
+    "uglify-es": "3.1.3",
+    "uglify-js": "3.1.4",
+    "umd": "3.0.1"
+  }
+}
