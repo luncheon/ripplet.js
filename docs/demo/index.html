@@ -9,6 +9,14 @@
       * {
         box-sizing: border-box;
       }
+      body {
+        display: flex;
+        flex-wrap: wrap;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
       .default {
         font-family: Arial, sans-serif;
         font-size: 16px;
@@ -19,8 +27,21 @@
         outline: none;
         border-radius: 4px;
         border: 1px solid rgba(0, 0, 0, .1);
-        padding: 1px 6px;
+        margin: 8px;
+        padding: 8px;
         text-align: center;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .rainbow {
+        background-image: linear-gradient(
+          -45deg,
+          rgba(255,   0,   0, .3),
+          rgba(255, 255,   0, .3),
+          rgba(  0, 255, 255, .2),
+          rgba(  0,   0, 255, .15),
+          rgba(255,   0, 255, .2),
+          rgba(255,   0,   0, .3)
+        );
       }
       .keep {
         transition: background-color .6s ease-in .2s;
@@ -36,6 +57,9 @@
         align-items: center;
         justify-content: center;
       }
+      .forkme:hover {
+        text-decoration: underline;
+      }
       .forkme-ripplet {
         background-image: url(Octocat.png);
         background-repeat: no-repeat;
@@ -48,13 +72,19 @@
     <button class="default" onmousedown="ripplet(event)">Click me!</button>
     <button class="default" onmousedown="ripplet(event)" style="border-radius: 50%; width: 80px;">Circle!</button>
     <button class="default" onmousedown="ripplet(event, { color: 'rgba(255, 0, 0, .3)' })">Red!</button>
+    <button class="default" onmousedown="ripplet(event, { color: null, className: 'rainbow' })">Rainbow!</button>
     <button class="default" onmousedown="ripplet(event, { spreadingDuration: '2s', clearingDelay: '1s', clearingDuration: '2s' })">Slow!</button>
     <button class="default" onmousedown="ripplet(event, { spreadingTimingFunction: 'cubic-bezier(0.5, 1.5, .6, -1)' })">Feint!</button>
     <button class="default" onmouseenter="ripplet(event)">Enter mouse!</button>
     <button class="default" onmouseleave="ripplet(event)">Leave mouse!</button>
     <button class="default keep" onmouseenter="ripplet(event)">Keep mouse!</button>
-    <a class="default forkme" href="https://github.com/luncheon/ripplet" draggable="false" onmousedown="ripplet(event, { className: 'forkme-ripplet', color: undefined, opacity: .5 })">Fork me!</a>
-    <script src="index.min.js"></script>
+    <a
+      class="default forkme"
+      href="https://github.com/luncheon/ripplet"
+      draggable="false"
+      onmousedown="ripplet(event, { className: 'forkme-ripplet', color: null, opacity: .5 })"
+    >Fork me!</a>
+    <script src="https://cdn.jsdelivr.net/npm/ripplet"></script>
     <script src="../../dist/index.js"></script>
   </body>
 </html>

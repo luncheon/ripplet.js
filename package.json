@@ -1,8 +1,8 @@
 {
   "name": "ripplet",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Most lightweight material design ripple effect generator",
-  "main": "./lib/index.js",
+  "main": "./dist/index.min.js",
   "types": "./lib/index.d.ts",
   "module": "./es/index.js",
   "jsnext:main": "./es/index.js",
@@ -23,7 +23,15 @@
     "lint": "tslint -p . --type-check",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["ripplet", "ripple", "material", "material design", "mdc", "mdl"],
+  "keywords": [
+    "ripplet",
+    "ripple",
+    "ripplify",
+    "material",
+    "material design",
+    "mdc",
+    "mdl"
+  ],
   "author": "",
   "license": "WTFPL",
   "repository": "luncheon/ripplet",
