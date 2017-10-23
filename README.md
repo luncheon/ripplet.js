@@ -88,3 +88,8 @@ That purely creates two elements generating ripplet and removes them when the an
 
 You can read, copy, and edit it.  
 This is a very important feature.
+
+
+## License
+
+WTFPL
