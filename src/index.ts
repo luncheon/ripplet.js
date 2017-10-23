@@ -24,11 +24,11 @@ export const defaultOptions: RippletOptions = {
   clearingTimingFunction:   'ease-in-out',
 }
 
-export default function ripplet(targetSuchAsMouseEvent: { currentTarget: HTMLElement, clientX: number, clientY: number }, options?: Readonly<Partial<RippletOptions>>) {
-  return generateRipplet(targetSuchAsMouseEvent, options ? { ...defaultOptions, ...options } : defaultOptions)
+export default function ripplet(targetSuchAsMouseEvent: { currentTarget: Element | EventTarget, clientX: number, clientY: number }, options?: Readonly<Partial<RippletOptions>>): HTMLElement {
+  return generateRipplet(targetSuchAsMouseEvent as any, options ? { ...defaultOptions, ...options } : defaultOptions)
 }
 
-function generateRipplet({ currentTarget: target, clientX, clientY }: { currentTarget: HTMLElement, clientX: number, clientY: number }, options: Readonly<RippletOptions>) {
+function generateRipplet({ currentTarget: target, clientX, clientY }: { currentTarget: Element, clientX: number, clientY: number }, options: Readonly<RippletOptions>) {
   const doc = document
   const targetRect = target.getBoundingClientRect()
   const containerElement = doc.body.appendChild(doc.createElement('div'))
