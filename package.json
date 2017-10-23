@@ -1,5 +1,5 @@
 {
-  "name": "ripplet",
+  "name": "ripplet.js",
   "version": "0.0.1",
   "description": "Most lightweight material design ripple effect generator",
   "main": "./dist/index.min.js",
@@ -25,23 +25,25 @@
   },
   "keywords": [
     "ripplet",
+    "ripplet.js",
     "ripple",
+    "ripple.js",
     "ripplify",
+    "waves",
     "material",
     "material design",
-    "mdc",
-    "mdl"
+    "material component"
   ],
   "author": "",
   "license": "WTFPL",
-  "repository": "luncheon/ripplet",
+  "repository": "luncheon/ripplet.js",
   "devDependencies": {
     "rimraf": "2.6.2",
     "rollup": "0.50.0",
-    "tslint": "5.7.0",
+    "tslint": "5.8.0",
     "typescript": "2.5.3",
-    "uglify-es": "3.1.3",
-    "uglify-js": "3.1.4",
+    "uglify-es": "3.1.5",
+    "uglify-js": "3.1.5",
     "umd": "3.0.1"
   }
 }

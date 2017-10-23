@@ -15,7 +15,7 @@ export interface RippletOptions {
 export const defaultOptions: RippletOptions = {
   className:                'ripplet',
   color:                    'rgba(0, 0, 0, .1)',
-  opacity:                  '1',
+  opacity:                  null,
   spreadingDuration:        '.4s',
   spreadingDelay:           '0s',
   spreadingTimingFunction:  'ease-out',
@@ -25,20 +25,21 @@ export const defaultOptions: RippletOptions = {
 }
 
 export default function ripplet(targetSuchAsMouseEvent: { currentTarget: HTMLElement, clientX: number, clientY: number }, options?: Readonly<Partial<RippletOptions>>) {
-  return generateRipplet(targetSuchAsMouseEvent, options ? { ...defaultOptions, ...options, color: options.hasOwnProperty('color') ? options.color! : defaultOptions.color } : defaultOptions)
+  return generateRipplet(targetSuchAsMouseEvent, options ? { ...defaultOptions, ...options } : defaultOptions)
 }
 
 function generateRipplet({ currentTarget: target, clientX, clientY }: { currentTarget: HTMLElement, clientX: number, clientY: number }, options: Readonly<RippletOptions>) {
+  const doc = document
   const targetRect = target.getBoundingClientRect()
-  const containerElement = document.body.appendChild(document.createElement('div'))
+  const containerElement = doc.body.appendChild(doc.createElement('div'))
   {
     const targetStyle             = window.getComputedStyle(target)
     const containerStyle          = containerElement.style
     containerStyle.position       = 'absolute'
     containerStyle.overflow       = 'hidden'
     containerStyle.pointerEvents  = 'none'
-    containerStyle.left           = `${targetRect.left + document.documentElement.scrollLeft + document.body.scrollLeft}px`
-    containerStyle.top            = `${targetRect.top  + document.documentElement.scrollTop  + document.body.scrollTop}px`
+    containerStyle.left           = `${targetRect.left + doc.documentElement.scrollLeft + doc.body.scrollLeft}px`
+    containerStyle.top            = `${targetRect.top  + doc.documentElement.scrollTop  + doc.body.scrollTop}px`
     containerStyle.width          = `${targetRect.width}px`
     containerStyle.height         = `${targetRect.height}px`
     containerStyle.zIndex         = `${(targetStyle.zIndex && parseInt(targetStyle.zIndex, 10) || 0) + 1}`
@@ -54,12 +55,12 @@ function generateRipplet({ currentTarget: target, clientX, clientY }: { currentT
     setTimeout(() => containerStyle.opacity = '0')
   }
 
-  const rippletElement = containerElement.appendChild(document.createElement('div'))
+  const rippletElement = containerElement.appendChild(doc.createElement('div'))
   rippletElement.className = options.className || ''
   {
     const distanceX = Math.max(clientX - targetRect.left, targetRect.right - clientX)
     const distanceY = Math.max(clientY - targetRect.top, targetRect.bottom - clientY)
-    const radius    = Math.sqrt(distanceX ** 2 + distanceY ** 2)
+    const radius    = Math.sqrt(distanceX * distanceX + distanceY * distanceY)
     const rippletStyle = rippletElement.style
     rippletStyle.backgroundColor            = options.color
     rippletStyle.opacity                    = options.opacity
@@ -77,9 +78,7 @@ function generateRipplet({ currentTarget: target, clientX, clientY }: { currentT
   }
 
   containerElement.addEventListener('transitionend', function (this: typeof containerElement, event: TransitionEvent) {
-    if (event.propertyName === 'opacity') {
-      this.parentNode!.removeChild(this)
-    }
+    event.propertyName === 'opacity' && this.parentNode!.removeChild(this)
   })
 
   return containerElement
