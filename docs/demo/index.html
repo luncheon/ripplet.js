@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>ripplet.js demo</title>
+    <link rel="prefetch" href="Octocat.png">
     <style>
       * {
         box-sizing: border-box;
@@ -69,6 +70,8 @@
     </style>
   </head>
   <body>
+    <script src="https://cdn.jsdelivr.net/npm/ripplet.js"></script>
+    <script src="../../dist/index.js"></script>
     <button class="default" onmousedown="ripplet(event)">Click me!</button>
     <button class="default" onmousedown="ripplet(event)" style="border-radius: 50%; width: 80px;">Circle!</button>
     <button class="default" onmousedown="ripplet(event, { color: 'rgba(255, 0, 0, .3)' })">Red!</button>
@@ -82,9 +85,19 @@
       class="default forkme"
       href="https://github.com/luncheon/ripplet.js"
       draggable="false"
+      ondragstart="return false"
       onmousedown="ripplet(event, { className: 'forkme-ripplet', color: null, opacity: .5 })"
     >Fork me!</a>
-    <script src="https://cdn.jsdelivr.net/npm/ripplet.js"></script>
-    <script src="../../dist/index.js"></script>
+    <script>
+      // window.event polyfill for Gecko
+      if (!Object.prototype.hasOwnProperty.call(window, 'event')) {
+        function holdEvent(event) {
+          window.event = event;
+        }
+        ['mousedown', 'mouseenter', 'onmouseleave'].forEach(function (eventType) {
+          window.addEventListener(eventType, holdEvent, true);
+        });
+      }
+    </script>
   </body>
 </html>
