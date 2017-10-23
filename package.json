@@ -1,6 +1,6 @@
 {
   "name": "ripplet.js",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Most lightweight material design ripple effect generator",
   "main": "./dist/index.min.js",
   "types": "./lib/index.d.ts",
