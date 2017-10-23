@@ -1,7 +1,7 @@
 export type TimingFunction = 'ease' | 'ease-in' | 'ease-out' | 'ease-in-out' | 'linear' | 'step-start' | 'step-end' | string | null
 
 export interface RippletOptions {
-  className:                string | null
+  className:                string
   color:                    string | null
   opacity:                  string | null
   spreadingDuration:        string | null
@@ -13,7 +13,7 @@ export interface RippletOptions {
 }
 
 export const defaultOptions: RippletOptions = {
-  className:                'ripplet',
+  className:                '',
   color:                    'rgba(0, 0, 0, .1)',
   opacity:                  null,
   spreadingDuration:        '.4s',
@@ -56,7 +56,7 @@ function generateRipplet({ currentTarget: target, clientX, clientY }: { currentT
   }
 
   const rippletElement = containerElement.appendChild(doc.createElement('div'))
-  rippletElement.className = options.className || ''
+  rippletElement.className = options.className
   {
     const distanceX = Math.max(clientX - targetRect.left, targetRect.right - clientX)
     const distanceY = Math.max(clientY - targetRect.top, targetRect.bottom - clientY)
