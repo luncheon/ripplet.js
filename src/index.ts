@@ -18,7 +18,7 @@ export const defaultOptions: RippletOptions = {
   opacity:                  null,
   spreadingDuration:        '.4s',
   spreadingDelay:           '0s',
-  spreadingTimingFunction:  'ease-out',
+  spreadingTimingFunction:  'linear',
   clearingDuration:         '1s',
   clearingDelay:            '0s',
   clearingTimingFunction:   'ease-in-out',

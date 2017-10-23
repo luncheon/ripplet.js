@@ -49,15 +49,15 @@ Generate a ripplet immediately.
 
 | Property name           | Default             | Description           |
 | ----------------------- | ------------------- | --------------------- |
-| className               | ''                  | Class name to be for the ripplet element (not for this library to use, but for user to style that element) |
-| color                   | 'rgba(0, 0, 0, .1)' | Ripplet color         |
+| className               | ""                  | Class name to be for the ripplet element (not for this library to use, but for user to style that element) |
+| color                   | "rgba(0, 0, 0, .1)" | Ripplet color         |
 | opacity                 | null                | Ripplet opacity (used when alpha channel of color property above is shared and difficult to change) |
-| spreadingDuration       | '.4s'               | As its name suggests  |
-| spreadingDelay          | '0s'                | As its name suggests  |
-| spreadingTimingFunction | 'ease-out'          | As its name suggests  |
-| clearingDuration        | '1s'                | As its name suggests  |
-| clearingDelay           | '0s'                | As its name suggests  |
-| clearingTimingFunction  | 'ease-in-out'       | As its name suggests  |
+| spreadingDuration       | ".4s"               | As its name suggests  |
+| spreadingDelay          | "0s"                | As its name suggests  |
+| spreadingTimingFunction | "linear"            | As its name suggests  |
+| clearingDuration        | "1s"                | As its name suggests  |
+| clearingDelay           | "0s"                | As its name suggests  |
+| clearingTimingFunction  | "ease-in-out"       | As its name suggests  |
 
 ### defaultOptions
 

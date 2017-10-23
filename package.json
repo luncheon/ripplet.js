@@ -1,6 +1,6 @@
 {
   "name": "ripplet.js",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Most lightweight material design ripple effect generator with no dependencies",
   "main": "./dist/index.min.js",
   "types": "./lib/index.d.ts",
@@ -24,15 +24,16 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "ripplet",
-    "ripplet.js",
     "ripple",
+    "ripple-effect",
     "ripple.js",
     "ripplify",
     "waves",
     "material",
-    "material design",
-    "material component"
+    "material-design",
+    "material-component",
+    "vanilla-javascript",
+    "typescript"
   ],
   "author": "",
   "license": "WTFPL",
