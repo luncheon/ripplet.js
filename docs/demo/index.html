@@ -6,11 +6,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>ripplet.js demo</title>
     <link rel="prefetch" href="Octocat.png">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
     <style>
       * {
         box-sizing: border-box;
       }
       body {
+        margin: 8px 24px;
+      }
+      .category {
+        margin: 16px;
+      }
+      .buttons {
         display: flex;
         flex-wrap: wrap;
         -webkit-user-select: none;
@@ -18,7 +25,7 @@
         -ms-user-select: none;
         user-select: none;
       }
-      .default {
+      .buttons > .default {
         font-family: Arial, sans-serif;
         font-size: 16px;
         width: 100px;
@@ -28,10 +35,15 @@
         outline: none;
         border-radius: 4px;
         border: 1px solid rgba(0, 0, 0, .1);
-        margin: 8px;
         padding: 8px;
+        margin-right: 8px;
         text-align: center;
         -webkit-tap-highlight-color: transparent;
+      }
+      .circle {
+        border-radius: 50%;
+        width: 80px;
+        height: 80px;
       }
       .rainbow {
         background-image: linear-gradient(
@@ -45,9 +57,10 @@
         );
       }
       .keep {
-        transition: background-color .6s ease-in .2s;
+        transition: background-color .4s ease-out;
       }
       .keep:hover {
+        transition: background-color .6s ease-in .2s;
         background-color: rgba(0, 0, 0, .1);
       }
       .forkme {
@@ -71,23 +84,52 @@
   </head>
   <body>
     <script src="https://cdn.jsdelivr.net/npm/ripplet.js"></script>
-    <script src="../../dist/index.js"></script>
-    <button class="default" onmousedown="ripplet(event)">Click me!</button>
-    <button class="default" onmousedown="ripplet(event)" style="border-radius: 50%; width: 80px;">Circle!</button>
-    <button class="default" onmousedown="ripplet(event, { color: 'rgba(255, 0, 0, .3)' })">Red!</button>
-    <button class="default" onmousedown="ripplet(event, { color: null, className: 'rainbow' })">Rainbow!</button>
-    <button class="default" onmousedown="ripplet(event, { spreadingDuration: '2s', clearingDelay: '1s', clearingDuration: '2s' })">Slow!</button>
-    <button class="default" onmousedown="ripplet(event, { spreadingTimingFunction: 'cubic-bezier(0.5, 1.5, .6, -1)' })">Feint!</button>
-    <button class="default" onmouseenter="ripplet(event)">Enter mouse!</button>
-    <button class="default" onmouseleave="ripplet(event)">Leave mouse!</button>
-    <button class="default keep" onmouseenter="ripplet(event)">Keep mouse!</button>
-    <a
-      class="default forkme"
-      href="https://github.com/luncheon/ripplet.js"
-      draggable="false"
-      ondragstart="return false"
-      onmousedown="ripplet(event, { className: 'forkme-ripplet', color: null, opacity: .5 })"
-    >Fork me!</a>
+    <!-- <script src="../../dist/index.js"></script> -->
+    <h1>ripplet.js demo</h1>
+    <div style="display: flex; flex-wrap: wrap;">
+      <div class="category">
+        <h3>Basic</h3>
+        <div class="buttons">
+          <button type="button" class="default" onmousedown="ripplet(event)">Click me!</button>
+          <button type="button" class="default circle" onmousedown="ripplet(event)">Circle!</button>
+        </div>
+      </div>
+      <div class="category">
+        <h3>Colors</h3>
+        <div class="buttons">
+          <button type="button" class="default" onmousedown="ripplet(event, { color: 'rgba(255, 0, 0, .3)' })">Red!</button>
+          <button type="button" class="default" onmousedown="ripplet(event, { color: null, className: 'rainbow' })">Rainbow!</button>
+          <button type="button" class="btn btn-primary" onmousedown="ripplet(event, { className: 'bg-primary', opacity: '.5' })">External CSS theme<br>(Bootstrap primary)</button>
+        </div>
+      </div>
+      <div class="category">
+        <h3>Timings</h3>
+        <div class="buttons">
+          <button type="button" class="default" onmousedown="ripplet(event, { spreadingDuration: '2s', clearingDelay: '1s', clearingDuration: '2s' })">Slow!</button>
+          <button type="button" class="default" onmousedown="ripplet(event, { spreadingTimingFunction: 'cubic-bezier(0.5, 1.5, .6, -1)' })">Feint!</button>
+        </div>
+      </div>
+      <div class="category">
+        <h3>Events</h3>
+        <div class="buttons">
+          <button type="button" class="default" onmouseenter="ripplet(event)">Enter mouse!</button>
+          <button type="button" class="default" onmouseleave="ripplet(event)">Leave mouse!</button>
+          <button type="button" class="default keep" onmouseenter="ripplet(event)">Hover mouse!</button>
+        </div>
+      </div>
+      <div class="category">
+        <h3>GitHub</h3>
+        <div class="buttons">
+          <a
+            class="default forkme"
+            href="https://github.com/luncheon/ripplet.js"
+            draggable="false"
+            ondragstart="return false"
+            onmousedown="ripplet(event, { className: 'forkme-ripplet', color: null, opacity: .5 })"
+          >Fork me!</a>
+        </div>
+      </div>
+    </div>
     <script>
       // window.event polyfill for Gecko
       if (!Object.prototype.hasOwnProperty.call(window, 'event')) {
