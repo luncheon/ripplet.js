@@ -115,7 +115,7 @@ window.addEventListener('mousedown', function (event) {
 ## Differentiation
 
 The most valuable feature of ripplet.js is **source code readability**.  
-[There are only 90 lines of source code.](https://github.com/luncheon/ripplet.js/blob/master/src/index.ts)  
+[There are only 100 lines of source code.](https://github.com/luncheon/ripplet.js/blob/master/src/index.ts)  
 That purely creates two elements generating ripplet and removes them when the animation ends.
 
 You can read, copy, and edit it.  

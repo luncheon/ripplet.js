@@ -1,40 +1,55 @@
-export type TimingFunction = 'ease' | 'ease-in' | 'ease-out' | 'ease-in-out' | 'linear' | 'step-start' | 'step-end' | string | null
+export type RippletOptions = Readonly<typeof defaultOptions>
 
-export interface RippletOptions {
-  className:                string
-  color:                    string | null
-  opacity:                  string | null
-  spreadingDuration:        string | null
-  spreadingDelay:           string | null
-  spreadingTimingFunction:  TimingFunction
-  clearingDuration:         string | null
-  clearingDelay:            string | null
-  clearingTimingFunction:   TimingFunction
-}
-
-export const defaultOptions: RippletOptions = {
+export const defaultOptions = {
   className:                '',
-  color:                    'rgba(0, 0, 0, .1)',
-  opacity:                  null,
-  spreadingDuration:        '.4s',
-  spreadingDelay:           '0s',
-  spreadingTimingFunction:  'linear',
-  clearingDuration:         '1s',
-  clearingDelay:            '0s',
-  clearingTimingFunction:   'ease-in-out',
+  color:                    'rgba(0, 0, 0, .1)' as string | null,
+  opacity:                  null                as string | null,
+  spreadingDuration:        '.4s'               as string | null,
+  spreadingDelay:           '0s'                as string | null,
+  spreadingTimingFunction:  'linear'            as string | null,
+  clearingDuration:         '1s'                as string | null,
+  clearingDelay:            '0s'                as string | null,
+  clearingTimingFunction:   'ease-in-out'       as string | null,
 }
 
-export default function ripplet(targetSuchAsMouseEvent: MouseEvent | Readonly<{ currentTarget: Element, clientX: number, clientY: number }>,                 options?: Readonly<Partial<RippletOptions>>): HTMLElement
-export default function ripplet(targetSuchAsMouseEvent: Event,                                                                                               options?: Readonly<Partial<RippletOptions>>): HTMLElement | undefined
-export default function ripplet({ currentTarget, clientX, clientY }: Readonly<{ currentTarget: Element | EventTarget, clientX?: number, clientY?: number }>, options?: Readonly<Partial<RippletOptions>>): HTMLElement | undefined {
+export default function ripplet(
+  targetSuchAsMouseEvent: MouseEvent | Readonly<{ currentTarget: Element, clientX: number, clientY: number }>,
+  options?:               Partial<RippletOptions>,
+): HTMLElement
+
+export default function ripplet(
+  targetSuchAsMouseEvent: Event,
+  options?:               Partial<RippletOptions>,
+): HTMLElement | undefined
+
+export default function ripplet(
+  { currentTarget, clientX, clientY }:  Readonly<{ currentTarget: Element | EventTarget, clientX?: number, clientY?: number }>,
+  options?:                             Partial<RippletOptions>,
+): HTMLElement | undefined {
   if (currentTarget instanceof Element && typeof clientX === 'number' && typeof clientY === 'number') {
-    return generateRipplet({ clientX, clientY }, currentTarget.getBoundingClientRect(), window.getComputedStyle(currentTarget), options ? { ...defaultOptions, ...options } : defaultOptions)
+    return generateRipplet(
+      { clientX, clientY },
+      currentTarget.getBoundingClientRect(),
+      window.getComputedStyle(currentTarget),
+      options ? { ...defaultOptions, ...options } : defaultOptions
+    )
   } else {
     return
   }
 }
 
-function generateRipplet(origin: { clientX: number, clientY: number }, targetRect: ClientRect, targetStyle: Readonly<CSSStyleDeclaration>, options: Readonly<RippletOptions>) {
+function generateRipplet(
+  origin:       Readonly<{ clientX: number, clientY: number }>,
+  targetRect:   Readonly<ClientRect>,
+  targetStyle:  Readonly<{
+    zIndex:                   string | null
+    borderTopLeftRadius:      string | null
+    borderTopRightRadius:     string | null
+    borderBottomLeftRadius:   string | null
+    borderBottomRightRadius:  string | null
+  }>,
+  options:      RippletOptions,
+) {
   const doc = document
   const containerElement = doc.body.appendChild(doc.createElement('div'))
   {

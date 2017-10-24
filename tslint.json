@@ -7,7 +7,7 @@
     "no-string-throw": false,
     "no-empty": ["error", {"allowEmptyCatch": true}],
     "interface-name": [false],
-    "max-line-length": [false],
+    "max-line-length": [true, 140],
     "max-classes-per-file": [false],
     "quotemark": [true, "single"],
     "semicolon": [true, "never"],
