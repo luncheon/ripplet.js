@@ -7,7 +7,7 @@ Most lightweight material design ripple effect generator with no dependencies.
 
 ## Installation
 
-### npm
+### via npm
 
 ```bash
 $ npm install ripplet.js
@@ -19,7 +19,7 @@ import ripplet from 'ripplet.js';
 element.addEventListener('mousedown', ripplet);
 ```
 
-### cdn
+### via CDN
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/ripplet.js"></script>
@@ -82,6 +82,33 @@ or
 <script>
   ripplet.defaultOptions.color = 'rgba(64, 128, 255, .2)';
 </script>
+```
+
+
+## Declarative HTML example with vanilla-js (dynamically appended elements ready!)
+
+```html
+<div data-ripplet-color="rgba(255, 64, 192, .2)">Click me!</div>
+<div data-ripplet-color="rgba(64, 255, 192, .2)">Click me!</div>
+<div data-ripplet-color="rgba(64, 192, 255, .2)">Click me!</div>
+```
+
+```javascript
+window.addEventListener('mousedown', function (event) {
+  var currentTarget = event.target.closest('[data-ripplet-color]');
+  if (currentTarget) {
+    ripplet(
+      {
+        currentTarget: currentTarget,
+        clientX: event.clientX,
+        clientY: event.clientY,
+      },
+      {
+        color: currentTarget.getAttribute('data-ripplet-color'),
+      }
+    );
+  }
+}, true);
 ```
 
 
