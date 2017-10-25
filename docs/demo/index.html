@@ -85,7 +85,7 @@
   <body>
     <script src="https://cdn.jsdelivr.net/npm/ripplet.js"></script>
     <!-- <script src="../../dist/index.js"></script> -->
-    <h1>ripplet.js</h1>
+    <h1 style="display: inline-block; padding: 8px 16px; margin: 0; border-radius: 4px;">ripplet.js</h1>
     <div style="display: flex; flex-wrap: wrap;">
       <div class="category">
         <h3>Basic</h3>
@@ -131,15 +131,45 @@
       </div>
     </div>
     <script>
-      // window.event polyfill for Gecko
-      if (!Object.prototype.hasOwnProperty.call(window, 'event')) {
-        function holdEvent(event) {
-          window.event = event;
+      (function () {
+        // window.event polyfill for Gecko
+        if (!Object.prototype.hasOwnProperty.call(window, 'event')) {
+          function holdEvent(event) {
+            window.event = event;
+          }
+          ['mousedown', 'mouseenter', 'onmouseleave'].forEach(function (eventType) {
+            window.addEventListener(eventType, holdEvent, true);
+          });
         }
-        ['mousedown', 'mouseenter', 'onmouseleave'].forEach(function (eventType) {
-          window.addEventListener(eventType, holdEvent, true);
-        });
-      }
+
+        // heading ripplet
+        var heading = document.querySelector('h1');
+        var headingRect = heading.getBoundingClientRect();
+        headingRipplet();
+        function headingRipplet() {
+          var spreadingDuration = Math.floor(4000 * Math.random() + 200);
+          console.log(spreadingDuration);
+          ripplet(
+            {
+              currentTarget: heading,
+              clientX: headingRect.left + Math.random() * headingRect.width,
+              clientY: headingRect.top + Math.random() * headingRect.height,
+            },
+            {
+              color: 'rgba('
+                + Math.floor(Math.random() * 256) + ','
+                + Math.floor(Math.random() * 256) + ','
+                + Math.floor(Math.random() * 256) + ','
+                + (Math.random() * .3 + .1)
+                + ')',
+              spreadingDuration: spreadingDuration + 'ms',
+              clearingDelay:     Math.floor(spreadingDuration * .8) + 'ms',
+              clearingDuration:  Math.floor(spreadingDuration * .6) + 'ms',
+            }
+          );
+          setTimeout(headingRipplet, Math.floor(4000 * Math.random() * Math.random()));
+        }
+      })();
     </script>
   </body>
 </html>
