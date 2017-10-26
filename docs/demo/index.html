@@ -5,16 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>ripplet.js - material design ripple effect generator</title>
-    <link rel="prefetch" href="Octocat.png">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0-beta.2/dist/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:700,800" rel="stylesheet">
+    <link rel="prefetch" href="fireworks.png">
     <style>
       * {
         box-sizing: border-box;
       }
       body {
-        margin: 8px 24px;
+        margin: 8px 16px;
+      }
+      h1 {
+        font-family: Nunito, sans-serif;
+        font-weight: 800;
+        padding: 8px 12px;
+        margin: 0;
+        border-radius: 4px;
+      }
+      .github-link {
+        padding: 8px;
+        border-radius: 50%;
+        transition: background-color .6s ease-in .2s;
+        margin-left: 8px;
+      }
+      .github-link:hover {
+        background-color: rgba(0, 224, 255, .2);
+      }
+      .github-link > img {
+        width: 40px;
+        height: 40px;
+      }
+      .description {
+        margin-left: 12px;
       }
       .category {
+        font-family: Nunito, sans-serif;
+        font-weight: 700;
         margin: 12px;
       }
       .buttons {
@@ -63,21 +89,18 @@
         transition: background-color .6s ease-in .2s;
         background-color: rgba(0, 0, 0, .1);
       }
-      .forkme {
-        color: inherit;
-        text-decoration: none;
-        display: inline-flex;
-        vertical-align: bottom;
-        align-items: center;
-        justify-content: center;
+      .ripplet-image {
+        transition: background-color .4s ease-out, color .4s ease-out;
       }
-      .forkme:hover {
-        text-decoration: underline;
+      .ripplet-image:hover {
+        background-color: rgb(32, 32, 32);
+        color: transparent;
       }
-      .forkme-ripplet {
-        background-image: url(Octocat.png);
+      .ripplet-image--ripplet {
+        /* http://www.emstudio.jp/free/data1042/ */
+        background-image: url(fireworks.png);
         background-repeat: no-repeat;
-        background-size: 80px;
+        background-size: 64px;
         background-position: center;
       }
     </style>
@@ -85,7 +108,13 @@
   <body>
     <script src="https://cdn.jsdelivr.net/npm/ripplet.js"></script>
     <!-- <script src="../../dist/index.js"></script> -->
-    <h1 style="display: inline-block; padding: 8px 16px; margin: 0; border-radius: 4px;">ripplet.js</h1>
+    <div style="display: flex; align-items: center;">
+      <h1>ripplet.js</h1>
+      <a class="github-link" href="https://github.com/luncheon/ripplet.js" onmouseenter="ripplet(event, { color: 'rgba(0, 224, 255, .2)' })" onmousedown="ripplet(event, { color: 'rgb(255, 255, 255)' })">
+        <img src="https://cdn.jsdelivr.net/npm/octicons@7.0.1/build/svg/mark-github.svg" alt="GitHub">
+      </a>
+    </div>
+    <p class="description">Most lightweight material design ripple effect generator with no dependencies.</p>
     <div style="display: flex; flex-wrap: wrap;">
       <div class="category">
         <h3>Basic</h3>
@@ -99,6 +128,7 @@
         <div class="buttons">
           <button type="button" class="default" onmousedown="ripplet(event, { color: 'rgba(255, 0, 0, .3)' })">Red!</button>
           <button type="button" class="default" onmousedown="ripplet(event, { color: null, className: 'rainbow' })">Rainbow!</button>
+          <button type="button" class="default ripplet-image" onmousedown="ripplet(event, { color: null, className: 'ripplet-image--ripplet', spreadingTimingFunction: 'ease-out', clearingDuration: '.5s', clearingDelay: '.1s' })">Image!</button>
           <button type="button" class="btn btn-primary" onmousedown="ripplet(event, { className: 'bg-primary', opacity: '.5' })">External CSS theme<br>(Bootstrap primary)</button>
         </div>
       </div>
@@ -117,38 +147,22 @@
           <button type="button" class="default keep" onmouseenter="ripplet(event)">Hover mouse!</button>
         </div>
       </div>
-      <div class="category">
-        <h3>GitHub</h3>
-        <div class="buttons">
-          <a
-            class="default forkme"
-            href="https://github.com/luncheon/ripplet.js"
-            draggable="false"
-            ondragstart="return false"
-            onmousedown="ripplet(event, { className: 'forkme-ripplet', color: null, opacity: .5 })"
-          >Fork me!</a>
-        </div>
-      </div>
     </div>
     <script>
-      (function () {
-        // window.event polyfill for Gecko
-        if (!Object.prototype.hasOwnProperty.call(window, 'event')) {
-          function holdEvent(event) {
-            window.event = event;
-          }
-          ['mousedown', 'mouseenter', 'onmouseleave'].forEach(function (eventType) {
-            window.addEventListener(eventType, holdEvent, true);
-          });
-        }
+      // window.event polyfill for Gecko
+      if (!Object.prototype.hasOwnProperty.call(window, 'event')) {
+        ['mousedown', 'mouseenter', 'onmouseleave'].forEach(function (eventType) {
+          window.addEventListener(eventType, function (event) { window.event = event }, true);
+        });
+      }
 
-        // heading ripplet
+      // heading ripplet
+      window.addEventListener('load', function () {
         var heading = document.querySelector('h1');
         var headingRect = heading.getBoundingClientRect();
         headingRipplet();
         function headingRipplet() {
           var spreadingDuration = Math.floor(4000 * Math.random() + 200);
-          console.log(spreadingDuration);
           ripplet(
             {
               currentTarget: heading,
@@ -169,7 +183,7 @@
           );
           setTimeout(headingRipplet, Math.floor(4000 * Math.random() * Math.random()));
         }
-      })();
+      });
     </script>
   </body>
 </html>
