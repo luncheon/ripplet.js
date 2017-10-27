@@ -1,6 +1,6 @@
-# ripplet.js
+# ![ripplet.js](https://luncheon.github.io/ripplet.js/logo.gif)
 
-Most lightweight material design ripple effect generator with no dependencies.
+Fully controllable vanilla-js material design ripple effect generator.
 
 [Demo](https://luncheon.github.io/ripplet.js/demo/)  
 
@@ -34,6 +34,7 @@ element.addEventListener('mousedown', ripplet);
 ### ripplet(targetSuchAsMouseEvent[, options]) => HTMLElement
 
 Generate a ripplet immediately.  
+In particular, create two elements (one is a circular enlarging element representing ripplet, and the other is a container element to restrict visible area) and remove them when the animation ends. Do nothing else.
 
 #### Parameters
 
@@ -61,7 +62,7 @@ Generate a ripplet immediately.
 
 #### Return value
 
-Generated ripplet container element (having 1 child element that ripples)
+Generated container element (having one child element representing ripplet)
 
 
 ### defaultOptions
@@ -110,16 +111,6 @@ window.addEventListener('mousedown', function (event) {
   }
 }, true);
 ```
-
-
-## Differentiation
-
-The most valuable feature of ripplet.js is **source code readability**.  
-[There are only 100 lines of source code.](https://github.com/luncheon/ripplet.js/blob/master/src/index.ts)  
-That purely creates two elements generating ripplet and removes them when the animation ends.
-
-You can read, copy, and edit it.  
-This is a very important feature.
 
 
 ## License
