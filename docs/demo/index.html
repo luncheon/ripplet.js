@@ -14,6 +14,7 @@
       }
       body {
         margin: 8px 16px;
+        font-size: 14px;
       }
       h1 {
         font-family: Nunito, sans-serif;
@@ -21,6 +22,36 @@
         padding: 8px 12px;
         margin: 0;
         border-radius: 4px;
+      }
+      h3 {
+        font-family: Nunito, sans-serif;
+        font-weight: 700;
+        margin: 12px;
+      }
+      input {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 13px;
+        border: none;
+        outline: none;
+        width: 144px;
+      }
+      input + .text-field-underline {
+        position: relative;
+        border-top: 1px solid #ccc;
+      }
+      input + .text-field-underline::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 2px;
+        transition: transform .3s ease-out;
+        transform: scale(0);
+        background-color: #666;
+      }
+      input:focus + .text-field-underline::before {
+        transform: scale(1);
       }
       .github-link {
         padding: 8px;
@@ -38,20 +69,15 @@
       .description {
         margin-left: 12px;
       }
-      .category {
-        font-family: Nunito, sans-serif;
-        font-weight: 700;
-        margin: 12px;
-      }
       .buttons {
         display: flex;
         flex-wrap: wrap;
+      }
+      .buttons .default {
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
-      }
-      .buttons > .default {
         font-family: Arial, sans-serif;
         font-size: 16px;
         width: 100px;
@@ -66,7 +92,7 @@
         text-align: center;
         -webkit-tap-highlight-color: transparent;
       }
-      .buttons > .circle {
+      .buttons .circle {
         border-radius: 50%;
         width: 80px;
         height: 80px;
@@ -147,7 +173,23 @@
           <button type="button" class="default keep" onmouseenter="ripplet(event)">Hover mouse!</button>
         </div>
       </div>
-    </div>
+      <div class="category">
+          <h3>Parameters</h3>
+          <form onsubmit="return false" class="buttons" style="align-items: center;">
+            <table>
+              <tr><td style="text-align: right; padding-right: 12px;">color :                   </td><td><input name="color"                   value="rgba(0, 0, 0, .1)"><div class="text-field-underline"></div></td></tr>
+              <tr><td style="text-align: right; padding-right: 12px;">opacity :                 </td><td><input name="opacity"                 value="1"                ><div class="text-field-underline"></div></td></tr>
+              <tr><td style="text-align: right; padding-right: 12px;">spreadingDuration :       </td><td><input name="spreadingDuration"       value=".4s"              ><div class="text-field-underline"></div></td></tr>
+              <tr><td style="text-align: right; padding-right: 12px;">spreadingDelay :          </td><td><input name="spreadingDelay"          value="0s"               ><div class="text-field-underline"></div></td></tr>
+              <tr><td style="text-align: right; padding-right: 12px;">spreadingTimingFunction : </td><td><input name="spreadingTimingFunction" value="linear"           ><div class="text-field-underline"></div></td></tr>
+              <tr><td style="text-align: right; padding-right: 12px;">clearingDuration :        </td><td><input name="clearingDuration"        value="1s"               ><div class="text-field-underline"></div></td></tr>
+              <tr><td style="text-align: right; padding-right: 12px;">clearingDelay :           </td><td><input name="clearingDelay"           value="0s"               ><div class="text-field-underline"></div></td></tr>
+              <tr><td style="text-align: right; padding-right: 12px;">clearingTimingFunction :  </td><td><input name="clearingTimingFunction"  value="ease-in-out"      ><div class="text-field-underline"></div></td></tr>
+            </table>
+            <button type="button" class="default" style="margin-left: 20px;" onmousedown="ripplet(event, Array.from(this.form.elements).reduce(function (params, element) { params[element.name] = element.value; return params; }, {})); return false;">Click me!</button>
+          </form>
+        </div>
+      </div>
     <script>
       // window.event polyfill for Gecko
       if (!Object.prototype.hasOwnProperty.call(window, 'event')) {
