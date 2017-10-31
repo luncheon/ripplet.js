@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>ripplet.js declarative example</title>
     <style>
-      [data-ripplet-color] {
+      [data-ripplet] {
         font-family: Arial, sans-serif;
         font-size: 16px;
         width: 100px;
@@ -19,47 +19,15 @@
         padding: 8px;
         margin-right: 8px;
         text-align: center;
+        vertical-align: top;
         -webkit-tap-highlight-color: transparent;
       }
     </style>
   </head>
   <body>
-    <button data-ripplet-color="rgba(64, 192, 255, .2)">Static button</button>
-    <script src="https://cdn.jsdelivr.net/npm/ripplet.js"></script>
-    <script>
-      window.addEventListener('mousedown', function (event) {
-        var currentTarget = event.target.closest('[data-ripplet-color]');
-        if (currentTarget) {
-          ripplet(
-            {
-              currentTarget: currentTarget,
-              clientX: event.clientX,
-              clientY: event.clientY
-            },
-            {
-              color: currentTarget.getAttribute('data-ripplet-color'),
-            }
-          );
-        }
-      }, true);
-
-      (function () {
-        var button = document.createElement('button');
-        button.textContent = 'Dynamic button';
-        button.setAttribute('data-ripplet-color', 'rgba(64, 255, 192, .2)');
-        document.body.appendChild(button);
-      })();
-
-      (function () {
-        var button = document.createElement('button');
-        button.textContent = 'Stop propagation';
-        button.setAttribute('data-ripplet-color', 'rgba(255, 64, 192, .2)');
-        button.addEventListener('mousedown', function (event) {
-          event.preventDefault();
-          event.stopPropagation();
-        });
-        document.body.appendChild(button);
-      })();
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/ripplet.js/dist/declarative.min.js"></script>
+    <!-- <script src="../../dist/declarative.js"></script> -->
+    <button data-ripplet>Default</button>
+    <button data-ripplet="color: rgba( 64, 192, 255, .2); spreading-duration: 2s; clearing-delay: 1.8s;">Sky Blue Slow</button>
   </body>
 </html>

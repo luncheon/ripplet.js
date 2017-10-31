@@ -200,31 +200,33 @@
 
       // heading ripplet
       window.addEventListener('load', function () {
-        var heading = document.querySelector('h1');
-        var headingRect = heading.getBoundingClientRect();
-        headingRipplet();
-        function headingRipplet() {
-          var spreadingDuration = Math.floor(4000 * Math.random() + 200);
-          ripplet(
-            {
-              currentTarget: heading,
-              clientX: headingRect.left + Math.random() * headingRect.width,
-              clientY: headingRect.top + Math.random() * headingRect.height,
-            },
-            {
-              color: 'rgba('
-                + Math.floor(Math.random() * 256) + ','
-                + Math.floor(Math.random() * 256) + ','
-                + Math.floor(Math.random() * 256) + ','
-                + (Math.random() * .3 + .1)
-                + ')',
-              spreadingDuration: spreadingDuration + 'ms',
-              clearingDelay:     Math.floor(spreadingDuration * .8) + 'ms',
-              clearingDuration:  Math.floor(spreadingDuration * .6) + 'ms',
-            }
-          );
-          setTimeout(headingRipplet, Math.floor(4000 * Math.random() * Math.random()));
-        }
+        setTimeout(function () {
+          var heading = document.querySelector('h1');
+          var headingRect = heading.getBoundingClientRect();
+          headingRipplet();
+          function headingRipplet() {
+            var spreadingDuration = Math.floor(4000 * Math.random() + 200);
+            ripplet(
+              {
+                currentTarget: heading,
+                clientX: headingRect.left + Math.random() * headingRect.width,
+                clientY: headingRect.top + Math.random() * headingRect.height,
+              },
+              {
+                color: 'rgba('
+                  + Math.floor(Math.random() * 256) + ','
+                  + Math.floor(Math.random() * 256) + ','
+                  + Math.floor(Math.random() * 256) + ','
+                  + (Math.random() * .3 + .1)
+                  + ')',
+                spreadingDuration: spreadingDuration + 'ms',
+                clearingDelay:     Math.floor(spreadingDuration * .8) + 'ms',
+                clearingDuration:  Math.floor(spreadingDuration * .6) + 'ms',
+              }
+            );
+            setTimeout(headingRipplet, Math.floor(4000 * Math.random() * Math.random()));
+          }
+        });
       });
     </script>
   </body>

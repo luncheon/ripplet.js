@@ -1,11 +1,12 @@
 {
   "name": "ripplet.js",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Fully controllable vanilla-js material design ripple effect generator",
-  "main": "./dist/index.min.js",
+  "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "module": "./es/index.js",
   "jsnext:main": "./es/index.js",
+  "browser": "./dist/index.min.js",
   "files": [
     "dist",
     "es",
@@ -14,8 +15,9 @@
   ],
   "scripts": {
     "rebuild": "npm run clean && npm run build",
-    "build": "npm run lint && npm run build:dist && npm run build:lib && npm run build:es",
+    "build": "npm run lint && npm run build:dist && npm run build:dist:declarative && npm run build:lib && npm run build:es",
     "build:dist": "rollup -c && uglifyjs -m -o dist/index.min.js dist/index.js",
+    "build:dist:declarative": "rollup -c -i src/declarative.umd.ts -o dist/declarative.js && uglifyjs -m -o dist/declarative.min.js dist/declarative.js",
     "build:lib": "tsc -p . -d",
     "build:es": "tsc -p . -t ES2015 --outDir ./es",
     "watch": "rollup -c -w",
