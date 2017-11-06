@@ -1,0 +1,13 @@
+{
+  "name": "verify-webpack-ts",
+  "version": "1.0.0",
+  "scripts": {
+    "postinstall": "npm link ../..",
+    "build": "webpack"
+  },
+  "devDependencies": {
+    "ts-loader": "^3.1.1",
+    "typescript": "^2.6.1",
+    "webpack": "^3.8.1"
+  }
+}

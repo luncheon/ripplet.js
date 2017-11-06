@@ -31,7 +31,7 @@ export default function ripplet(
       { clientX, clientY },
       currentTarget.getBoundingClientRect(),
       window.getComputedStyle(currentTarget),
-      options ? { ...defaultOptions, ...options } : defaultOptions
+      mergeDefaultOptions(options)
     )
   } else {
     return
@@ -94,11 +94,22 @@ function generateRipplet(
     })
   }
 
-  rippletElement.addEventListener('transitionend', (event: TransitionEvent) => {
+  rippletElement.addEventListener('transitionend', ((event: TransitionEvent) => {
     if (event.propertyName === 'opacity' && containerElement.parentNode) {
       containerElement.parentNode.removeChild(containerElement)
     }
-  })
+  }) as EventListener)
 
   return containerElement
+}
+
+function mergeDefaultOptions(options?: Partial<RippletOptions>): RippletOptions {
+  if (!options) {
+    return defaultOptions
+  }
+  const mergedOptions = {} as typeof defaultOptions
+  (Object.keys(defaultOptions) as (keyof RippletOptions)[]).forEach(field => {
+    mergedOptions[field] = options.hasOwnProperty(field) ? options[field]! : defaultOptions[field]
+  })
+  return mergedOptions
 }

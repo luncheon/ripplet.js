@@ -7,6 +7,9 @@
   </head>
   <body>
     <script src="../../dist/index.min.js"></script>
-    <script>document.body.addEventListener('mousedown', ripplet);</script>
+    <script>
+      ripplet.defaultOptions.color = 'rgba(255, 0, 0, .2)';
+      document.body.addEventListener('mousedown', ripplet);
+    </script>
   </body>
 </html>
