@@ -86,23 +86,29 @@ or
 ```
 
 
-## Declarative Usage
+## Declarative Edition
 
-I'm tired to write mousedown event listeners. So I made a declarative edition.  
-Load `"declarative.js"` and simply add an attribute `data-ripplet` to html elements with/without options.  
+If you don't need detailed control, you can use declarative edition that captures mousedown events.  
+Load `"declarative.js"` and add an attribute `data-ripplet` to html elements with/without options.  
 Dynamically appended elements also ripples if `data-ripplet` attribute is available.
+
+### Example Usage
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/ripplet.js/dist/declarative.min.js"></script>
+<!-- <script>ripplet.defaultOptions.color = 'rgba(0, 255, 0, .2)';</script> -->
+
 <button data-ripplet>Default</button>
 <button data-ripplet="color: rgba(64, 192, 255, .2); spreading-duration: 2s; clearing-delay: 1.8s;">Sky Blue Slow</button>
-<!-- window.ripplet is also loaded -->
 ```
 
 or
 
 ```javascript
-import 'ripplet.js/lib/declarative';
+import 'ripplet.js/dist/declarative.min';
+
+// import { defaultOptions } from 'ripplet.js/es/declarative';
+// defaultOptions.color = 'rgba(255, 128, 0, .2)';
 ```
 
 
