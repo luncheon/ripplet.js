@@ -1,6 +1,6 @@
 {
   "editor.tabSize": 2,
-  "files.exclude": {
+  "search.exclude": {
     "**/node_modules": true,
     "dist": true,
     "es": true,

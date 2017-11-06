@@ -1,12 +1,11 @@
 {
   "name": "ripplet.js",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Fully controllable vanilla-js material design ripple effect generator",
-  "main": "./lib/index.js",
+  "main": "./dist/index.min.js",
   "types": "./lib/index.d.ts",
   "module": "./es/index.js",
   "jsnext:main": "./es/index.js",
-  "browser": "./dist/index.min.js",
   "files": [
     "dist",
     "es",
@@ -23,8 +22,17 @@
     "watch": "rollup -c -w",
     "clean": "rimraf dist lib es",
     "lint": "tslint -p . --type-check",
+    "verify": "npm run verify:install && npm run verify:clean && npm run verify:build",
+    "verify:install": "subpkg i",
+    "verify:clean": "rimraf verify/rollup/dist verify/webpack/dist verify/webpack1/dist",
+    "verify:build": "subpkg run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "subPackages": [
+    "verify/rollup",
+    "verify/webpack",
+    "verify/webpack1"
+  ],
   "keywords": [
     "ripple",
     "ripple-effect",
@@ -43,6 +51,7 @@
   "devDependencies": {
     "rimraf": "2.6.2",
     "rollup": "0.50.0",
+    "subpackage": "^1.1.0",
     "tslint": "5.8.0",
     "typescript": "2.5.3",
     "uglify-es": "3.1.5",

@@ -1,0 +1,11 @@
+{
+  "name": "verify-webpack",
+  "version": "1.0.0",
+  "scripts": {
+    "postinstall": "npm link ../..",
+    "build": "webpack verify-webpack1.js dist/index.js"
+  },
+  "devDependencies": {
+    "webpack": "^1.15.0"
+  }
+}

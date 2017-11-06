@@ -1,0 +1,12 @@
+{
+  "name": "verify-rollup",
+  "version": "1.0.0",
+  "scripts": {
+    "postinstall": "npm link ../..",
+    "build": "rollup -c"
+  },
+  "devDependencies": {
+    "rollup": "^0.50.0",
+    "rollup-plugin-node-resolve": "^3.0.0"
+  }
+}
