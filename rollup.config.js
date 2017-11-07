@@ -1,8 +1,8 @@
 export default {
   name: 'ripplet',
-  input: './src/index.umd.ts',
+  input: './src/ripplet.umd.ts',
   output: {
-    file: './dist/index.js',
+    file: './umd/ripplet.js',
     format: 'umd',
   },
   plugins: [

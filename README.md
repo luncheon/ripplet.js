@@ -89,13 +89,13 @@ or
 ## Declarative Edition
 
 If you don't need detailed control, you can use declarative edition that captures mousedown events.  
-Load `"declarative.js"` and add an attribute `data-ripplet` to html elements with/without options.  
-Dynamically appended elements also ripples if `data-ripplet` attribute is available.
+Load `"ripplet-declarative.js"` and add `data-ripplet` attribute to html elements with/without options.  
+Elements dynamically appended also ripple if `data-ripplet` attribute is available.
 
 ### Example Usage
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ripplet.js/dist/declarative.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ripplet.js/umd/ripplet-declarative.min.js"></script>
 <!-- <script>ripplet.defaultOptions.color = 'rgba(0, 255, 0, .2)';</script> -->
 
 <button data-ripplet>Default</button>
@@ -105,9 +105,10 @@ Dynamically appended elements also ripples if `data-ripplet` attribute is availa
 or
 
 ```javascript
-import 'ripplet.js/dist/declarative.min';
+import 'ripplet.js/es/ripplet-declarative';
+// require(ripplet.js/umd/ripplet-declarative.min');
 
-// import { defaultOptions } from 'ripplet.js/es/declarative';
+// import { defaultOptions } from 'ripplet.js/es/ripplet-declarative';
 // defaultOptions.color = 'rgba(255, 128, 0, .2)';
 ```
 

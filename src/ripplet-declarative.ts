@@ -1,6 +1,6 @@
-import ripplet from './'
+import ripplet from './ripplet'
 export default ripplet
-export * from './'
+export * from './ripplet'
 
 window.addEventListener('mousedown', event => {
   if (event.button !== 0) {
