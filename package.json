@@ -6,6 +6,7 @@
   "module": "./es/ripplet.js",
   "jsnext:main": "./es/ripplet.js",
   "types": "./types/ripplet.d.ts",
+  "unpkg": "./umd/ripplet.min.js",
   "files": [
     "umd",
     "es",
