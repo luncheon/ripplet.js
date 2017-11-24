@@ -1,6 +1,7 @@
 # ![ripplet.js](https://luncheon.github.io/ripplet.js/logo.gif)
 
-Fully controllable vanilla-js material design ripple effect generator.
+Fully controllable vanilla-js material design ripple effect generator.  
+This can be used with any JavaScript framework and/or any CSS framework.
 
 [Demo](https://luncheon.github.io/ripplet.js/demo/)  
 
@@ -27,6 +28,10 @@ element.addEventListener('mousedown', ripplet);
   element.addEventListener('mousedown', ripplet);
 </script>
 ```
+
+### Download directly
+
+<a target="_blank" download="ripplet.min.js" href="https://cdn.jsdelivr.net/npm/ripplet.js">Download ripplet.min.js</a>
 
 
 ## API
@@ -111,6 +116,10 @@ import 'ripplet.js/es/ripplet-declarative';
 // import { defaultOptions } from 'ripplet.js/es/ripplet-declarative';
 // defaultOptions.color = 'rgba(255, 128, 0, .2)';
 ```
+
+or
+
+<a target="_blank" download="ripplet-declarative.min.js" href="https://cdn.jsdelivr.net/npm/ripplet.js/umd/ripplet-declarative.min.js">Download ripplet-declarative.min.js</a>
 
 
 ## License
