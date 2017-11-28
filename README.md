@@ -56,7 +56,7 @@ In particular, create two elements (one is a circular enlarging element represen
 | Property name           | Default             | Description           |
 | ----------------------- | ------------------- | --------------------- |
 | className               | ""                  | Class name to be set for the ripplet element (not for this library to use, but for user to style that element) |
-| color                   | "rgba(0, 0, 0, .1)" | Ripplet color         |
+| color                   | "rgba(0, 0, 0, .1)" | Ripplet color (specify null if the color or image of the ripple effect is based on the CSS className above) |
 | opacity                 | null                | Ripplet opacity (used when alpha channel of color property above is shared and difficult to change) |
 | spreadingDuration       | ".4s"               | As its name suggests  |
 | spreadingDelay          | "0s"                | As its name suggests  |
