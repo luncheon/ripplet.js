@@ -121,11 +121,11 @@
         );
       }
       .keep {
-        transition: background-color .4s ease-out;
-      }
-      .keep:hover {
         transition: background-color .6s ease-in .2s;
-        background-color: rgba(0, 0, 0, .1);
+      }
+      .keep:not(:hover) {
+        background-color: transparent !important;
+        transition: background-color .4s ease-out;
       }
       .ripplet-image {
         transition: background-color .4s ease-out, color .4s ease-out;
@@ -144,7 +144,7 @@
     </style>
   </head>
   <body>
-    <script src="https://cdn.jsdelivr.net/npm/ripplet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ripplet.js@0.1.1"></script>
     <!-- <script src="../../umd/ripplet.js"></script> -->
     <div style="display: flex; align-items: center;">
       <h1>ripplet.js</h1>
@@ -183,7 +183,14 @@
         <div class="buttons">
           <button type="button" class="default" onmouseenter="ripplet(event)">Enter mouse!</button>
           <button type="button" class="default" onmouseleave="ripplet(event)">Leave mouse!</button>
-          <button type="button" class="default keep" onmouseenter="ripplet(event)">Hover mouse!</button>
+          <table style="text-align: center; font-size: 14px;">
+            <tr class="keep" onmouseenter="ripplet(event, { color: 'rgba(255,   0,   0, .3)' })" style="background-color: rgba(255,   0,   0, .3);"><td style="padding: 0 12px; border-bottom: 1px solid #ccc;">Hover mouse!</td></tr>
+            <tr class="keep" onmouseenter="ripplet(event, { color: 'rgba(255, 255,   0, .3)' })" style="background-color: rgba(255, 255,   0, .3);"><td style="padding: 0 12px; border-bottom: 1px solid #ccc;">Hover mouse!</td></tr>
+            <tr class="keep" onmouseenter="ripplet(event, { color: 'rgba(  0, 255,   0, .2)' })" style="background-color: rgba(  0, 255,   0, .2);"><td style="padding: 0 12px; border-bottom: 1px solid #ccc;">Hover mouse!</td></tr>
+            <tr class="keep" onmouseenter="ripplet(event, { color: 'rgba(  0, 255, 255, .2)' })" style="background-color: rgba(  0, 255, 255, .2);"><td style="padding: 0 12px; border-bottom: 1px solid #ccc;">Hover mouse!</td></tr>
+            <tr class="keep" onmouseenter="ripplet(event, { color: 'rgba(  0,   0, 255, .1)' })" style="background-color: rgba(  0,   0, 255, .1);"><td style="padding: 0 12px; border-bottom: 1px solid #ccc;">Hover mouse!</td></tr>
+            <tr class="keep" onmouseenter="ripplet(event, { color: 'rgba(255,   0, 255, .2)' })" style="background-color: rgba(255,   0, 255, .2);"><td style="padding: 0 12px; border-bottom: 1px solid #ccc;">Hover mouse!</td></tr>
+          </table>
         </div>
       </div>
       <div class="category">
