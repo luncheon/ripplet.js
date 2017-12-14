@@ -19,13 +19,15 @@
     "build:umd": "rollup -c && uglifyjs -m -o umd/ripplet.min.js umd/ripplet.js",
     "build:umd-declarative": "rollup -c -i src/ripplet-declarative.umd.ts -o umd/ripplet-declarative.js && uglifyjs -m -o umd/ripplet-declarative.min.js umd/ripplet-declarative.js",
     "build:es": "tsc -p . -m es2015 --outDir ./es -d --declarationDir ./types",
-    "watch": "rollup -c -w",
+    "watch": "echo Rollup watch crashes in cmd/PowerShell on windows. see https://github.com/rollup/rollup/issues/1739",
+    "watch_": "rollup -c -w",
     "clean": "rimraf umd es types",
     "lint": "tslint -p .",
-    "verify": "npm run verify:install && npm run verify:clean && npm run verify:build",
+    "verify": "npm run verify:install && npm run verify:clean && npm run verify:build && verify:open",
     "verify:install": "subpkg i",
     "verify:clean": "rimraf verify/*/dist",
     "verify:build": "subpkg run build",
+    "verify:open": "opener ./verify/verify.html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "subPackages": [
@@ -51,11 +53,12 @@
   "license": "WTFPL",
   "repository": "luncheon/ripplet.js",
   "devDependencies": {
+    "opener": "^1.4.3",
     "rimraf": "2.6.2",
-    "rollup": "0.50.0",
+    "rollup": "0.52.1",
     "subpackage": "1.1.0",
     "tslint": "5.8.0",
-    "typescript": "2.6.1",
+    "typescript": "2.6.2",
     "uglify-es": "3.1.5",
     "uglify-js": "3.1.5",
     "umd": "3.0.1"
