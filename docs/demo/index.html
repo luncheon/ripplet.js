@@ -159,6 +159,7 @@
         <div class="buttons">
           <button type="button" class="default" onmousedown="ripplet(event)">Click me!</button>
           <button type="button" class="default circle" onmousedown="ripplet(event)">Circle!</button>
+          <button type="button" class="default" onmousedown="ripplet(event, { centered: true })">Centered!</button>
         </div>
       </div>
       <div class="category">
@@ -197,6 +198,7 @@
               <tr><td style="text-align: right; padding-right: 12px;">clearingDuration :        </td><td><input name="clearingDuration"        value="1s"               ><div class="text-field-underline"></div></td></tr>
               <tr><td style="text-align: right; padding-right: 12px;">clearingDelay :           </td><td><input name="clearingDelay"           value="0s"               ><div class="text-field-underline"></div></td></tr>
               <tr><td style="text-align: right; padding-right: 12px;">clearingTimingFunction :  </td><td><input name="clearingTimingFunction"  value="ease-in-out"      ><div class="text-field-underline"></div></td></tr>
+              <tr><td style="text-align: right; padding-right: 12px;">centered :                </td><td><input name="centered"                value="false"            ><div class="text-field-underline"></div></td></tr>
             </table>
             <button type="button" class="default" style="margin-left: 20px;" onmousedown="ripplet(event, Array.from(this.form.elements).reduce(function (params, element) { params[element.name] = element.value; return params; }, {})); return false;">Click me!</button>
           </form>

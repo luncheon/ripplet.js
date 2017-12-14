@@ -64,6 +64,7 @@ In particular, create two elements (one is a circular enlarging element represen
 | clearingDuration        | "1s"                | As its name suggests  |
 | clearingDelay           | "0s"                | As its name suggests  |
 | clearingTimingFunction  | "ease-in-out"       | As its name suggests  |
+| centered                | false               | Force the origin centered (`clientX` and `clientY` of the first argument are ignored) |
 
 #### Return value
 

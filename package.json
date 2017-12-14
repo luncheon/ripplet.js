@@ -1,6 +1,6 @@
 {
   "name": "ripplet.js",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Fully controllable vanilla-js material design ripple effect generator",
   "main": "./umd/ripplet.js",
   "module": "./es/ripplet.js",
@@ -23,7 +23,7 @@
     "watch_": "rollup -c -w",
     "clean": "rimraf umd es types",
     "lint": "tslint -p .",
-    "verify": "npm run verify:install && npm run verify:clean && npm run verify:build && verify:open",
+    "verify": "npm run verify:install && npm run verify:clean && npm run verify:build && npm run verify:open",
     "verify:install": "subpkg i",
     "verify:clean": "rimraf verify/*/dist",
     "verify:build": "subpkg run build",

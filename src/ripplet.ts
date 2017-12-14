@@ -10,6 +10,7 @@ export const defaultOptions = {
   clearingDuration:         '1s'                as string | null,
   clearingDelay:            '0s'                as string | null,
   clearingTimingFunction:   'ease-in-out'       as string | null,
+  centered:                 false               as boolean | 'true' | 'false' | null,
 }
 
 export default function ripplet(
@@ -39,7 +40,7 @@ export default function ripplet(
 }
 
 function generateRipplet(
-  origin:       Readonly<{ clientX: number, clientY: number }>,
+  { clientX: originX, clientY: originY }: Readonly<{ clientX: number, clientY: number }>,
   targetRect:   Readonly<ClientRect>,
   targetStyle:  Readonly<{
     zIndex:                   string | null
@@ -50,6 +51,10 @@ function generateRipplet(
   }>,
   options:      RippletOptions,
 ) {
+  if (options.centered && options.centered !== 'false') {
+    originX = targetRect.left + targetRect.width  * .5
+    originY = targetRect.top  + targetRect.height * .5
+  }
   const doc = document
   const containerElement = doc.body.appendChild(doc.createElement('div'))
   {
@@ -72,15 +77,15 @@ function generateRipplet(
   const rippletElement = containerElement.appendChild(doc.createElement('div'))
   rippletElement.className = options.className
   {
-    const distanceX     = Math.max(origin.clientX - targetRect.left, targetRect.right - origin.clientX)
-    const distanceY     = Math.max(origin.clientY - targetRect.top, targetRect.bottom - origin.clientY)
+    const distanceX     = Math.max(originX - targetRect.left, targetRect.right - originX)
+    const distanceY     = Math.max(originY - targetRect.top, targetRect.bottom - originY)
     const radius        = Math.sqrt(distanceX * distanceX + distanceY * distanceY)
     const rippletStyle  = rippletElement.style
     rippletStyle.backgroundColor            = options.color
     rippletStyle.width                      = `${radius * 2}px`
     rippletStyle.height                     = `${radius * 2}px`
-    rippletStyle.marginLeft                 = `${origin.clientX - targetRect.left - radius}px`
-    rippletStyle.marginTop                  = `${origin.clientY - targetRect.top  - radius}px`
+    rippletStyle.marginLeft                 = `${originX - targetRect.left - radius}px`
+    rippletStyle.marginTop                  = `${originY - targetRect.top  - radius}px`
     rippletStyle.borderRadius               = '50%'
     rippletStyle.transitionProperty         = 'transform,opacity'
     rippletStyle.transitionDuration         = `${options.spreadingDuration      },${options.clearingDuration      }`
