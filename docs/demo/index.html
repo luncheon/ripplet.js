@@ -148,7 +148,7 @@
     <!-- <script src="../../umd/ripplet.js"></script> -->
     <div style="display: flex; align-items: center;">
       <h1>ripplet.js</h1>
-      <a class="github-link" href="https://github.com/luncheon/ripplet.js" onmouseenter="ripplet(event, { color: 'rgba(0, 224, 255, .2)' })" onmousedown="ripplet(event, { color: 'rgb(255, 255, 255)' })">
+      <a class="github-link" href="https://github.com/luncheon/ripplet.js" onmouseenter="ripplet(arguments[0], { color: 'rgba(0, 224, 255, .2)' })" onmousedown="ripplet(arguments[0], { color: 'rgb(255, 255, 255)' })">
         <img src="https://cdn.jsdelivr.net/npm/octicons@7.0.1/build/svg/mark-github.svg" alt="GitHub">
       </a>
     </div>
@@ -157,39 +157,39 @@
       <div class="category">
         <h3>Basic</h3>
         <div class="buttons">
-          <button type="button" class="default" onmousedown="ripplet(event)">Click me!</button>
-          <button type="button" class="default circle" onmousedown="ripplet(event)">Circle!</button>
-          <button type="button" class="default" onmousedown="ripplet(event, { centered: true })">Centered!</button>
+          <button type="button" class="default" onmousedown="ripplet(arguments[0])">Click me!</button>
+          <button type="button" class="default circle" onmousedown="ripplet(arguments[0])">Circle!</button>
+          <button type="button" class="default" onmousedown="ripplet(arguments[0], { centered: true })">Centered!</button>
         </div>
       </div>
       <div class="category">
         <h3>Colors</h3>
         <div class="buttons">
-          <button type="button" class="default" onmousedown="ripplet(event, { color: 'rgba(255, 0, 0, .3)' })">Red!</button>
-          <button type="button" class="default" onmousedown="ripplet(event, { color: null, className: 'rainbow' })">Rainbow!</button>
-          <button type="button" class="default ripplet-image" onmousedown="ripplet(event, { color: null, className: 'ripplet-image--ripplet', spreadingTimingFunction: 'ease-out', clearingDuration: '.5s', clearingDelay: '.1s' })">Image!</button>
-          <button type="button" class="btn btn-primary" onmousedown="ripplet(event, { className: 'bg-primary', opacity: '.5' })">External CSS theme<br>(Bootstrap primary)</button>
+          <button type="button" class="default" onmousedown="ripplet(arguments[0], { color: 'rgba(255, 0, 0, .3)' })">Red!</button>
+          <button type="button" class="default" onmousedown="ripplet(arguments[0], { color: null, className: 'rainbow' })">Rainbow!</button>
+          <button type="button" class="default ripplet-image" onmousedown="ripplet(arguments[0], { color: null, className: 'ripplet-image--ripplet', spreadingTimingFunction: 'ease-out', clearingDuration: '.5s', clearingDelay: '.1s' })">Image!</button>
+          <button type="button" class="btn btn-primary" onmousedown="ripplet(arguments[0], { className: 'bg-primary', opacity: '.5' })">External CSS theme<br>(Bootstrap primary)</button>
         </div>
       </div>
       <div class="category">
         <h3>Timings</h3>
         <div class="buttons">
-          <button type="button" class="default" onmousedown="ripplet(event, { spreadingDuration: '2s', clearingDelay: '1s', clearingDuration: '2s' })">Slow!</button>
-          <button type="button" class="default" onmousedown="ripplet(event, { spreadingTimingFunction: 'cubic-bezier(0.5, 1.5, .6, -1)' })">Feint!</button>
+          <button type="button" class="default" onmousedown="ripplet(arguments[0], { spreadingDuration: '2s', clearingDelay: '1s', clearingDuration: '2s' })">Slow!</button>
+          <button type="button" class="default" onmousedown="ripplet(arguments[0], { spreadingTimingFunction: 'cubic-bezier(0.5, 1.5, .6, -1)' })">Feint!</button>
         </div>
       </div>
       <div class="category">
         <h3>Events</h3>
         <div class="buttons">
-          <button type="button" class="default" onmouseenter="ripplet(event)">Enter mouse!</button>
-          <button type="button" class="default" onmouseleave="ripplet(event)">Leave mouse!</button>
+          <button type="button" class="default" onmouseenter="ripplet(arguments[0])">Enter mouse!</button>
+          <button type="button" class="default" onmouseleave="ripplet(arguments[0])">Leave mouse!</button>
           <table style="text-align: center; font-size: 14px;">
-            <tr class="keep" onmouseenter="ripplet(event, { color: 'rgba(255,   0,   0, .3)' })" style="background-color: rgba(255,   0,   0, .3);"><td style="padding: 0 12px; border-bottom: 1px solid #ccc;">Hover mouse!</td></tr>
-            <tr class="keep" onmouseenter="ripplet(event, { color: 'rgba(255, 255,   0, .3)' })" style="background-color: rgba(255, 255,   0, .3);"><td style="padding: 0 12px; border-bottom: 1px solid #ccc;">Hover mouse!</td></tr>
-            <tr class="keep" onmouseenter="ripplet(event, { color: 'rgba(  0, 255,   0, .2)' })" style="background-color: rgba(  0, 255,   0, .2);"><td style="padding: 0 12px; border-bottom: 1px solid #ccc;">Hover mouse!</td></tr>
-            <tr class="keep" onmouseenter="ripplet(event, { color: 'rgba(  0, 255, 255, .2)' })" style="background-color: rgba(  0, 255, 255, .2);"><td style="padding: 0 12px; border-bottom: 1px solid #ccc;">Hover mouse!</td></tr>
-            <tr class="keep" onmouseenter="ripplet(event, { color: 'rgba(  0,   0, 255, .1)' })" style="background-color: rgba(  0,   0, 255, .1);"><td style="padding: 0 12px; border-bottom: 1px solid #ccc;">Hover mouse!</td></tr>
-            <tr class="keep" onmouseenter="ripplet(event, { color: 'rgba(255,   0, 255, .2)' })" style="background-color: rgba(255,   0, 255, .2);"><td style="padding: 0 12px; border-bottom: 1px solid #ccc;">Hover mouse!</td></tr>
+            <tr class="keep" onmouseenter="ripplet(arguments[0], { color: 'rgba(255,   0,   0, .3)' })" style="background-color: rgba(255,   0,   0, .3);"><td style="padding: 0 12px; border-bottom: 1px solid #ccc;">Hover mouse!</td></tr>
+            <tr class="keep" onmouseenter="ripplet(arguments[0], { color: 'rgba(255, 255,   0, .3)' })" style="background-color: rgba(255, 255,   0, .3);"><td style="padding: 0 12px; border-bottom: 1px solid #ccc;">Hover mouse!</td></tr>
+            <tr class="keep" onmouseenter="ripplet(arguments[0], { color: 'rgba(  0, 255,   0, .2)' })" style="background-color: rgba(  0, 255,   0, .2);"><td style="padding: 0 12px; border-bottom: 1px solid #ccc;">Hover mouse!</td></tr>
+            <tr class="keep" onmouseenter="ripplet(arguments[0], { color: 'rgba(  0, 255, 255, .2)' })" style="background-color: rgba(  0, 255, 255, .2);"><td style="padding: 0 12px; border-bottom: 1px solid #ccc;">Hover mouse!</td></tr>
+            <tr class="keep" onmouseenter="ripplet(arguments[0], { color: 'rgba(  0,   0, 255, .1)' })" style="background-color: rgba(  0,   0, 255, .1);"><td style="padding: 0 12px; border-bottom: 1px solid #ccc;">Hover mouse!</td></tr>
+            <tr class="keep" onmouseenter="ripplet(arguments[0], { color: 'rgba(255,   0, 255, .2)' })" style="background-color: rgba(255,   0, 255, .2);"><td style="padding: 0 12px; border-bottom: 1px solid #ccc;">Hover mouse!</td></tr>
           </table>
         </div>
       </div>
@@ -207,18 +207,11 @@
               <tr><td style="text-align: right; padding-right: 12px;">clearingTimingFunction :  </td><td><input name="clearingTimingFunction"  value="ease-in-out"      ><div class="text-field-underline"></div></td></tr>
               <tr><td style="text-align: right; padding-right: 12px;">centered :                </td><td><input name="centered"                value="false"            ><div class="text-field-underline"></div></td></tr>
             </table>
-            <button type="button" class="default" style="margin-left: 20px;" onmousedown="ripplet(event, Array.from(this.form.elements).reduce(function (params, element) { params[element.name] = element.value; return params; }, {})); return false;">Click me!</button>
+            <button type="button" class="default" style="margin-left: 20px;" onmousedown="ripplet(arguments[0], Array.from(this.form.elements).reduce(function (params, element) { params[element.name] = element.value; return params; }, {})); return false;">Click me!</button>
           </form>
         </div>
       </div>
     <script>
-      // window.event polyfill for Gecko
-      if (!Object.prototype.hasOwnProperty.call(window, 'event')) {
-        ['mousedown', 'mouseenter', 'onmouseleave'].forEach(function (eventType) {
-          window.addEventListener(eventType, function (event) { window.event = event }, true);
-        });
-      }
-
       // heading ripplet
       window.addEventListener('load', function () {
         randomInterval(requestAnimationFrame.bind(window, function () {
