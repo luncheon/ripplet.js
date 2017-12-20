@@ -1,13 +1,34 @@
 export default {
-  name: 'ripplet',
-  input: './src/ripplet.umd.ts',
   output: {
-    file: './umd/ripplet.js',
     format: 'umd',
   },
   plugins: [
+    umdEntry(),
     typescript(),
   ],
+}
+
+const path = require('path')
+
+const umdEntryTemplate = entry =>
+`import _default, * as named from './${path.parse(entry).name}'
+Object.keys(named).forEach(function (name) { _default[name] = named[name] })
+export default _default
+`
+
+function umdEntry() {
+  return {
+    resolveId(importee, importer) {
+      if (!importer) {
+        return path.resolve(__dirname, importee + '?')
+      }
+    },
+    load(id) {
+      if (id.endsWith('?')) {
+        return umdEntryTemplate(id.slice(0, -1))
+      }
+    },
+  }
 }
 
 function typescript() {

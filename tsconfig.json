@@ -16,7 +16,6 @@
     "src/**/*"
   ],
   "exclude": [
-    "node_modules",
-    "**/*.umd.ts"
+    "node_modules"
   ]
 }
