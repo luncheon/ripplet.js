@@ -64,11 +64,7 @@
       .github-link {
         padding: 8px;
         border-radius: 50%;
-        transition: background-color .6s ease-in .2s;
         margin-left: 8px;
-      }
-      .github-link:hover {
-        background-color: rgba(0, 224, 255, .2);
       }
       .github-link > img {
         width: 40px;
@@ -144,11 +140,11 @@
     </style>
   </head>
   <body>
-    <script src="https://cdn.jsdelivr.net/npm/ripplet.js@0.1.1"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ripplet.js@0.1.2"></script>
     <!-- <script src="../../umd/ripplet.js"></script> -->
     <div style="display: flex; align-items: center;">
       <h1>ripplet.js</h1>
-      <a class="github-link" href="https://github.com/luncheon/ripplet.js" onmouseenter="ripplet(arguments[0], { color: 'rgba(0, 224, 255, .2)' })" onmousedown="ripplet(arguments[0], { color: 'rgb(255, 255, 255)' })">
+      <a class="github-link" href="https://github.com/luncheon/ripplet.js" onmousedown="ripplet(arguments[0], { color: 'rgb(255, 255, 255)' })">
         <img src="https://cdn.jsdelivr.net/npm/octicons@7.0.1/build/svg/mark-github.svg" alt="GitHub">
       </a>
     </div>

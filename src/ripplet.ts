@@ -14,7 +14,7 @@ export const defaultOptions = {
 }
 
 export default function ripplet(
-  targetSuchAsMouseEvent: MouseEvent | Readonly<{ currentTarget: Element, clientX: number, clientY: number }>,
+  targetSuchAsMouseEvent: MouseEvent | Readonly<{ currentTarget: Element, clientX?: number, clientY?: number }>,
   options?:               Partial<RippletOptions>,
 ): HTMLElement
 
@@ -27,34 +27,27 @@ export default function ripplet(
   { currentTarget, clientX, clientY }:  Readonly<{ currentTarget: Element | EventTarget, clientX?: number, clientY?: number }>,
   options?:                             Partial<RippletOptions>,
 ): HTMLElement | undefined {
-  if (currentTarget instanceof Element && typeof clientX === 'number' && typeof clientY === 'number') {
-    return generateRipplet(
-      { clientX, clientY },
-      currentTarget.getBoundingClientRect(),
-      window.getComputedStyle(currentTarget),
-      mergeDefaultOptions(options)
-    )
-  } else {
+  if (!(currentTarget instanceof Element)) {
     return
   }
+  const mergedOptions = mergeDefaultOptions(options)
+  const targetRect = currentTarget.getBoundingClientRect()
+  if (mergedOptions.centered && mergedOptions.centered !== 'false') {
+    clientX = targetRect.left + targetRect.width  * .5
+    clientY = targetRect.top  + targetRect.height * .5
+  } else if (typeof clientX !== 'number' || typeof clientY !== 'number') {
+    return
+  }
+  return generateRipplet(clientX, clientY, targetRect, window.getComputedStyle(currentTarget), mergedOptions)
 }
 
 function generateRipplet(
-  { clientX: originX, clientY: originY }: Readonly<{ clientX: number, clientY: number }>,
+  originX:      number,
+  originY:      number,
   targetRect:   Readonly<ClientRect>,
-  targetStyle:  Readonly<{
-    zIndex:                   string | null
-    borderTopLeftRadius:      string | null
-    borderTopRightRadius:     string | null
-    borderBottomLeftRadius:   string | null
-    borderBottomRightRadius:  string | null
-  }>,
+  targetStyle:  Readonly<CSSStyleDeclaration>,
   options:      RippletOptions,
 ) {
-  if (options.centered && options.centered !== 'false') {
-    originX = targetRect.left + targetRect.width  * .5
-    originY = targetRect.top  + targetRect.height * .5
-  }
   const doc = document
   const containerElement = doc.body.appendChild(doc.createElement('div'))
   {
