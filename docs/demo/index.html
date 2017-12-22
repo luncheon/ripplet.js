@@ -13,30 +13,44 @@
       gtag('config', 'UA-64398169-1');
     </script>
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0-beta.2/dist/css/bootstrap.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:700,800" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:300,600,700,800" rel="stylesheet">
     <link rel="prefetch" href="fireworks.png">
     <style>
       * {
         box-sizing: border-box;
+        font-family: inherit;
+        font-weight: inherit;
       }
       body {
-        margin: 8px 16px;
-        font-size: 14px;
+        margin: 8px 120px 200px 16px;
+        font-family: Nunito, sans-serif;
+        font-weight: 300px;
+      }
+      table {
+        border-collapse: collapse;
       }
       h1 {
         font-family: Nunito, sans-serif;
+        font-size: 3rem;
         font-weight: 800;
-        padding: 8px 12px;
+        padding: .4rem 1.2rem;
         margin: 0;
-        border-radius: 4px;
+        border-radius: 8px;
       }
-      h3 {
+      .description {
+        margin: .5em 0 1em 0;
+        font-size: 1.2rem;
+      }
+      .category {
+        margin: 16px;
+      }
+      .category h3 {
         font-family: Nunito, sans-serif;
         font-weight: 700;
-        margin: 12px;
+        font-size: 1.75rem;
+        margin: 4px 4px;
       }
-      input {
+      input:not([type]), input[type="text"] {
         font-family: Arial, Helvetica, sans-serif;
         font-size: 13px;
         border: none;
@@ -61,6 +75,17 @@
       input:focus + .text-field-underline::before {
         transform: scale(1);
       }
+      label {
+        display: inline-flex;
+        align-items: center;
+        margin-right: 1em;
+        cursor: pointer;
+      }
+      input[type="checkbox"],
+      input[type="radio"] {
+        margin: 0 .5em 0 .25em;
+        cursor: pointer;
+      }
       .github-link {
         padding: 8px;
         border-radius: 50%;
@@ -77,12 +102,18 @@
         display: flex;
         flex-wrap: wrap;
       }
+      .buttons button {
+        height: 80px;
+        margin: 4px 8px 8px 4px;
+        line-height: 1.4;
+        font-size: 1.5rem;
+        font-weight: 600;
+      }
       .buttons .default {
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
-        font-family: Arial, sans-serif;
         font-size: 16px;
         width: 100px;
         height: 80px;
@@ -92,18 +123,12 @@
         border-radius: 4px;
         border: 1px solid rgba(0, 0, 0, .1);
         padding: 8px;
-        margin: 0 8px 8px 0;
         text-align: center;
         -webkit-tap-highlight-color: transparent;
       }
       .buttons .circle {
         border-radius: 50%;
         width: 80px;
-        height: 80px;
-      }
-      .buttons .btn {
-        height: 80px;
-        margin: 0 8px 8px 0;
       }
       .rainbow {
         background-image: linear-gradient(
@@ -140,7 +165,7 @@
     </style>
   </head>
   <body>
-    <script src="https://cdn.jsdelivr.net/npm/ripplet.js@0.1.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ripplet.js@0.1.3"></script>
     <!-- <script src="../../umd/ripplet.js"></script> -->
     <div style="display: flex; align-items: center;">
       <h1>ripplet.js</h1>
@@ -151,10 +176,9 @@
     <p class="description">Fully controllable vanilla-js material design ripple effect generator.</p>
     <div style="display: flex; flex-wrap: wrap;">
       <div class="category">
-        <h3>Basic</h3>
+        <h3>Origin</h3>
         <div class="buttons">
           <button type="button" class="default" onmousedown="ripplet(arguments[0])">Click me!</button>
-          <button type="button" class="default circle" onmousedown="ripplet(arguments[0])">Circle!</button>
           <button type="button" class="default" onmousedown="ripplet(arguments[0], { centered: true })">Centered!</button>
         </div>
       </div>
@@ -164,7 +188,6 @@
           <button type="button" class="default" onmousedown="ripplet(arguments[0], { color: 'rgba(255, 0, 0, .3)' })">Red!</button>
           <button type="button" class="default" onmousedown="ripplet(arguments[0], { color: null, className: 'rainbow' })">Rainbow!</button>
           <button type="button" class="default ripplet-image" onmousedown="ripplet(arguments[0], { color: null, className: 'ripplet-image--ripplet', spreadingTimingFunction: 'ease-out', clearingDuration: '.5s', clearingDelay: '.1s' })">Image!</button>
-          <button type="button" class="btn btn-primary" onmousedown="ripplet(arguments[0], { className: 'bg-primary', opacity: '.5' })">External CSS theme<br>(Bootstrap primary)</button>
         </div>
       </div>
       <div class="category">
@@ -172,6 +195,32 @@
         <div class="buttons">
           <button type="button" class="default" onmousedown="ripplet(arguments[0], { spreadingDuration: '2s', clearingDelay: '1s', clearingDuration: '2s' })">Slow!</button>
           <button type="button" class="default" onmousedown="ripplet(arguments[0], { spreadingTimingFunction: 'cubic-bezier(0.5, 1.5, .6, -1)' })">Feint!</button>
+        </div>
+      </div>
+      <div class="category">
+        <h3>Placement</h3>
+        <div class="buttons" style="width: 200px; height: 80px; padding: 10px; overflow: scroll; -webkit-overflow-scrolling: touch;">
+          <table>
+            <tr>
+              <td><button type="button" class="default" onmousedown="ripplet(arguments[0])">Append to Body!</button></td>
+              <td><button type="button" class="default" onmousedown="ripplet(arguments[0], { appendTo: 'parent' })">Append to Parent!</button></td>
+            </tr>
+          </table>
+          <div style="padding: 10px 20px; background-color: rgba(0,0,0,.1); border-radius: 8px; position: fixed; bottom: 10px; right: 10px;">
+            <h3>Fixed Ancestor</h3>
+            <table>
+              <tr>
+                <td><button type="button" class="default" onmousedown="ripplet(arguments[0], { spreadingDuration: '2s', clearingDelay: '1s', clearingDuration: '2s' })">Append to Body!</button></td>
+                <td><button type="button" class="default" onmousedown="ripplet(arguments[0], { spreadingDuration: '2s', clearingDelay: '1s', clearingDuration: '2s', appendTo: 'parent' })">Append to Parent!</button></td>
+              </tr>
+            </table>
+          </div>
+          <button
+            type="button"
+            class="default circle"
+            style="position: fixed; bottom: 180px; right: 10px; box-shadow: 1px 2px 4px rgba(0,0,0,.4);"
+            onmousedown="ripplet(arguments[0], { spreadingDuration: '2s', clearingDelay: '1s', clearingDuration: '2s' })"
+          >Fixed Target!</button>
         </div>
       </div>
       <div class="category">
@@ -190,24 +239,55 @@
         </div>
       </div>
       <div class="category">
-          <h3>Parameters</h3>
-          <form onsubmit="return false" class="buttons" style="align-items: center;">
-            <table>
-              <tr><td style="text-align: right; padding-right: 12px;">color :                   </td><td><input name="color"                   value="rgba(0, 0, 0, .1)"><div class="text-field-underline"></div></td></tr>
-              <tr><td style="text-align: right; padding-right: 12px;">opacity :                 </td><td><input name="opacity"                 value="1"                ><div class="text-field-underline"></div></td></tr>
-              <tr><td style="text-align: right; padding-right: 12px;">spreadingDuration :       </td><td><input name="spreadingDuration"       value=".4s"              ><div class="text-field-underline"></div></td></tr>
-              <tr><td style="text-align: right; padding-right: 12px;">spreadingDelay :          </td><td><input name="spreadingDelay"          value="0s"               ><div class="text-field-underline"></div></td></tr>
-              <tr><td style="text-align: right; padding-right: 12px;">spreadingTimingFunction : </td><td><input name="spreadingTimingFunction" value="linear"           ><div class="text-field-underline"></div></td></tr>
-              <tr><td style="text-align: right; padding-right: 12px;">clearingDuration :        </td><td><input name="clearingDuration"        value="1s"               ><div class="text-field-underline"></div></td></tr>
-              <tr><td style="text-align: right; padding-right: 12px;">clearingDelay :           </td><td><input name="clearingDelay"           value="0s"               ><div class="text-field-underline"></div></td></tr>
-              <tr><td style="text-align: right; padding-right: 12px;">clearingTimingFunction :  </td><td><input name="clearingTimingFunction"  value="ease-in-out"      ><div class="text-field-underline"></div></td></tr>
-              <tr><td style="text-align: right; padding-right: 12px;">centered :                </td><td><input name="centered"                value="false"            ><div class="text-field-underline"></div></td></tr>
-            </table>
-            <button type="button" class="default" style="margin-left: 20px;" onmousedown="ripplet(arguments[0], Array.from(this.form.elements).reduce(function (params, element) { params[element.name] = element.value; return params; }, {})); return false;">Click me!</button>
-          </form>
-        </div>
+        <h3>Parameters</h3>
+        <form onsubmit="return false" class="buttons" style="align-items: center;">
+          <table>
+            <tr><td style="text-align: right; padding-right: 12px;">color :                   </td><td><input name="color"                   value="rgba(0, 0, 0, .1)"><div class="text-field-underline"></div></td></tr>
+            <tr><td style="text-align: right; padding-right: 12px;">opacity :                 </td><td><input name="opacity"                 value="1"                ><div class="text-field-underline"></div></td></tr>
+            <tr><td style="text-align: right; padding-right: 12px;">spreadingDuration :       </td><td><input name="spreadingDuration"       value=".4s"              ><div class="text-field-underline"></div></td></tr>
+            <tr><td style="text-align: right; padding-right: 12px;">spreadingDelay :          </td><td><input name="spreadingDelay"          value="0s"               ><div class="text-field-underline"></div></td></tr>
+            <tr><td style="text-align: right; padding-right: 12px;">spreadingTimingFunction : </td><td><input name="spreadingTimingFunction" value="linear"           ><div class="text-field-underline"></div></td></tr>
+            <tr><td style="text-align: right; padding-right: 12px;">clearingDuration :        </td><td><input name="clearingDuration"        value="1s"               ><div class="text-field-underline"></div></td></tr>
+            <tr><td style="text-align: right; padding-right: 12px;">clearingDelay :           </td><td><input name="clearingDelay"           value="0s"               ><div class="text-field-underline"></div></td></tr>
+            <tr><td style="text-align: right; padding-right: 12px;">clearingTimingFunction :  </td><td><input name="clearingTimingFunction"  value="ease-in-out"      ><div class="text-field-underline"></div></td></tr>
+            <tr><td style="text-align: right; padding-right: 12px;">origin :                  </td><td><label><input type="checkbox" name="centered"                  >centered</label></td></tr>
+            <tr><td style="text-align: right; padding-right: 12px;">appendTo :                </td><td><label><input type="radio" name="appendTo" value="body" checked>body</label><label><input type="radio" name="appendTo" value="parent">parent</label></td></tr>
+          </table>
+          <div class="buttons" style="margin-left: 20px;">
+            <button type="button" class="default" onmousedown="ripplet(arguments[0], serializeForm(this.form))">Click me!</button>
+          </div>
+        </form>
       </div>
+    </div>
     <script>
+      function serializeForm(form) {
+        return Array.from(form.elements).reduce(function (params, element) {
+          switch (element.type) {
+            case 'radio':
+              if (element.checked) {
+                params[element.name] = element.value;
+              }
+              break;
+            case 'checkbox':
+              params[element.name] = element.checked;
+              break;
+            default:
+              params[element.name] = element.value;
+          }
+          return params;
+        }, {});
+      }
+
+      Array.from(document.querySelectorAll('input[type="checkbox"], input[type="radio"]')).forEach(function (input) {
+        input.addEventListener('change', requestAnimationFrame.bind(window, function () {
+          if (input.checked) {
+            var rippletContainer = ripplet({ currentTarget: input }, { centered: true, color: 'rgba(128,192,255,.4)', spreadingTimingFunction: 'ease-out' });
+            rippletContainer.style.borderRadius = '50%';
+            rippletContainer.style.transform = 'scale(2.5)';
+          }
+        }));
+      });
+
       // heading ripplet
       window.addEventListener('load', function () {
         randomInterval(requestAnimationFrame.bind(window, function () {

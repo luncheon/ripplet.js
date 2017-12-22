@@ -11,15 +11,16 @@ export const defaultOptions = {
   clearingDelay:            '0s'                as string | null,
   clearingTimingFunction:   'ease-in-out'       as string | null,
   centered:                 false               as boolean | 'true' | 'false' | null,
+  appendTo:                 'body'              as 'body' | 'parent' | null,
 }
 
 export default function ripplet(
-  targetSuchAsMouseEvent: MouseEvent | Readonly<{ currentTarget: Element, clientX?: number, clientY?: number }>,
+  targetSuchAsMouseEvent: MouseEvent | Readonly<{ currentTarget: Element, clientX: number, clientY: number }>,
   options?:               Partial<RippletOptions>,
 ): HTMLElement
 
 export default function ripplet(
-  targetSuchAsMouseEvent: Event,
+  targetSuchAsMouseEvent: Event | Readonly<{ currentTarget: Element }>,
   options?:               Partial<RippletOptions>,
 ): HTMLElement | undefined
 
@@ -38,42 +39,79 @@ export default function ripplet(
   } else if (typeof clientX !== 'number' || typeof clientY !== 'number') {
     return
   }
-  return generateRipplet(clientX, clientY, targetRect, window.getComputedStyle(currentTarget), mergedOptions)
+  return generateRipplet(currentTarget, clientX, clientY, targetRect, mergedOptions)
 }
 
 function generateRipplet(
-  originX:      number,
-  originY:      number,
-  targetRect:   Readonly<ClientRect>,
-  targetStyle:  Readonly<CSSStyleDeclaration>,
-  options:      RippletOptions,
+  targetElement:  Element,
+  originX:        number,
+  originY:        number,
+  targetRect:     Readonly<ClientRect>,
+  options:        RippletOptions,
 ) {
   const doc = document
-  const containerElement = doc.body.appendChild(doc.createElement('div'))
-  {
-    const containerStyle                    = containerElement.style
+  const targetStyle = getComputedStyle(targetElement)
+  let removingElement: Element
+  let containerElement: HTMLElement
+  let containerStyle: CSSStyleDeclaration
+  if (targetStyle.position === 'fixed') {
+    containerElement                        = removingElement
+                                            = doc.body.appendChild(doc.createElement('div'))
+    containerStyle                          = containerElement.style
+    copyStyles(
+      containerStyle,
+      targetStyle,
+      ['position', 'left', 'top', 'right', 'bottom', 'marginLeft', 'marginTop', 'marginRight', 'marginBottom']
+    )
+  } else if (options.appendTo === 'parent') {
+    const parentElement                     = targetElement.parentElement
+    if (!parentElement) {
+      return
+    }
+    const containerContainer                = removingElement
+                                            = parentElement.insertBefore(doc.createElement('div'), targetElement)
+    const containerContainerStyle           = containerContainer.style
+    containerContainerStyle.position        = 'relative'
+    containerContainerStyle.width           = '0'
+    containerContainerStyle.height          = '0'
+
+    containerElement                        = containerContainer.appendChild(doc.createElement('div'))
+    containerStyle                          = containerElement.style
     containerStyle.position                 = 'absolute'
-    containerStyle.overflow                 = 'hidden'
-    containerStyle.pointerEvents            = 'none'
+    containerStyle.left                     = '0'
+    containerStyle.top                      = '0'
+    copyStyles(
+      containerStyle,
+      targetStyle,
+      ['marginLeft', 'marginTop', 'marginRight', 'marginBottom']
+    )
+  } else {
+    containerElement                        = removingElement
+                                            = doc.body.appendChild(doc.createElement('div'))
+    containerStyle                          = containerElement.style
+    containerStyle.position                 = 'absolute'
     containerStyle.left                     = `${targetRect.left + doc.documentElement.scrollLeft + doc.body.scrollLeft}px`
     containerStyle.top                      = `${targetRect.top  + doc.documentElement.scrollTop  + doc.body.scrollTop}px`
-    containerStyle.width                    = `${targetRect.width}px`
-    containerStyle.height                   = `${targetRect.height}px`
-    containerStyle.zIndex                   = `${(targetStyle.zIndex && parseInt(targetStyle.zIndex, 10) || 0) + 1}`
-    containerStyle.borderTopLeftRadius      = targetStyle.borderTopLeftRadius
-    containerStyle.borderTopRightRadius     = targetStyle.borderTopRightRadius
-    containerStyle.borderBottomLeftRadius   = targetStyle.borderBottomLeftRadius
-    containerStyle.borderBottomRightRadius  = targetStyle.borderBottomRightRadius
-    containerStyle.opacity                  = options.opacity
   }
+  containerStyle.overflow                 = 'hidden'
+  containerStyle.pointerEvents            = 'none'
+  containerStyle.width                    = `${targetRect.width}px`
+  containerStyle.height                   = `${targetRect.height}px`
+  containerStyle.zIndex                   = `${(parseInt(targetStyle.zIndex as any, 10) || 0) + 1}`
+  containerStyle.opacity                  = options.opacity
+  copyStyles(
+    containerStyle,
+    targetStyle,
+    ['borderTopLeftRadius', 'borderTopRightRadius', 'borderBottomLeftRadius', 'borderBottomRightRadius']
+  )
 
-  const rippletElement = containerElement.appendChild(doc.createElement('div'))
-  rippletElement.className = options.className
+  const rippletElement                    = containerElement.appendChild(doc.createElement('div'))
+  rippletElement.className                = options.className
   {
-    const distanceX     = Math.max(originX - targetRect.left, targetRect.right - originX)
-    const distanceY     = Math.max(originY - targetRect.top, targetRect.bottom - originY)
-    const radius        = Math.sqrt(distanceX * distanceX + distanceY * distanceY)
-    const rippletStyle  = rippletElement.style
+    const distanceX                         = Math.max(originX - targetRect.left, targetRect.right - originX)
+    const distanceY                         = Math.max(originY - targetRect.top, targetRect.bottom - originY)
+    const radius                            = Math.sqrt(distanceX * distanceX + distanceY * distanceY)
+    const rippletStyle                      = rippletElement.style
     rippletStyle.backgroundColor            = options.color
     rippletStyle.width                      = `${radius * 2}px`
     rippletStyle.height                     = `${radius * 2}px`
@@ -91,14 +129,19 @@ function generateRipplet(
       rippletStyle.opacity                    = '0'
     })
   }
-
-  rippletElement.addEventListener('transitionend', ((event: TransitionEvent) => {
-    if (event.propertyName === 'opacity' && containerElement.parentNode) {
-      containerElement.parentNode.removeChild(containerElement)
+  rippletElement.addEventListener('transitionend', event => {
+    if ((event as TransitionEvent).propertyName === 'opacity' && removingElement.parentElement) {
+      removingElement.parentElement.removeChild(removingElement)
     }
-  }) as EventListener)
+  })
 
   return containerElement
+}
+
+function copyStyles<T>(destination: T, source: Readonly<T>, properties: (keyof T)[]) {
+  for (const property of properties) {
+    destination[property] = source[property]
+  }
 }
 
 function mergeDefaultOptions(options?: Partial<RippletOptions>): RippletOptions {
