@@ -54,22 +54,22 @@ function generateRipplet(
   let removingElement: Element
   let containerElement: HTMLElement
   let containerStyle: CSSStyleDeclaration
-  if (targetStyle.position === 'fixed') {
-    containerElement                        = removingElement
-                                            = doc.body.appendChild(doc.createElement('div'))
-    containerStyle                          = containerElement.style
+  if (targetStyle.position === 'fixed' || (targetStyle.position === 'absolute' && options.appendTo === 'parent')) {
+    containerElement = removingElement = doc.createElement('div')
+    if (options.appendTo === 'parent') {
+      targetElement.parentElement!.insertBefore(containerElement, targetElement)
+    } else {
+      doc.body.appendChild(containerElement)
+    }
+    containerStyle = containerElement.style
     copyStyles(
       containerStyle,
       targetStyle,
       ['position', 'left', 'top', 'right', 'bottom', 'marginLeft', 'marginTop', 'marginRight', 'marginBottom']
     )
   } else if (options.appendTo === 'parent') {
-    const parentElement                     = targetElement.parentElement
-    if (!parentElement) {
-      return
-    }
     const containerContainer                = removingElement
-                                            = parentElement.insertBefore(doc.createElement('div'), targetElement)
+                                            = targetElement.parentElement!.insertBefore(doc.createElement('div'), targetElement)
     const containerContainerStyle           = containerContainer.style
     containerContainerStyle.position        = 'relative'
     containerContainerStyle.width           = '0'
