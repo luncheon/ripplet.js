@@ -1,6 +1,6 @@
 {
   "name": "ripplet.js",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Fully controllable vanilla-js material design ripple effect generator",
   "main": "./umd/ripplet.js",
   "module": "./es/ripplet.js",
@@ -40,13 +40,9 @@
   ],
   "keywords": [
     "ripple",
-    "ripple-effect",
-    "ripple.js",
-    "ripplify",
     "waves",
     "material",
     "material-design",
-    "material-component",
     "vanilla-js",
     "typescript"
   ],

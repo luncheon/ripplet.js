@@ -4,39 +4,96 @@
     <meta charset="utf-8">
     <title>ripplet.js build verification</title>
     <style>
-      body { display: flex; flex-wrap: wrap; }
-      iframe { display: block; width: 100px; height: 80px; margin: 0 15px 15px 0; }
+      iframe { width: 120px; height: 80px; margin: 0 15px 15px 10px; display: block; }
+      button { width: 120px; height: 80px; margin: 0 15px 15px 10px; background-color: transparent; }
+      h5 { margin: 0; }
     </style>
   </head>
-  <body>
-    <div>
-      Browser
-      <iframe src="browser/verify-browser.html"></iframe>
+  <body style="min-height: 1080px; max-width: 1024px;">
+    <script src="../umd/ripplet-declarative.min.js"></script>
+    <script>
+      ripplet.defaultOptions.spreadingDuration = '2s'
+      ripplet.defaultOptions.clearingDelay     = '2s'
+    </script>
+
+    <div style="display: flex; flex-wrap: wrap;">
+      <div>
+        <h5>Browser</h5>
+        <iframe src="browser/verify-browser.html"></iframe>
+      </div>
+
+      <div>
+        <h5>Declarative</h5>
+        <iframe src="rollup-declarative/verify-rollup-declarative.html"></iframe>
+      </div>
+
+      <div>
+        <h5>Rollup</h5>
+        <iframe src="rollup/verify-rollup.html"></iframe>
+      </div>
+
+      <div>
+        <h5>webpack</h5>
+        <iframe src="webpack/verify-webpack.html"></iframe>
+      </div>
+
+      <div>
+        <h5>webpack 1.x</h5>
+        <iframe src="webpack1/verify-webpack1.html"></iframe>
+      </div>
+
+      <div>
+        <h5>webpack + TypeScript</h5>
+        <iframe src="webpack-ts/verify-webpack-ts.html"></iframe>
+      </div>
+    </div>
+
+    <div style="overflow: hidden;">
+      <h5>float</h5>
+      <button type="button" style="float: left;"  data-ripplet>float: left</button>
+      <button type="button" style="float: right;" data-ripplet>float: right</button>
+      <button type="button" style="float: left;"  data-ripplet="append-to: parent;">float: left<br>appendTo: parent</button>
+      <button type="button" style="float: right;" data-ripplet="append-to: parent;">float: right<br>appendTo: parent</button>
     </div>
 
     <div>
-      Declarative
-      <iframe src="rollup-declarative/verify-rollup-declarative.html"></iframe>
+      <h5>scrollable ancestor</h5>
+      <div style="overflow: scroll; width: fit-content; height: 60px;">
+        <button type="button" data-ripplet="append-to: body;">appendTo: body</button>
+        <button type="button" data-ripplet="append-to: parent;">appendTo: parent</button>
+      </div>
     </div>
 
     <div>
-      Rollup
-      <iframe src="rollup/verify-rollup.html"></iframe>
+      <h5>flexbox parent</h5>
+      <div style="display: flex;">
+        <button type="button" data-ripplet="append-to: body;">appendTo: body</button>
+        <button type="button" data-ripplet="append-to: parent;">appendTo: parent</button>
+      </div>
     </div>
 
     <div>
-      webpack
-      <iframe src="webpack/verify-webpack.html"></iframe>
+      <h5>flexbox parent (justify-content: space-around): PROBLEMATIC</h5>
+      <div style="display: flex; justify-content: space-around;">
+        <button type="button" data-ripplet="append-to: body;">appendTo: body</button>
+        <button type="button" data-ripplet="append-to: parent;">appendTo: parent</button>
+      </div>
     </div>
 
     <div>
-      webpack 1.x
-      <iframe src="webpack1/verify-webpack1.html"></iframe>
+      <h5>relative-positioned parent</h5>
+      <div style="position: relative;">
+        <button type="button" style="position: absolute; right:  10px; bottom: -10px;" data-ripplet="append-to: body;">position: absolute<br>appendTo: body</button>
+        <button type="button" style="position: absolute; right: 125px; bottom: -10px;" data-ripplet="append-to: parent;">position: absolute<br>appendTo: parent</button>
+        <button type="button" style="position: relative; right:  10px; bottom: -10px;" data-ripplet="append-to: body;">position: relative<br>appendTo: parent</button>
+        <button type="button" style="position: relative; right:  10px; bottom: -10px;" data-ripplet="append-to: parent;">position: relative<br>appendTo: parent</button>
+      </div>
     </div>
 
-    <div>
-      webpack + TypeScript
-      <iframe src="webpack-ts/verify-webpack-ts.html"></iframe>
+    <div style="position: fixed; background-color: rgba(0,0,0,.1); right: 10px; bottom: 10px; padding: 10px;">
+      <h5>fixed ancestor</h5>
+      <button type="button" data-ripplet></button>
+      <button type="button" data-ripplet="append-to: parent;">appendTo: parent</button>
     </div>
   </body>
 </html>

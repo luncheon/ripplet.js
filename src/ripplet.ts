@@ -49,7 +49,7 @@ function generateRipplet(
   targetRect:     Readonly<ClientRect>,
   options:        RippletOptions,
 ) {
-  const doc = document
+  const doc = document  // for minification efficiency
   const targetStyle = getComputedStyle(targetElement)
   let removingElement: Element
   let containerElement: HTMLElement
@@ -71,20 +71,18 @@ function generateRipplet(
     const containerContainer                = removingElement
                                             = targetElement.parentElement!.insertBefore(doc.createElement('div'), targetElement)
     const containerContainerStyle           = containerContainer.style
+    containerContainerStyle.display         = 'inline-block'
     containerContainerStyle.position        = 'relative'
     containerContainerStyle.width           = '0'
     containerContainerStyle.height          = '0'
+    containerContainerStyle.cssFloat        = targetStyle.cssFloat
 
+    const containerContainerRect            = containerContainer.getBoundingClientRect()  // this may be a slow operation...
     containerElement                        = containerContainer.appendChild(doc.createElement('div'))
     containerStyle                          = containerElement.style
     containerStyle.position                 = 'absolute'
-    containerStyle.left                     = '0'
-    containerStyle.top                      = '0'
-    copyStyles(
-      containerStyle,
-      targetStyle,
-      ['marginLeft', 'marginTop', 'marginRight', 'marginBottom']
-    )
+    containerStyle.top                      = `${targetRect.top  - containerContainerRect.top}px`
+    containerStyle.left                     = `${targetRect.left - containerContainerRect.left}px`
   } else {
     containerElement                        = removingElement
                                             = doc.body.appendChild(doc.createElement('div'))
