@@ -2,11 +2,24 @@ import ripplet from './ripplet'
 export default ripplet
 export * from './ripplet'
 
+// Element.prototype.closest is not implemented in IE
+// https://caniuse.com/#feat=element-closest
+const getRippletTarget = Element.prototype.closest
+  ? (event: Event) => (event.target as Element).closest('[data-ripplet]')
+  : (event: Event) => {
+    for (let element = event.target as Element | null; element; element = element.parentElement) {
+      if (element.hasAttribute('data-ripplet')) {
+        return element
+      }
+    }
+    return undefined
+  }
+
 window.addEventListener('mousedown', event => {
   if (event.button !== 0) {
     return
   }
-  const currentTarget = (event.target as Element).closest('[data-ripplet]')
+  const currentTarget = getRippletTarget(event)
   if (currentTarget) {
     ripplet({ currentTarget, clientX: event.clientX, clientY: event.clientY }, parseOptions(currentTarget.getAttribute('data-ripplet')))
   }
