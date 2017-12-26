@@ -31,7 +31,7 @@ element.addEventListener('mousedown', ripplet);
 
 ### Download directly
 
-<a target="_blank" download="ripplet.min.js" href="https://cdn.jsdelivr.net/npm/ripplet.js">Download ripplet.min.js</a>
+<a target="_blank" download="ripplet.min.js" href="https://cdn.jsdelivr.net/npm/ripplet.js@latest/umd/ripplet.min.js">Download ripplet.min.js</a>
 
 
 ## API
@@ -121,7 +121,7 @@ import 'ripplet.js/es/ripplet-declarative';
 
 or
 
-<a target="_blank" download="ripplet-declarative.min.js" href="https://cdn.jsdelivr.net/npm/ripplet.js/umd/ripplet-declarative.min.js">Download ripplet-declarative.min.js</a>
+<a target="_blank" download="ripplet-declarative.min.js" href="https://cdn.jsdelivr.net/npm/ripplet.js@latest/umd/ripplet-declarative.min.js">Download ripplet-declarative.min.js</a>
 
 
 ## License
