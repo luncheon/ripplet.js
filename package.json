@@ -1,6 +1,6 @@
 {
   "name": "ripplet.js",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Fully controllable vanilla-js material design ripple effect generator",
   "main": "./umd/ripplet.js",
   "module": "./es/ripplet.js",
@@ -16,8 +16,8 @@
   "scripts": {
     "rebuild": "npm run clean && npm run build",
     "build": "npm run lint && npm run build:umd && npm run build:umd-declarative && npm run build:es",
-    "build:umd": "rollup -c -n ripplet -i src/ripplet -o umd/ripplet.js && uglifyjs -m -o umd/ripplet.min.js umd/ripplet.js",
-    "build:umd-declarative": "rollup -c -n ripplet -i src/ripplet-declarative -o umd/ripplet-declarative.js && uglifyjs -m -o umd/ripplet-declarative.min.js umd/ripplet-declarative.js",
+    "build:umd": "rollup -c -n ripplet -i src/ripplet -o umd/ripplet.js && uglifyjs -m -c join_vars=true -o umd/ripplet.min.js umd/ripplet.js",
+    "build:umd-declarative": "rollup -c -n ripplet -i src/ripplet-declarative -o umd/ripplet-declarative.js && uglifyjs -m -c join_vars=true -o umd/ripplet-declarative.min.js umd/ripplet-declarative.js",
     "build:es": "tsc -p . -m es2015 --outDir ./es -d --declarationDir ./types",
     "watch": "echo Rollup watch crashes in cmd/PowerShell on windows. see https://github.com/rollup/rollup/issues/1739",
     "watch_": "rollup -c -w",
