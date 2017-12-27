@@ -102,44 +102,30 @@
         display: flex;
         flex-wrap: wrap;
       }
-      .buttons button {
-        height: 80px;
-        margin: 4px 8px 8px 4px;
-        line-height: 1.4;
-        font-size: 1.5rem;
-        font-weight: 600;
-      }
-      .buttons .default {
+      .default {
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
-        font-size: 16px;
         width: 100px;
         height: 80px;
+        margin: 4px 8px 8px 4px;
+        padding: 8px;
+        line-height: 1.4;
+        font-size: 1.5rem;
+        font-weight: 600;
+        font-size: 16px;
         background-color: white;
         border: none;
         outline: none;
         border-radius: 4px;
         border: 1px solid rgba(0, 0, 0, .1);
-        padding: 8px;
         text-align: center;
         -webkit-tap-highlight-color: transparent;
       }
-      .buttons .circle {
+      .default.circle {
         border-radius: 50%;
         width: 80px;
-      }
-      .rainbow {
-        background-image: linear-gradient(
-          -45deg,
-          rgba(255,   0,   0, .3),
-          rgba(255, 255,   0, .3),
-          rgba(  0, 255, 255, .2),
-          rgba(  0,   0, 255, .15),
-          rgba(255,   0, 255, .2),
-          rgba(255,   0,   0, .3)
-        );
       }
       .keep {
         transition: background-color .6s ease-in .2s;
@@ -147,20 +133,6 @@
       .keep:not(:hover) {
         background-color: transparent !important;
         transition: background-color .4s ease-out;
-      }
-      .ripplet-image {
-        transition: background-color .4s ease-out, color .4s ease-out;
-      }
-      .ripplet-image:hover {
-        background-color: rgb(32, 32, 32);
-        color: transparent;
-      }
-      .ripplet-image--ripplet {
-        /* http://www.emstudio.jp/free/data1042/ */
-        background-image: url(fireworks.png);
-        background-repeat: no-repeat;
-        background-size: 64px;
-        background-position: center;
       }
     </style>
   </head>
@@ -174,6 +146,7 @@
       </a>
     </div>
     <p class="description">Fully controllable vanilla-js material design ripple effect generator.</p>
+
     <div style="display: flex; flex-wrap: wrap;">
       <div class="category">
         <h3>Origin</h3>
@@ -187,7 +160,37 @@
         <div class="buttons">
           <button type="button" class="default" onmousedown="ripplet(arguments[0], { color: 'rgba(255, 0, 0, .3)' })">Red!</button>
           <button type="button" class="default" onmousedown="ripplet(arguments[0], { color: null, className: 'rainbow' })">Rainbow!</button>
+          <style>
+            .rainbow {
+              background-image: linear-gradient(
+                -45deg,
+                rgba(255,   0,   0, .3),
+                rgba(255, 255,   0, .3),
+                rgba(  0, 255, 255, .2),
+                rgba(  0,   0, 255, .15),
+                rgba(255,   0, 255, .2),
+                rgba(255,   0,   0, .3)
+              );
+            }
+          </style>
+
           <button type="button" class="default ripplet-image" onmousedown="ripplet(arguments[0], { color: null, className: 'ripplet-image--ripplet', spreadingTimingFunction: 'ease-out', clearingDuration: '.5s', clearingDelay: '.1s' })">Image!</button>
+          <style>
+            .ripplet-image {
+              transition: background-color .4s ease-out, color .4s ease-out;
+            }
+            .ripplet-image:hover {
+              background-color: rgb(32, 32, 32);
+              color: transparent;
+            }
+            .ripplet-image--ripplet {
+              /* http://www.emstudio.jp/free/data1042/ */
+              background-image: url(fireworks.png);
+              background-repeat: no-repeat;
+              background-size: 64px;
+              background-position: center;
+            }
+          </style>
         </div>
       </div>
       <div class="category">
@@ -206,23 +209,25 @@
               <td><button type="button" class="default" onmousedown="ripplet(arguments[0], { appendTo: 'parent' })">Append to Parent!</button></td>
             </tr>
           </table>
-          <div style="padding: 10px 20px; background-color: rgba(0,0,0,.1); border-radius: 8px; position: fixed; bottom: 10px; right: 10px;">
-            <h3>Fixed Ancestor</h3>
-            <table>
-              <tr>
-                <td><button type="button" class="default" onmousedown="ripplet(arguments[0], { spreadingDuration: '2s', clearingDelay: '1s', clearingDuration: '2s' })">Append to Body!</button></td>
-                <td><button type="button" class="default" onmousedown="ripplet(arguments[0], { spreadingDuration: '2s', clearingDelay: '1s', clearingDuration: '2s', appendTo: 'parent' })">Append to Parent!</button></td>
-              </tr>
-            </table>
-          </div>
-          <button
-            type="button"
-            class="default circle"
-            style="position: fixed; bottom: 180px; right: 10px; box-shadow: 1px 2px 4px rgba(0,0,0,.4);"
-            onmousedown="ripplet(arguments[0], { spreadingDuration: '2s', clearingDelay: '1s', clearingDuration: '2s' })"
-          >Fixed Target!</button>
         </div>
       </div>
+      <div style="padding: 10px 20px; background-color: rgba(0,0,0,.1); border-radius: 8px; position: fixed; bottom: 10px; right: 10px;">
+        <h3>Fixed Ancestor</h3>
+        <table>
+          <tr>
+            <td><button type="button" class="default" onmousedown="ripplet(arguments[0], { spreadingDuration: '2s', clearingDelay: '1s', clearingDuration: '2s' })">Append to Body!</button></td>
+            <td><button type="button" class="default" onmousedown="ripplet(arguments[0], { spreadingDuration: '2s', clearingDelay: '1s', clearingDuration: '2s', appendTo: 'parent' })">Append to Parent!</button></td>
+          </tr>
+        </table>
+      </div>
+      <button
+        type="button"
+        class="default circle"
+        style="position: fixed; bottom: 180px; right: 10px; box-shadow: 1px 2px 4px rgba(0,0,0,.4);"
+        onmousedown="ripplet(arguments[0], { spreadingDuration: '2s', clearingDelay: '1s', clearingDuration: '2s' })"
+      >
+        Fixed Target!
+      </button>
       <div class="category">
         <h3>Events</h3>
         <div class="buttons">
@@ -261,7 +266,7 @@
     </div>
     <script>
       function serializeForm(form) {
-        return Array.from(form.elements).reduce(function (params, element) {
+        return Array.prototype.reduce.call(form.elements, function (params, element) {
           switch (element.type) {
             case 'radio':
               if (element.checked) {
@@ -278,7 +283,7 @@
         }, {});
       }
 
-      Array.from(document.querySelectorAll('input[type="checkbox"], input[type="radio"]')).forEach(function (input) {
+      Array.prototype.forEach.call(document.querySelectorAll('input[type="checkbox"], input[type="radio"]'), function (input) {
         input.addEventListener('change', requestAnimationFrame.bind(window, function () {
           if (input.checked) {
             var rippletContainer = ripplet({ currentTarget: input }, { centered: true, color: 'rgba(128,192,255,.4)', spreadingTimingFunction: 'ease-out' });
