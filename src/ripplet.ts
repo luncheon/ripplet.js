@@ -98,7 +98,7 @@ function generateRipplet(
     copyStyles(
       containerStyle,
       targetStyle,
-      ['borderTopLeftRadius', 'borderTopRightRadius', 'borderBottomLeftRadius', 'borderBottomRightRadius']
+      ['borderTopLeftRadius', 'borderTopRightRadius', 'borderBottomLeftRadius', 'borderBottomRightRadius', 'webkitClipPath', 'clipPath']
     )
   }
 
