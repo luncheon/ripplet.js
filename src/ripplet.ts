@@ -25,39 +25,68 @@ export default function ripplet(
 ): HTMLElement | undefined
 
 export default function ripplet(
-  { currentTarget, clientX, clientY }:  Readonly<{ currentTarget: Element | EventTarget, clientX?: number, clientY?: number }>,
+  {
+    currentTarget: targetElement,
+    clientX: originX,
+    clientY: originY,
+  }:  Readonly<{ currentTarget: Element | EventTarget, clientX?: number, clientY?: number }>,
   options?:                             Partial<RippletOptions>,
 ): HTMLElement | undefined {
-  if (!(currentTarget instanceof Element)) {
+  if (!(targetElement instanceof Element)) {
     return
   }
-  const mergedOptions = mergeDefaultOptions(options)
-  const targetRect = currentTarget.getBoundingClientRect()
-  if (mergedOptions.centered && mergedOptions.centered !== 'false') {
-    clientX = targetRect.left + targetRect.width  * .5
-    clientY = targetRect.top  + targetRect.height * .5
-  } else if (typeof clientX !== 'number' || typeof clientY !== 'number') {
-    return
-  }
-  return generateRipplet(currentTarget, clientX, clientY, targetRect, mergedOptions)
-}
 
-function generateRipplet(
-  targetElement:  Element,
-  originX:        number,
-  originY:        number,
-  targetRect:     Readonly<ClientRect>,
-  options:        RippletOptions,
-) {
-  const doc                             = document  // for minification efficiency
+  const mergedOptions = mergeDefaultOptions(options)
+  let {
+    left:   targetLeft,
+    top:    targetTop,
+    width:  targetWidth,
+    height: targetHeight,
+  } = targetElement.getBoundingClientRect()
+
+  if (mergedOptions.centered && mergedOptions.centered !== 'false') {
+    originX = targetLeft + targetWidth  * .5
+    originY = targetTop  + targetHeight * .5
+  } else if (typeof originX !== 'number' || typeof originY !== 'number') {
+    return
+  }
+
+  const doc                             = document
   const { documentElement, body }       = doc
   const createDiv: () => HTMLDivElement = doc.createElement.bind(doc, 'div')
+  const win = window as any
+  const DOMMatrix: typeof WebKitCSSMatrix = win.DOMMatrix || win.WebKitCSSMatrix || win.MSCSSMatrix // tslint:disable-line:variable-name
+  const targetStyle                     = getComputedStyle(targetElement)
   const containerElement                = createDiv()
-  let removingElement                   = containerElement
+  const containerStyle                  = containerElement.style
+
+  // resolve transform
+  // based on https://www.w3.org/TR/css-transforms/#transform-rendering
+  const transform                       = targetStyle.transform
+  if (DOMMatrix && targetElement instanceof HTMLElement && transform && transform !== 'none') {
+    targetWidth                           = targetElement.offsetWidth
+    targetHeight                          = targetElement.offsetHeight
+    const transformOrigin                 = targetStyle.transformOrigin!.split(' ').map(parseFloat)
+    const matrix                          = new DOMMatrix()
+      .translate(transformOrigin[0], transformOrigin[1], transformOrigin[2])
+      .multiply(new DOMMatrix(transform))
+      .translate(-transformOrigin[0], -transformOrigin[1], transformOrigin[2] && -transformOrigin[2])
+    const translated10                    = matrix.translate(targetWidth, 0, 0)
+    const translated01                    = matrix.translate(0, targetHeight, 0)
+    const translated11                    = matrix.translate(targetWidth, targetHeight, 0)
+    targetLeft                            -= Math.min(matrix.m41, translated01.m41, translated10.m41, translated11.m41)
+    targetTop                             -= Math.min(matrix.m42, translated01.m42, translated10.m42, translated11.m42)
+    const point                           = matrix.inverse().translate(originX - targetLeft, originY - targetTop)
+    originX                               = point.m41 + targetLeft
+    originY                               = point.m42 + targetTop
+
+    containerStyle.transform              = targetStyle.transform
+    containerStyle.transformOrigin        = targetStyle.transformOrigin
+  }
+
+  let removingElement                     = containerElement
   {
-    const appendToParent                = options.appendTo === 'parent'
-    const targetStyle                   = getComputedStyle(targetElement)
-    const containerStyle                = containerElement.style
+    const appendToParent                    = mergedOptions.appendTo === 'parent'
     if (targetStyle.position === 'fixed' || (targetStyle.position === 'absolute' && appendToParent)) {
       if (appendToParent) {
         targetElement.parentElement!.insertBefore(containerElement, targetElement)
@@ -81,20 +110,20 @@ function generateRipplet(
       const containerContainerRect            = containerContainer.getBoundingClientRect()  // this may be a slow operation...
       containerContainer.appendChild(containerElement)
       containerStyle.position                 = 'absolute'
-      containerStyle.top                      = `${targetRect.top  - containerContainerRect.top}px`
-      containerStyle.left                     = `${targetRect.left - containerContainerRect.left}px`
+      containerStyle.left                     = `${targetLeft - containerContainerRect.left}px`
+      containerStyle.top                      = `${targetTop  - containerContainerRect.top}px`
     } else {
       body.appendChild(containerElement)
       containerStyle.position                 = 'absolute'
-      containerStyle.left                     = `${targetRect.left + documentElement.scrollLeft + body.scrollLeft}px`
-      containerStyle.top                      = `${targetRect.top  + documentElement.scrollTop  + body.scrollTop}px`
+      containerStyle.left                     = `${targetLeft + documentElement.scrollLeft + body.scrollLeft}px`
+      containerStyle.top                      = `${targetTop  + documentElement.scrollTop  + body.scrollTop}px`
     }
     containerStyle.overflow                 = 'hidden'
     containerStyle.pointerEvents            = 'none'
-    containerStyle.width                    = `${targetRect.width}px`
-    containerStyle.height                   = `${targetRect.height}px`
+    containerStyle.width                    = `${targetWidth}px`
+    containerStyle.height                   = `${targetHeight}px`
     containerStyle.zIndex                   = `${(parseInt(targetStyle.zIndex as any, 10) || 0) + 1}`
-    containerStyle.opacity                  = options.opacity
+    containerStyle.opacity                  = mergedOptions.opacity
     copyStyles(
       containerStyle,
       targetStyle,
@@ -103,21 +132,21 @@ function generateRipplet(
   }
 
   {
-    const distanceX                         = Math.max(originX - targetRect.left, targetRect.right - originX)
-    const distanceY                         = Math.max(originY - targetRect.top, targetRect.bottom - originY)
+    const distanceX                         = Math.max(originX - targetLeft, targetLeft + targetWidth - originX)
+    const distanceY                         = Math.max(originY - targetTop, targetTop + targetHeight - originY)
     const radius                            = Math.sqrt(distanceX * distanceX + distanceY * distanceY)
     const rippletElement                    = containerElement.appendChild(createDiv())
     const rippletStyle                      = rippletElement.style
-    rippletElement.className                = options.className
-    rippletStyle.backgroundColor            = options.color
+    rippletElement.className                = mergedOptions.className
+    rippletStyle.backgroundColor            = mergedOptions.color
     rippletStyle.width                      = rippletStyle.height
                                             = `${radius * 2}px`
-    rippletStyle.marginLeft                 = `${originX - targetRect.left - radius}px`
-    rippletStyle.marginTop                  = `${originY - targetRect.top  - radius}px`
+    rippletStyle.marginLeft                 = `${originX - targetLeft - radius}px`
+    rippletStyle.marginTop                  = `${originY - targetTop  - radius}px`
     rippletStyle.borderRadius               = '50%'
     rippletStyle.transition                 =
-      `transform ${options.spreadingDuration} ${options.spreadingTimingFunction} ${options.spreadingDelay}` +
-      `,opacity ${ options.clearingDuration } ${options.clearingTimingFunction } ${options.clearingDelay }`
+      `transform ${mergedOptions.spreadingDuration} ${mergedOptions.spreadingTimingFunction} ${mergedOptions.spreadingDelay}` +
+      `,opacity ${ mergedOptions.clearingDuration } ${mergedOptions.clearingTimingFunction } ${mergedOptions.clearingDelay }`
     rippletStyle.transform                  = 'scale(0)'
     rippletStyle.opacity                    = '1'
     setTimeout(() => {
