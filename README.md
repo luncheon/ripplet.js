@@ -99,6 +99,7 @@ If you don't need detailed control, you can use declarative edition that capture
 Load `"ripplet-declarative.js"` and add `data-ripplet` attribute to html elements with/without options.  
 Elements dynamically appended also ripple if `data-ripplet` attribute is available.
 
+
 ### Example Usage
 
 ```html
@@ -123,6 +124,21 @@ or
 
 <a target="_blank" download="ripplet-declarative.min.js" href="https://cdn.jsdelivr.net/npm/ripplet.js@0.1.8/umd/ripplet-declarative.min.js">Download ripplet-declarative.min.js</a>
 
+
+## Tips
+
+I recommend applying following styles to the ripple target elements:
+
+* Erase tap highlight effect for iOS
+* Disable tap-to-hover behavior and double-tap-to-zoom behavior for iOS
+
+```css
+/* Example for the declarative edition */
+[data-ripplet] {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+```
 
 ## License
 
