@@ -24,9 +24,7 @@ element.addEventListener('mousedown', ripplet);
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/ripplet.js@0.1.8"></script>
-<script>
-  element.addEventListener('mousedown', ripplet);
-</script>
+<button onmousedown="ripplet(arguments[0])">Click me!</button>
 ```
 
 ### Download directly
@@ -97,7 +95,7 @@ or
 
 If you don't need detailed control, you can use declarative edition that captures mousedown events.  
 Load `"ripplet-declarative.js"` and add `data-ripplet` attribute to html elements with/without options.  
-Elements dynamically appended also ripple if `data-ripplet` attribute is available.
+Elements dynamically appended also have the ripple effect if `data-ripplet` attribute is available.
 
 
 ### Example Usage
@@ -129,14 +127,14 @@ or
 
 I recommend applying following styles to the ripple target elements:
 
-* Erase tap highlight effect for iOS
-* Disable tap-to-hover behavior and double-tap-to-zoom behavior for iOS
+1. Erase tap highlight effect for iOS
+2. Disable tap-to-hover behavior and double-tap-to-zoom behavior for iOS
 
 ```css
 /* Example for the declarative edition */
 [data-ripplet] {
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent; /* 1 */
+  touch-action: manipulation; /* 2 */
 }
 ```
 
