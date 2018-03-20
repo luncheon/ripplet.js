@@ -10,7 +10,8 @@
     "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": false,
     "experimentalDecorators": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "types": []
   },
   "include": [
     "src/**/*"

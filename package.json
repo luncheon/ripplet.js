@@ -14,20 +14,17 @@
     "src"
   ],
   "scripts": {
-    "rebuild": "npm run clean && npm run build",
-    "build": "npm run lint && npm run build:umd && npm run build:umd-declarative && npm run build:es",
+    "build": "npm run clean && npm run lint && npm run build:umd && npm run build:umd-declarative && npm run build:es",
     "build:umd": "rollup -c -n ripplet -i src/ripplet -o umd/ripplet.js && uglifyjs -m -c join_vars=true -o umd/ripplet.min.js umd/ripplet.js",
     "build:umd-declarative": "rollup -c -n ripplet -i src/ripplet-declarative -o umd/ripplet-declarative.js && uglifyjs -m -c join_vars=true -o umd/ripplet-declarative.min.js umd/ripplet-declarative.js",
     "build:es": "tsc -p . -m es2015 --outDir ./es -d --declarationDir ./types",
-    "watch": "echo Rollup watch crashes in cmd/PowerShell on windows. see https://github.com/rollup/rollup/issues/1739",
-    "watch_": "rollup -c -w",
+    "watch": "rollup -w -c -n ripplet -i src/ripplet -o umd/ripplet.js",
     "clean": "rimraf umd es types",
     "lint": "tslint -p .",
-    "verify": "npm run verify:install && npm run verify:rebuild && npm run verify:open",
+    "verify": "npm run verify:install && npm run verify:build && npm run verify:open",
     "verify:install": "subpkg i",
-    "verify:rebuild": "npm run verify:clean && npm run verify:build",
     "verify:clean": "rimraf verify/*/dist",
-    "verify:build": "subpkg run build",
+    "verify:build": "npm run verify:clean && subpkg run build",
     "verify:open": "opener ./verify/verify.html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -52,12 +49,12 @@
   "devDependencies": {
     "opener": "1.4.3",
     "rimraf": "2.6.2",
-    "rollup": "0.52.3",
+    "rollup": "^0.57.1",
     "subpackage": "1.1.0",
-    "tslint": "5.8.0",
-    "typescript": "2.6.2",
+    "tslint": "^5.9.1",
+    "typescript": "^2.7.2",
     "uglify-es": "3.1.5",
     "uglify-js": "3.1.5",
-    "umd": "3.0.1"
+    "umd": "^3.0.3"
   }
 }
