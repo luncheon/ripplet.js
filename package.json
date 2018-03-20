@@ -5,21 +5,22 @@
   "main": "./umd/ripplet.js",
   "module": "./es/ripplet.js",
   "jsnext:main": "./es/ripplet.js",
-  "types": "./types/ripplet.d.ts",
+  "types": "./es/ripplet.d.ts",
   "unpkg": "./umd/ripplet.min.js",
   "files": [
     "umd",
     "es",
-    "types",
     "src"
   ],
   "scripts": {
-    "build": "npm run clean && npm run lint && npm run build:umd && npm run build:umd-declarative && npm run build:es",
-    "build:umd": "rollup -c -n ripplet -i src/ripplet -o umd/ripplet.js && uglifyjs -m -c join_vars=true -o umd/ripplet.min.js umd/ripplet.js",
-    "build:umd-declarative": "rollup -c -n ripplet -i src/ripplet-declarative -o umd/ripplet-declarative.js && uglifyjs -m -c join_vars=true -o umd/ripplet-declarative.min.js umd/ripplet-declarative.js",
-    "build:es": "tsc -p . -m es2015 --outDir ./es -d --declarationDir ./types",
+    "build": "npm run clean && npm run lint && npm run build:umd && npm run build:es",
+    "build:umd": "npm run build:umd:types && npm run build:umd:main && npm run build:umd:declarative",
+    "build:umd:main": "rollup -c -n ripplet -i src/ripplet -o umd/ripplet.js && uglifyjs -m -c join_vars=true -o umd/ripplet.min.js umd/ripplet.js",
+    "build:umd:declarative": "rollup -c -n ripplet -i src/ripplet-declarative -o umd/ripplet-declarative.js && uglifyjs -m -c join_vars=true -o umd/ripplet-declarative.min.js umd/ripplet-declarative.js",
+    "build:umd:types": "tsc -p . -m umd --outDir ./umd -d --emitDeclarationOnly",
+    "build:es": "tsc -p . -m es2015 --outDir ./es -d",
     "watch": "rollup -w -c -n ripplet -i src/ripplet -o umd/ripplet.js",
-    "clean": "rimraf umd es types",
+    "clean": "rimraf umd es",
     "lint": "tslint -p .",
     "verify": "npm run verify:install && npm run verify:build && npm run verify:open",
     "verify:install": "subpkg i",
@@ -52,9 +53,9 @@
     "rollup": "^0.57.1",
     "subpackage": "1.1.0",
     "tslint": "^5.9.1",
-    "typescript": "^2.7.2",
-    "uglify-es": "3.1.5",
-    "uglify-js": "3.1.5",
+    "typescript": "^2.8.0-insiders.20180320",
+    "uglify-es": "^3.3.9",
+    "uglify-js": "^3.3.16",
     "umd": "^3.0.3"
   }
 }

@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "outDir": "./lib",
     "target": "es5",
     "moduleResolution": "node",
     "removeComments": false,

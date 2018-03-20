@@ -25,7 +25,7 @@ export default function ripplet(
 ): HTMLElement | undefined
 
 export default function ripplet(
-  { currentTarget, clientX, clientY }:  Readonly<{ currentTarget: Element | EventTarget, clientX?: number, clientY?: number }>,
+  { currentTarget, clientX, clientY }:  Readonly<{ currentTarget: any, clientX?: number, clientY?: number }>,
   options?:                             Partial<RippletOptions>,
 ): HTMLElement | undefined {
   if (!(currentTarget instanceof Element)) {
