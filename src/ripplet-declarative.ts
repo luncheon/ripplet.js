@@ -16,17 +16,10 @@ function parseOptions(optionsString: string | null) {
   if (!optionsString) {
     return
   }
-  const split = optionsString
-    .replace(/\s*/g, '')
-    .replace(/[a-zA-Z0-9_]-[a-z]/g, $0 => $0[0] + $0[2].toUpperCase())
-    .split(';')
-  if (split.length === 0) {
-    return
-  }
   const options: Record<string, string> = {}
-  for (const s of split) {
-    const [key, value] = s.split(':', 2)
-    options[key] = value
+  for (const s of optionsString.split(';')) {
+    const index = s.indexOf(':')
+    options[s.slice(0, index).trim().replace(/[a-zA-Z0-9_]-[a-z]/g, $0 => $0[0] + $0[2].toUpperCase())] = s.slice(index + 1).trim()
   }
   return options
 }
