@@ -26,41 +26,35 @@ export default function ripplet(
 
 export default function ripplet(
   { currentTarget, clientX, clientY }:  Readonly<{ currentTarget: any, clientX?: number, clientY?: number }>,
-  options?:                             Partial<RippletOptions>,
+  _options?:                            Partial<RippletOptions>,
 ): HTMLElement | undefined {
   if (!(currentTarget instanceof Element)) {
     return
   }
-  const mergedOptions = mergeDefaultOptions(options)
+  const options = _options
+    ? (Object.keys(defaultOptions) as (keyof RippletOptions)[]).reduce(
+        (merged, field) => (merged[field] = _options.hasOwnProperty(field) ? _options[field]! : defaultOptions[field], merged),
+        {} as typeof defaultOptions
+      )
+    : defaultOptions
   const targetRect = currentTarget.getBoundingClientRect()
-  if (mergedOptions.centered && mergedOptions.centered !== 'false') {
+  if (options.centered && options.centered !== 'false') {
     clientX = targetRect.left + targetRect.width  * .5
     clientY = targetRect.top  + targetRect.height * .5
   } else if (typeof clientX !== 'number' || typeof clientY !== 'number') {
     return
   }
-  return generateRipplet(currentTarget, clientX, clientY, targetRect, mergedOptions)
-}
 
-function generateRipplet(
-  targetElement:  Element,
-  originX:        number,
-  originY:        number,
-  targetRect:     Readonly<ClientRect>,
-  options:        RippletOptions,
-) {
-  const doc                             = document  // for minification efficiency
-  const { documentElement, body }       = doc
-  const createDiv: () => HTMLDivElement = doc.createElement.bind(doc, 'div')
-  const containerElement                = createDiv()
+  const { documentElement, body }       = document
+  const containerElement                = document.createElement('div')
   let removingElement                   = containerElement
   {
     const appendToParent                = options.appendTo === 'parent'
-    const targetStyle                   = getComputedStyle(targetElement)
+    const targetStyle                   = getComputedStyle(currentTarget)
     const containerStyle                = containerElement.style
     if (targetStyle.position === 'fixed' || (targetStyle.position === 'absolute' && appendToParent)) {
       if (appendToParent) {
-        targetElement.parentElement!.insertBefore(containerElement, targetElement)
+        currentTarget.parentElement!.insertBefore(containerElement, currentTarget)
       } else {
         body.appendChild(containerElement)
       }
@@ -71,7 +65,7 @@ function generateRipplet(
       )
     } else if (appendToParent) {
       const containerContainer                = removingElement
-                                              = targetElement.parentElement!.insertBefore(createDiv(), targetElement)
+                                              = currentTarget.parentElement!.insertBefore(document.createElement('div'), currentTarget)
       const containerContainerStyle           = containerContainer.style
       containerContainerStyle.display         = 'inline-block'
       containerContainerStyle.position        = 'relative'
@@ -103,25 +97,24 @@ function generateRipplet(
   }
 
   {
-    const distanceX                         = Math.max(originX - targetRect.left, targetRect.right - originX)
-    const distanceY                         = Math.max(originY - targetRect.top, targetRect.bottom - originY)
+    const distanceX                         = Math.max(clientX - targetRect.left, targetRect.right - clientX)
+    const distanceY                         = Math.max(clientY - targetRect.top, targetRect.bottom - clientY)
     const radius                            = Math.sqrt(distanceX * distanceX + distanceY * distanceY)
-    const rippletElement                    = containerElement.appendChild(createDiv())
+    const rippletElement                    = containerElement.appendChild(document.createElement('div'))
     const rippletStyle                      = rippletElement.style
     rippletElement.className                = options.className
     rippletStyle.backgroundColor            = options.color
     rippletStyle.width                      = rippletStyle.height
                                             = `${radius * 2}px`
-    rippletStyle.marginLeft                 = `${originX - targetRect.left - radius}px`
-    rippletStyle.marginTop                  = `${originY - targetRect.top  - radius}px`
+    rippletStyle.marginLeft                 = `${clientX - targetRect.left - radius}px`
+    rippletStyle.marginTop                  = `${clientY - targetRect.top  - radius}px`
     rippletStyle.borderRadius               = '50%'
     rippletStyle.transition                 =
       `transform ${options.spreadingDuration} ${options.spreadingTimingFunction} ${options.spreadingDelay}` +
       `,opacity ${ options.clearingDuration } ${options.clearingTimingFunction } ${options.clearingDelay }`
     rippletStyle.transform                  = 'scale(0)'
-    rippletStyle.opacity                    = '1'
     setTimeout(() => {
-      rippletStyle.transform                  = 'scale(1)'
+      rippletStyle.transform                  = ''
       rippletStyle.opacity                    = '0'
     })
     rippletElement.addEventListener('transitionend', event => {
@@ -137,14 +130,4 @@ function copyStyles<T>(destination: T, source: Readonly<T>, properties: (keyof T
   for (const property of properties) {
     destination[property] = source[property]
   }
-}
-
-function mergeDefaultOptions(options?: Partial<RippletOptions>): RippletOptions {
-  if (!options) {
-    return defaultOptions
-  }
-  return (Object.keys(defaultOptions) as (keyof RippletOptions)[]).reduce(
-    (merged, field) => (merged[field] = options.hasOwnProperty(field) ? options[field]! : defaultOptions[field], merged),
-    {} as typeof defaultOptions
-  )
 }
