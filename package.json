@@ -53,9 +53,9 @@
     "rollup": "^0.57.1",
     "subpackage": "1.1.0",
     "tslint": "^5.9.1",
-    "typescript": "^2.8.0-insiders.20180320",
+    "typescript": "^2.8.1",
     "uglify-es": "^3.3.9",
-    "uglify-js": "^3.3.16",
+    "uglify-js": "^3.3.20",
     "umd": "^3.0.3"
   }
 }
