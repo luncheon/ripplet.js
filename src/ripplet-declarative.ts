@@ -2,6 +2,20 @@ import ripplet from './ripplet'
 export default ripplet
 export * from './ripplet'
 
+// use passive event listener if possible
+let eventListenerOptions: boolean | AddEventListenerOptions = true
+{
+  const testOptions: AddEventListenerOptions = {
+    get passive() {
+      eventListenerOptions = { passive: true, capture: true }
+      return true
+    },
+  }
+  const noop = () => {}
+  addEventListener('test', noop, testOptions)
+  removeEventListener('test', noop, testOptions)
+}
+
 addEventListener('mousedown', event => {
   if (event.button !== 0) {
     return
@@ -10,7 +24,7 @@ addEventListener('mousedown', event => {
   if (currentTarget) {
     ripplet({ currentTarget, clientX: event.clientX, clientY: event.clientY }, parseOptions(currentTarget.getAttribute('data-ripplet')))
   }
-}, true)
+}, eventListenerOptions)
 
 function parseOptions(optionsString: string | null) {
   if (!optionsString) {
