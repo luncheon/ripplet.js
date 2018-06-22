@@ -23,13 +23,13 @@ element.addEventListener('mousedown', ripplet);
 ### via CDN
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ripplet.js@0.1.12"></script>
+<script src="https://cdn.jsdelivr.net/npm/ripplet.js@0.1.13"></script>
 <button onmousedown="ripplet(arguments[0])">Click me!</button>
 ```
 
 ### Download directly
 
-<a target="_blank" download="ripplet.min.js" href="https://cdn.jsdelivr.net/npm/ripplet.js@0.1.12/umd/ripplet.min.js">Download ripplet.min.js</a>
+<a target="_blank" download="ripplet.min.js" href="https://cdn.jsdelivr.net/npm/ripplet.js@0.1.13/umd/ripplet.min.js">Download ripplet.min.js</a>
 
 
 ## API
@@ -84,7 +84,7 @@ defaultOptions.color = 'rgba(64, 128, 255, .2)';
 or
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ripplet.js@0.1.12"></script>
+<script src="https://cdn.jsdelivr.net/npm/ripplet.js@0.1.13"></script>
 <script>
   ripplet.defaultOptions.color = 'rgba(64, 128, 255, .2)';
 </script>
@@ -101,7 +101,7 @@ Elements dynamically appended also have the ripple effect if `data-ripplet` attr
 ### Example Usage
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ripplet.js@0.1.12/umd/ripplet-declarative.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ripplet.js@0.1.13/umd/ripplet-declarative.min.js"></script>
 <!-- <script>ripplet.defaultOptions.color = 'rgba(0, 255, 0, .2)';</script> -->
 
 <button data-ripplet>Default</button>
@@ -120,7 +120,7 @@ import 'ripplet.js/es/ripplet-declarative';
 
 or
 
-<a target="_blank" download="ripplet-declarative.min.js" href="https://cdn.jsdelivr.net/npm/ripplet.js@0.1.12/umd/ripplet-declarative.min.js">Download ripplet-declarative.min.js</a>
+<a target="_blank" download="ripplet-declarative.min.js" href="https://cdn.jsdelivr.net/npm/ripplet.js@0.1.13/umd/ripplet-declarative.min.js">Download ripplet-declarative.min.js</a>
 
 
 ## Tips
