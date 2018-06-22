@@ -64,19 +64,27 @@ export default function ripplet(
         ['position', 'left', 'top', 'right', 'bottom', 'marginLeft', 'marginTop', 'marginRight', 'marginBottom']
       )
     } else if (appendToParent) {
-      const containerContainer                = removingElement
-                                              = currentTarget.parentElement!.insertBefore(document.createElement('div'), currentTarget)
-      const containerContainerStyle           = containerContainer.style
-      containerContainerStyle.display         = 'inline-block'
-      containerContainerStyle.position        = 'relative'
-      containerContainerStyle.width           = containerContainerStyle.height
-                                              = '0'
-      containerContainerStyle.cssFloat        = targetStyle.cssFloat
-      const containerContainerRect            = containerContainer.getBoundingClientRect()  // this may be a slow operation...
-      containerContainer.appendChild(containerElement)
-      containerStyle.position                 = 'absolute'
-      containerStyle.top                      = `${targetRect.top  - containerContainerRect.top}px`
-      containerStyle.left                     = `${targetRect.left - containerContainerRect.left}px`
+      const parentStyle = getComputedStyle(currentTarget.parentElement!)
+      if (parentStyle.display === 'flex' || parentStyle.display === 'inline-flex') {
+        currentTarget.parentElement!.insertBefore(containerElement, currentTarget)
+        containerStyle.position                 = 'absolute'
+        containerStyle.left                     = `${(currentTarget as HTMLElement).offsetLeft}px`
+        containerStyle.top                      = `${(currentTarget as HTMLElement).offsetTop}px`
+      } else {
+        const containerContainer                = removingElement
+                                                = currentTarget.parentElement!.insertBefore(document.createElement('div'), currentTarget)
+        const containerContainerStyle           = containerContainer.style
+        containerContainerStyle.display         = 'inline-block'
+        containerContainerStyle.position        = 'relative'
+        containerContainerStyle.width           = containerContainerStyle.height
+                                                = '0'
+        containerContainerStyle.cssFloat        = targetStyle.cssFloat
+        const containerContainerRect            = containerContainer.getBoundingClientRect()  // this may be a slow operation...
+        containerContainer.appendChild(containerElement)
+        containerStyle.position                 = 'absolute'
+        containerStyle.top                      = `${targetRect.top  - containerContainerRect.top}px`
+        containerStyle.left                     = `${targetRect.left - containerContainerRect.left}px`
+      }
     } else {
       body.appendChild(containerElement)
       containerStyle.position                 = 'absolute'

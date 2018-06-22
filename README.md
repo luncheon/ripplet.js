@@ -63,7 +63,7 @@ In particular, create two elements (one is a circular enlarging element represen
 | clearingDelay           | "0s"                | As its name suggests  |
 | clearingTimingFunction  | "ease-in-out"       | As its name suggests  |
 | centered                | false               | Force the origin centered (`clientX` and `clientY` of the first argument are ignored) |
-| appendTo                | "body"              | Either `"body"` or `"parent"`. Consider specifying `"parent"` if there are scrollable ancestors or `position: fixed` ancestors. Please see the demo. If the parent treats children as special (e.g. the parent is a table, a flexbox, a grid container, etc.), specifying `"parent"` may cause the ripplet to be placed incorrectly. |
+| appendTo                | "body"              | Either `"body"` or `"parent"`. Consider specifying `"parent"` if there are scrollable ancestors or `position: fixed` ancestors.<br>If the parent treats children as special (e.g. the parent is a flexbox on IE), specifying `"parent"` may cause the ripplet to be placed incorrectly. |
 
 #### Return value
 
