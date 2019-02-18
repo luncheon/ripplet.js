@@ -1,5 +1,5 @@
 node_modules/
-umd
-es
-verify/**/dist
-verify/**/package-lock.json
+/umd
+/es
+/verify/**/dist
+/verify/**/package-lock.json

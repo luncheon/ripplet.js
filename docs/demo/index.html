@@ -131,8 +131,13 @@
     </style>
   </head>
   <body>
-    <script src="https://cdn.jsdelivr.net/npm/ripplet.js@0.1.13"></script>
-    <!-- <script src="../../umd/ripplet.js"></script> -->
+    <script>
+      (function (version) {
+        var script = document.createElement('script');
+        script.src = version === 'master' ? '../umd/ripplet.js' : 'https://cdn.jsdelivr.net/npm/ripplet.js@' + version;
+        document.body.appendChild(script);
+      })(location.search.slice(1) || '0.1.13');
+    </script>
     <div style="display: flex; align-items: center;">
       <h1>ripplet.js</h1>
       <a class="github-link" href="https://github.com/luncheon/ripplet.js" onmousedown="ripplet(arguments[0], { color: 'rgb(255, 255, 255)' })">

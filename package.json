@@ -13,12 +13,13 @@
     "src"
   ],
   "scripts": {
-    "build": "npm run clean && npm run lint && npm run build:umd && npm run build:es",
+    "build": "npm run clean && npm run lint && npm run build:umd && npm run build:es && npm run build:demo",
     "build:umd": "npm run build:umd:types && npm run build:umd:main && npm run build:umd:declarative",
     "build:umd:main": "rollup -c -n ripplet -i src/ripplet -o umd/ripplet.js && uglifyjs -m -c join_vars=true -o umd/ripplet.min.js umd/ripplet.js",
     "build:umd:declarative": "rollup -c -n ripplet -i src/ripplet-declarative -o umd/ripplet-declarative.js && uglifyjs -m -c join_vars=true -o umd/ripplet-declarative.min.js umd/ripplet-declarative.js",
     "build:umd:types": "tsc -p . -m umd --outDir ./umd -d --emitDeclarationOnly",
     "build:es": "tsc -p . -m es2015 --outDir ./es -d",
+    "build:demo": "copyfiles umd/* docs/",
     "watch": "rollup -w -c -n ripplet -i src/ripplet -o umd/ripplet.js",
     "clean": "rimraf umd es",
     "lint": "tslint -p .",
@@ -48,6 +49,7 @@
   "license": "WTFPL",
   "repository": "luncheon/ripplet.js",
   "devDependencies": {
+    "copyfiles": "^2.1.0",
     "opener": "^1.5.1",
     "rimraf": "^2.6.3",
     "rollup": "^1.2.1",
