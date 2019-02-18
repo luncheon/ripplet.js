@@ -48,14 +48,14 @@
   "license": "WTFPL",
   "repository": "luncheon/ripplet.js",
   "devDependencies": {
-    "opener": "1.4.3",
-    "rimraf": "2.6.2",
-    "rollup": "^0.61.1",
+    "opener": "^1.5.1",
+    "rimraf": "^2.6.3",
+    "rollup": "^1.2.1",
     "subpackage": "1.1.0",
-    "tslint": "^5.10.0",
-    "typescript": "^2.9.2",
+    "tslint": "^5.12.1",
+    "typescript": "^3.3.3",
     "uglify-es": "^3.3.9",
-    "uglify-js": "^3.4.1",
+    "uglify-js": "^3.4.9",
     "umd": "^3.0.3"
   }
 }
