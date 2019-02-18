@@ -121,15 +121,18 @@ export default function ripplet(
       `transform ${options.spreadingDuration} ${options.spreadingTimingFunction} ${options.spreadingDelay}` +
       `,opacity ${ options.clearingDuration } ${options.clearingTimingFunction } ${options.clearingDelay }`
     rippletStyle.transform                  = 'scale(0)'
-    setTimeout(() => {
-      rippletStyle.transform                  = ''
-      rippletStyle.opacity                    = '0'
-    })
+
+    // reflect styles by force layout
+    // tslint:disable-next-line:no-unused-expression
+    rippletElement.offsetTop
+
     rippletElement.addEventListener('transitionend', event => {
-      if ((event as TransitionEvent).propertyName === 'opacity' && removingElement.parentElement) {
+      if (event.propertyName === 'opacity' && removingElement.parentElement) {
         removingElement.parentElement.removeChild(removingElement)
       }
     })
+    rippletStyle.transform                  = ''
+    rippletStyle.opacity                    = '0'
   }
   return containerElement
 }
