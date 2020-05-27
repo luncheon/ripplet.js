@@ -136,7 +136,7 @@
         var script = document.createElement('script');
         script.src = version === 'master' ? '../umd/ripplet.js' : 'https://cdn.jsdelivr.net/npm/ripplet.js@' + version;
         document.body.appendChild(script);
-      })(location.search.slice(1) || '0.1.14');
+      })(location.search.slice(1) || '0.2.0');
     </script>
     <div style="display: flex; align-items: center;">
       <h1>ripplet.js</h1>
@@ -157,8 +157,8 @@
       <div class="category">
         <h3>Colors</h3>
         <div class="buttons">
-          <button type="button" class="default" onmousedown="ripplet(arguments[0], { color: 'rgba(255, 0, 0, .3)' })">Red!</button>
-          <button type="button" class="default" onmousedown="ripplet(arguments[0], { color: null, className: 'rainbow' })">Rainbow!</button>
+          <button type="button" class="default" onmousedown="ripplet(arguments[0], { color: 'red' })">Red!</button>
+          <button type="button" class="default" onmousedown="ripplet(arguments[0], { color: null, opacity: 1, className: 'rainbow' })">Rainbow!</button>
           <style>
             .rainbow {
               background-image: linear-gradient(
@@ -173,7 +173,7 @@
             }
           </style>
 
-          <button type="button" class="default ripplet-image" onmousedown="ripplet(arguments[0], { color: null, className: 'ripplet-image--ripplet', spreadingTimingFunction: 'ease-out', clearingDuration: '.5s', clearingDelay: '.1s' })">Image!</button>
+          <button type="button" class="default ripplet-image" onmousedown="ripplet(arguments[0], { color: null, opacity: 1, className: 'ripplet-image--ripplet', spreadingTimingFunction: 'ease-out', clearingDuration: '.5s', clearingDelay: '.1s' })">Image!</button>
           <style>
             .ripplet-image {
               transition: background-color .4s ease-out, color .4s ease-out;
@@ -211,7 +211,7 @@
         </div>
       </div>
       <div style="padding: 10px 20px; background-color: rgba(0,0,0,.1); border-radius: 8px; position: fixed; bottom: 10px; right: 10px;">
-        <h3>Fixed Ancestor</h3>
+        <h3>Fixed Ancestor<br>(Click and scroll immediately)</h3>
         <table>
           <tr>
             <td><button type="button" class="default" onmousedown="ripplet(arguments[0], { spreadingDuration: '2s', clearingDelay: '1s', clearingDuration: '2s' })">Append to Body!</button></td>
@@ -233,12 +233,12 @@
           <button type="button" class="default" onmouseenter="ripplet(arguments[0])">Enter mouse!</button>
           <button type="button" class="default" onmouseleave="ripplet(arguments[0])">Leave mouse!</button>
           <table style="text-align: center; font-size: 14px;">
-            <tr class="keep" onmouseenter="ripplet(arguments[0], { color: 'rgba(255,   0,   0, .3)' })" style="background-color: rgba(255,   0,   0, .3);"><td style="padding: 0 12px; border-bottom: 1px solid #ccc;">Hover mouse!</td></tr>
-            <tr class="keep" onmouseenter="ripplet(arguments[0], { color: 'rgba(255, 255,   0, .3)' })" style="background-color: rgba(255, 255,   0, .3);"><td style="padding: 0 12px; border-bottom: 1px solid #ccc;">Hover mouse!</td></tr>
-            <tr class="keep" onmouseenter="ripplet(arguments[0], { color: 'rgba(  0, 255,   0, .2)' })" style="background-color: rgba(  0, 255,   0, .2);"><td style="padding: 0 12px; border-bottom: 1px solid #ccc;">Hover mouse!</td></tr>
-            <tr class="keep" onmouseenter="ripplet(arguments[0], { color: 'rgba(  0, 255, 255, .2)' })" style="background-color: rgba(  0, 255, 255, .2);"><td style="padding: 0 12px; border-bottom: 1px solid #ccc;">Hover mouse!</td></tr>
-            <tr class="keep" onmouseenter="ripplet(arguments[0], { color: 'rgba(  0,   0, 255, .1)' })" style="background-color: rgba(  0,   0, 255, .1);"><td style="padding: 0 12px; border-bottom: 1px solid #ccc;">Hover mouse!</td></tr>
-            <tr class="keep" onmouseenter="ripplet(arguments[0], { color: 'rgba(255,   0, 255, .2)' })" style="background-color: rgba(255,   0, 255, .2);"><td style="padding: 0 12px; border-bottom: 1px solid #ccc;">Hover mouse!</td></tr>
+            <tr class="keep" onmouseenter="ripplet(arguments[0], { color: 'rgb(255,   0,   0)' })" style="background-color: rgba(255,   0,   0, .3);"><td style="padding: 0 12px; border-bottom: 1px solid #ccc;">Hover mouse!</td></tr>
+            <tr class="keep" onmouseenter="ripplet(arguments[0], { color: 'rgb(255, 255,   0)' })" style="background-color: rgba(255, 255,   0, .3);"><td style="padding: 0 12px; border-bottom: 1px solid #ccc;">Hover mouse!</td></tr>
+            <tr class="keep" onmouseenter="ripplet(arguments[0], { color: 'rgb(  0, 255,   0)' })" style="background-color: rgba(  0, 255,   0, .2);"><td style="padding: 0 12px; border-bottom: 1px solid #ccc;">Hover mouse!</td></tr>
+            <tr class="keep" onmouseenter="ripplet(arguments[0], { color: 'rgb(  0, 255, 255)' })" style="background-color: rgba(  0, 255, 255, .2);"><td style="padding: 0 12px; border-bottom: 1px solid #ccc;">Hover mouse!</td></tr>
+            <tr class="keep" onmouseenter="ripplet(arguments[0], { color: 'rgb(  0,   0, 255)' })" style="background-color: rgba(  0,   0, 255, .1);"><td style="padding: 0 12px; border-bottom: 1px solid #ccc;">Hover mouse!</td></tr>
+            <tr class="keep" onmouseenter="ripplet(arguments[0], { color: 'rgb(255,   0, 255)' })" style="background-color: rgba(255,   0, 255, .2);"><td style="padding: 0 12px; border-bottom: 1px solid #ccc;">Hover mouse!</td></tr>
           </table>
         </div>
       </div>
@@ -246,14 +246,14 @@
         <h3>Parameters</h3>
         <form onsubmit="return false" class="buttons" style="align-items: center;">
           <table>
-            <tr><td style="text-align: right; padding-right: 12px;">color :                   </td><td><input name="color"                   value="rgba(0, 0, 0, .1)"><div class="text-field-underline"></div></td></tr>
-            <tr><td style="text-align: right; padding-right: 12px;">opacity :                 </td><td><input name="opacity"                 value="1"                ><div class="text-field-underline"></div></td></tr>
-            <tr><td style="text-align: right; padding-right: 12px;">spreadingDuration :       </td><td><input name="spreadingDuration"       value=".4s"              ><div class="text-field-underline"></div></td></tr>
-            <tr><td style="text-align: right; padding-right: 12px;">spreadingDelay :          </td><td><input name="spreadingDelay"          value="0s"               ><div class="text-field-underline"></div></td></tr>
-            <tr><td style="text-align: right; padding-right: 12px;">spreadingTimingFunction : </td><td><input name="spreadingTimingFunction" value="linear"           ><div class="text-field-underline"></div></td></tr>
-            <tr><td style="text-align: right; padding-right: 12px;">clearingDuration :        </td><td><input name="clearingDuration"        value="1s"               ><div class="text-field-underline"></div></td></tr>
-            <tr><td style="text-align: right; padding-right: 12px;">clearingDelay :           </td><td><input name="clearingDelay"           value="0s"               ><div class="text-field-underline"></div></td></tr>
-            <tr><td style="text-align: right; padding-right: 12px;">clearingTimingFunction :  </td><td><input name="clearingTimingFunction"  value="ease-in-out"      ><div class="text-field-underline"></div></td></tr>
+            <tr><td style="text-align: right; padding-right: 12px;">color :                   </td><td><input name="color"                   value="currentColor"><div class="text-field-underline"></div></td></tr>
+            <tr><td style="text-align: right; padding-right: 12px;">opacity :                 </td><td><input name="opacity"                 value="0.1"         ><div class="text-field-underline"></div></td></tr>
+            <tr><td style="text-align: right; padding-right: 12px;">spreadingDuration :       </td><td><input name="spreadingDuration"       value=".4s"         ><div class="text-field-underline"></div></td></tr>
+            <tr><td style="text-align: right; padding-right: 12px;">spreadingDelay :          </td><td><input name="spreadingDelay"          value="0s"          ><div class="text-field-underline"></div></td></tr>
+            <tr><td style="text-align: right; padding-right: 12px;">spreadingTimingFunction : </td><td><input name="spreadingTimingFunction" value="linear"      ><div class="text-field-underline"></div></td></tr>
+            <tr><td style="text-align: right; padding-right: 12px;">clearingDuration :        </td><td><input name="clearingDuration"        value="1s"          ><div class="text-field-underline"></div></td></tr>
+            <tr><td style="text-align: right; padding-right: 12px;">clearingDelay :           </td><td><input name="clearingDelay"           value="0s"          ><div class="text-field-underline"></div></td></tr>
+            <tr><td style="text-align: right; padding-right: 12px;">clearingTimingFunction :  </td><td><input name="clearingTimingFunction"  value="ease-in-out" ><div class="text-field-underline"></div></td></tr>
             <tr><td style="text-align: right; padding-right: 12px;">origin :                  </td><td><label><input type="checkbox" name="centered"                  >centered</label></td></tr>
             <tr><td style="text-align: right; padding-right: 12px;">appendTo :                </td><td><label><input type="radio" name="appendTo" value="body" checked>body</label><label><input type="radio" name="appendTo" value="parent">parent</label></td></tr>
           </table>
@@ -285,7 +285,7 @@
       Array.prototype.forEach.call(document.querySelectorAll('input[type="checkbox"], input[type="radio"]'), function (input) {
         input.addEventListener('change', requestAnimationFrame.bind(window, function () {
           if (input.checked) {
-            var rippletContainer = ripplet({ currentTarget: input }, { centered: true, color: 'rgba(128,192,255,.4)', spreadingTimingFunction: 'ease-out' });
+            var rippletContainer = ripplet({ currentTarget: input }, { centered: true, color: 'rgb(128,192,255)', opacity: .4, spreadingTimingFunction: 'ease-out', clearingDuration: '.6s' });
             rippletContainer.style.borderRadius = '50%';
             rippletContainer.style.transform = 'scale(2.5)';
           }

@@ -2,7 +2,7 @@ export declare type RippletOptions = Readonly<typeof defaultOptions>;
 export declare const defaultOptions: {
     className: string;
     color: string | null;
-    opacity: string | null;
+    opacity: number | null;
     spreadingDuration: string | null;
     spreadingDelay: string | null;
     spreadingTimingFunction: string | null;

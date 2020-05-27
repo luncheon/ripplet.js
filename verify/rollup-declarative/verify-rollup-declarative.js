@@ -1,3 +1,3 @@
 import { defaultOptions } from 'ripplet.js/es/ripplet-declarative'
 
-defaultOptions.color = 'rgba(255, 128, 0, .2)'
+defaultOptions.color = 'rgb(255, 128, 0)'

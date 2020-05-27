@@ -1,6 +1,6 @@
 {
   "name": "ripplet.js",
-  "version": "0.1.14",
+  "version": "0.2.0",
   "description": "Fully controllable vanilla-js material design ripple effect generator",
   "main": "./umd/ripplet.js",
   "module": "./es/ripplet.js",
@@ -49,15 +49,15 @@
   "license": "WTFPL",
   "repository": "luncheon/ripplet.js",
   "devDependencies": {
-    "copyfiles": "^2.1.0",
+    "copyfiles": "^2.2.0",
     "opener": "^1.5.1",
-    "rimraf": "^2.6.3",
-    "rollup": "^1.2.1",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.10.9",
     "subpackage": "1.1.0",
-    "tslint": "^5.12.1",
-    "typescript": "^3.3.3",
+    "tslint": "^6.1.2",
+    "typescript": "^3.9.3",
     "uglify-es": "^3.3.9",
-    "uglify-js": "^3.4.9",
+    "uglify-js": "^3.9.3",
     "umd": "^3.0.3"
   }
 }

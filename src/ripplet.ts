@@ -2,16 +2,16 @@ export type RippletOptions = Readonly<typeof defaultOptions>
 
 export const defaultOptions = {
   className:                '',
-  color:                    'rgba(0,0,0,.1)'  as string | null,
-  opacity:                  null              as string | null,
-  spreadingDuration:        '.4s'             as string | null,
-  spreadingDelay:           '0s'              as string | null,
-  spreadingTimingFunction:  'linear'          as string | null,
-  clearingDuration:         '1s'              as string | null,
-  clearingDelay:            '0s'              as string | null,
-  clearingTimingFunction:   'ease-in-out'     as string | null,
-  centered:                 false             as boolean | 'true' | 'false' | null,
-  appendTo:                 'body'            as 'body' | 'parent' | null,
+  color:                    'currentcolor' as string | null,
+  opacity:                  .1             as number | null,
+  spreadingDuration:        '.4s'          as string | null,
+  spreadingDelay:           '0s'           as string | null,
+  spreadingTimingFunction:  'linear'       as string | null,
+  clearingDuration:         '1s'           as string | null,
+  clearingDelay:            '0s'           as string | null,
+  clearingTimingFunction:   'ease-in-out'  as string | null,
+  centered:                 false          as boolean | 'true' | 'false' | null,
+  appendTo:                 'body'         as 'body' | 'parent' | null,
 }
 
 export default function ripplet(
@@ -31,10 +31,10 @@ export default function ripplet(
   if (!(currentTarget instanceof Element)) {
     return
   }
-  const options = _options
-    ? (Object.keys(defaultOptions) as (keyof RippletOptions)[]).reduce(
-        (merged, field) => (merged[field] = _options.hasOwnProperty(field) ? _options[field]! : defaultOptions[field], merged),
-        {} as typeof defaultOptions
+  const options: typeof defaultOptions = _options
+    ? (Object.keys(defaultOptions) as (keyof RippletOptions)[]).reduce<any>(
+        (merged, field) => (merged[field] = _options.hasOwnProperty(field) ? _options[field] : defaultOptions[field], merged),
+        {}
       )
     : defaultOptions
   const targetRect = currentTarget.getBoundingClientRect()
@@ -45,12 +45,12 @@ export default function ripplet(
     return
   }
 
+  const targetStyle                     = getComputedStyle(currentTarget)
   const { documentElement, body }       = document
   const containerElement                = document.createElement('div')
   let removingElement                   = containerElement
   {
     const appendToParent                = options.appendTo === 'parent'
-    const targetStyle                   = getComputedStyle(currentTarget)
     const containerStyle                = containerElement.style
     if (targetStyle.position === 'fixed' || (targetStyle.position === 'absolute' && appendToParent)) {
       if (appendToParent) {
@@ -95,8 +95,8 @@ export default function ripplet(
     containerStyle.pointerEvents            = 'none'
     containerStyle.width                    = `${targetRect.width}px`
     containerStyle.height                   = `${targetRect.height}px`
-    containerStyle.zIndex                   = `${(parseInt(targetStyle.zIndex as any, 10) || 0) + 1}`
-    containerStyle.opacity                  = options.opacity
+    containerStyle.zIndex                   = (+targetStyle.zIndex || 0) + 1 as string & number
+    containerStyle.opacity                  = options.opacity as string & number
     copyStyles(
       containerStyle,
       targetStyle,
@@ -111,7 +111,7 @@ export default function ripplet(
     const rippletElement                    = containerElement.appendChild(document.createElement('div'))
     const rippletStyle                      = rippletElement.style
     rippletElement.className                = options.className
-    rippletStyle.backgroundColor            = options.color
+    rippletStyle.backgroundColor            = /^currentcolor$/i.test(options.color!) ? targetStyle.color : options.color!
     rippletStyle.width                      = rippletStyle.height
                                             = `${radius * 2}px`
     rippletStyle.marginLeft                 = `${clientX - targetRect.left - radius}px`
