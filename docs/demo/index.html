@@ -293,7 +293,7 @@
       });
 
       // heading ripplet
-      window.addEventListener('load', function () {
+      addEventListener('load', function () {
         randomInterval(requestAnimationFrame.bind(window, function () {
           var heading = document.querySelector('h1');
           var headingRect = heading.getBoundingClientRect();
@@ -309,8 +309,9 @@
                 + Math.floor(Math.random() * 256) + ','
                 + Math.floor(Math.random() * 256) + ','
                 + Math.floor(Math.random() * 256) + ','
-                + (Math.random() * .3 + .1)
+                + (Math.random() * .3)
                 + ')',
+              opacity: 1,
               spreadingDuration: spreadingDuration + 'ms',
               clearingDelay:     Math.floor(spreadingDuration * .8) + 'ms',
               clearingDuration:  Math.floor(spreadingDuration * .6) + 'ms',
@@ -320,7 +321,7 @@
 
         function randomInterval(callback, maxIntervalInMilliseconds) {
           function _callback() {
-            callback();
+            document.hidden || callback();
             setTimeout(_callback, Math.floor(maxIntervalInMilliseconds * Math.random() * Math.random()));
           }
           setTimeout(_callback, Math.floor(maxIntervalInMilliseconds * Math.random() * Math.random()));
