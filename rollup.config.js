@@ -36,7 +36,7 @@ function typescript() {
   const tsconfig = require('./tsconfig.json')
   const compilerOptions = Object.assign({}, tsconfig && tsconfig.compilerOptions, { module: ts.ModuleKind.ES2015, noEmitHelpers: true, importHelpers: true })
   const compilerHost = ts.createCompilerHost(compilerOptions)
-  const uglify = require('uglify-es')
+  const { minify } = require('terser')
   return {
     resolveId(importee, importer) {
       if (importer) {
@@ -53,7 +53,7 @@ function typescript() {
         }
       }
       if (id.endsWith('/tslib.es6.js')) {
-        return uglify.minify(code)
+        return minify(code)
       }
     },
   }
