@@ -48,9 +48,9 @@ export default function ripplet(
   const targetStyle                     = getComputedStyle(currentTarget)
   const { documentElement, body }       = document
   const containerElement                = document.createElement('div')
+  const appendToParent                  = options.appendTo === 'parent'
   let removingElement                   = containerElement
   {
-    const appendToParent                = options.appendTo === 'parent'
     const containerStyle                = containerElement.style
     if (targetStyle.position === 'fixed' || (targetStyle.position === 'absolute' && appendToParent)) {
       if (appendToParent) {
@@ -114,7 +114,11 @@ export default function ripplet(
     rippletStyle.backgroundColor            = /^currentcolor$/i.test(options.color!) ? targetStyle.color : options.color!
     rippletStyle.width                      = rippletStyle.height
                                             = `${radius * 2}px`
-    rippletStyle.marginLeft                 = `${clientX - targetRect.left - radius}px`
+    if (getComputedStyle(appendToParent ? currentTarget.parentElement! : body).direction === 'rtl') {
+      rippletStyle.marginRight                = `${targetRect.right - clientX - radius}px`
+    } else {
+      rippletStyle.marginLeft                 = `${clientX - targetRect.left - radius}px`
+    }
     rippletStyle.marginTop                  = `${clientY - targetRect.top  - radius}px`
     rippletStyle.borderRadius               = '50%'
     rippletStyle.transition                 =
