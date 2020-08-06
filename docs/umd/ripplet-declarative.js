@@ -11,11 +11,19 @@
       spreadingDuration: '.4s',
       spreadingDelay: '0s',
       spreadingTimingFunction: 'linear',
+      clearing: true,
       clearingDuration: '1s',
       clearingDelay: '0s',
       clearingTimingFunction: 'ease-in-out',
       centered: false,
       appendTo: 'body',
+  };
+  var target2container2ripplet = new Map();
+  var copyStyles = function (destination, source, properties) {
+      for (var _i = 0, properties_1 = properties; _i < properties_1.length; _i++) {
+          var property = properties_1[_i];
+          destination[property] = source[property];
+      }
   };
   function ripplet(_a, _options) {
       var currentTarget = _a.currentTarget, clientX = _a.clientX, clientY = _a.clientY;
@@ -106,71 +114,94 @@
           rippletStyle.marginTop = clientY - targetRect.top - radius + "px";
           rippletStyle.borderRadius = '50%';
           rippletStyle.transition =
-              "transform " + options.spreadingDuration + " " + options.spreadingTimingFunction + " " + options.spreadingDelay +
-                  (",opacity " + options.clearingDuration + " " + options.clearingTimingFunction + " " + options.clearingDelay);
+              "transform " + options.spreadingDuration + " " + options.spreadingTimingFunction + " " + options.spreadingDelay + ",opacity " + options.clearingDuration + " " + options.clearingTimingFunction + " " + options.clearingDelay;
           rippletStyle.transform = 'scale(0)';
           // reflect styles by force layout
           // tslint:disable-next-line:no-unused-expression
           rippletElement.offsetTop;
+          rippletStyle.transform = '';
           rippletElement.addEventListener('transitionend', function (event) {
               if (event.propertyName === 'opacity' && removingElement.parentElement) {
                   removingElement.parentElement.removeChild(removingElement);
               }
           });
-          rippletStyle.transform = '';
-          rippletStyle.opacity = '0';
+          if (options.clearing && options.clearing !== 'false') {
+              rippletStyle.opacity = '0';
+          }
+          else {
+              var container2ripplet = target2container2ripplet.get(currentTarget);
+              if (!container2ripplet) {
+                  target2container2ripplet.set(currentTarget, container2ripplet = new Map());
+              }
+              container2ripplet.set(containerElement, rippletElement);
+          }
       }
       return containerElement;
   }
-  function copyStyles(destination, source, properties) {
-      for (var _i = 0, properties_1 = properties; _i < properties_1.length; _i++) {
-          var property = properties_1[_i];
-          destination[property] = source[property];
+  ripplet.clear = function (targetElement, rippletContainerElement) {
+      if (targetElement) {
+          var container2ripplet = target2container2ripplet.get(targetElement);
+          if (container2ripplet) {
+              if (rippletContainerElement) {
+                  var rippletElement = container2ripplet.get(rippletContainerElement);
+                  rippletElement && (rippletElement.style.opacity = '0');
+                  container2ripplet.delete(rippletContainerElement);
+                  container2ripplet.size === 0 && target2container2ripplet.delete(targetElement);
+              }
+              else {
+                  container2ripplet.forEach(function (r) { return r.style.opacity = '0'; });
+                  target2container2ripplet.delete(targetElement);
+              }
+          }
       }
-  }
+      else {
+          target2container2ripplet.forEach(function (container2ripplet) { return container2ripplet.forEach(function (r) { return r.style.opacity = '0'; }); });
+          target2container2ripplet.clear();
+      }
+  };
+  ripplet.defaultOptions = defaultOptions;
+  ripplet._ripplets = target2container2ripplet;
 
-  // use passive event listener if possible
-  var eventListenerOptions = true;
-  {
-      var testOptions = {
-          get passive() {
-              eventListenerOptions = { passive: true, capture: true };
-              return true;
-          },
-      };
-      var noop = function () { };
-      addEventListener('test', noop, testOptions);
-      removeEventListener('test', noop, testOptions);
-  }
-  addEventListener('mousedown', function (event) {
-      if (event.button !== 0) {
-          return;
-      }
-      var currentTarget = findRippletTarget(event.target);
-      if (currentTarget) {
-          ripplet({ currentTarget: currentTarget, clientX: event.clientX, clientY: event.clientY }, parseOptions(currentTarget.getAttribute('data-ripplet')));
-      }
-  }, eventListenerOptions);
-  function parseOptions(optionsString) {
-      if (!optionsString) {
-          return;
-      }
-      var options = {};
-      for (var _i = 0, _a = optionsString.split(';'); _i < _a.length; _i++) {
-          var s = _a[_i];
-          var index = s.indexOf(':');
-          options[s.slice(0, index).trim().replace(/[a-zA-Z0-9_]-[a-z]/g, function ($0) { return $0[0] + $0[2].toUpperCase(); })] = s.slice(index + 1).trim();
-      }
-      return options;
-  }
   // Element.prototype.closest is not implemented in IE
   // https://caniuse.com/#feat=element-closest
-  function findRippletTarget(element) {
+  var findRippletTarget = function (element) {
       while (element && !element.hasAttribute('data-ripplet')) {
           element = element.parentElement;
       }
       return element;
-  }
+  };
+  var parseOptions = function (optionsString) {
+      var options = {};
+      if (optionsString) {
+          for (var _i = 0, _a = optionsString.split(';'); _i < _a.length; _i++) {
+              var s = _a[_i];
+              var index = s.indexOf(':');
+              options[s.slice(0, index).trim().replace(/[a-zA-Z0-9_]-[a-z]/g, function ($0) { return $0[0] + $0[2].toUpperCase(); })] = s.slice(index + 1).trim();
+          }
+      }
+      return options;
+  };
+  addEventListener('pointerdown', function (event) {
+      if (event.button !== 0) {
+          return;
+      }
+      var currentTarget = findRippletTarget(event.target);
+      if (!currentTarget) {
+          return;
+      }
+      var options = parseOptions(currentTarget.getAttribute('data-ripplet'));
+      if (options.clearing !== 'true') {
+          options.clearing = 'false';
+          var clear_1 = function () {
+              ripplet.clear(currentTarget, container);
+              currentTarget.removeEventListener('pointerup', clear_1);
+              currentTarget.removeEventListener('pointerleave', clear_1);
+          };
+          currentTarget.addEventListener('pointerup', clear_1);
+          currentTarget.addEventListener('pointerleave', clear_1);
+      }
+      var container = ripplet({ currentTarget: currentTarget, clientX: event.clientX, clientY: event.clientY }, options);
+  }, true);
 
   var named = /*#__PURE__*/Object.freeze({
     __proto__: null,

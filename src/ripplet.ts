@@ -1,4 +1,5 @@
-export type RippletOptions = Readonly<typeof defaultOptions>
+export type RippletOptions = Partial<typeof defaultOptions>
+export type RippletContainerElement = HTMLElement & { readonly __ripplet__: unique symbol }
 
 export const defaultOptions = {
   className:                '',
@@ -7,6 +8,7 @@ export const defaultOptions = {
   spreadingDuration:        '.4s'          as string | null,
   spreadingDelay:           '0s'           as string | null,
   spreadingTimingFunction:  'linear'       as string | null,
+  clearing:                 true           as boolean | 'true' | 'false' | null,
   clearingDuration:         '1s'           as string | null,
   clearingDelay:            '0s'           as string | null,
   clearingTimingFunction:   'ease-in-out'  as string | null,
@@ -14,20 +16,28 @@ export const defaultOptions = {
   appendTo:                 'body'         as 'body' | 'parent' | null,
 }
 
-export default function ripplet(
-  targetSuchAsMouseEvent: MouseEvent | Readonly<{ currentTarget: Element, clientX: number, clientY: number }>,
-  options?:               Partial<RippletOptions>,
-): HTMLElement
+const target2container2ripplet = new Map<Element, Map<RippletContainerElement, HTMLElement>>()
 
-export default function ripplet(
-  targetSuchAsMouseEvent: Event | Readonly<{ currentTarget: Element }>,
-  options?:               Partial<RippletOptions>,
-): HTMLElement | undefined
+const copyStyles = <T>(destination: T, source: Readonly<T>, properties: (keyof T)[]) => {
+  for (const property of properties) {
+    destination[property] = source[property]
+  }
+}
 
-export default function ripplet(
+function ripplet(
+  targetSuchAsPointerEvent: MouseEvent | Readonly<{ currentTarget: Element, clientX: number, clientY: number }>,
+  options?:               Readonly<RippletOptions>,
+): RippletContainerElement
+
+function ripplet(
+  targetSuchAsPointerEvent: Event | Readonly<{ currentTarget: Element }>,
+  options?:               Readonly<RippletOptions>,
+): RippletContainerElement | undefined
+
+function ripplet(
   { currentTarget, clientX, clientY }:  Readonly<{ currentTarget: any, clientX?: number, clientY?: number }>,
-  _options?:                            Partial<RippletOptions>,
-): HTMLElement | undefined {
+  _options?:                            Readonly<RippletOptions>,
+): RippletContainerElement | undefined {
   if (!(currentTarget instanceof Element)) {
     return
   }
@@ -47,9 +57,9 @@ export default function ripplet(
 
   const targetStyle                     = getComputedStyle(currentTarget)
   const { documentElement, body }       = document
-  const containerElement                = document.createElement('div')
+  const containerElement                = document.createElement('div') as any as RippletContainerElement
   const appendToParent                  = options.appendTo === 'parent'
-  let removingElement                   = containerElement
+  let removingElement: HTMLElement      = containerElement
   {
     const containerStyle                = containerElement.style
     if (targetStyle.position === 'fixed' || (targetStyle.position === 'absolute' && appendToParent)) {
@@ -122,27 +132,54 @@ export default function ripplet(
     rippletStyle.marginTop                  = `${clientY - targetRect.top  - radius}px`
     rippletStyle.borderRadius               = '50%'
     rippletStyle.transition                 =
-      `transform ${options.spreadingDuration} ${options.spreadingTimingFunction} ${options.spreadingDelay}` +
-      `,opacity ${ options.clearingDuration } ${options.clearingTimingFunction } ${options.clearingDelay }`
+      `transform ${options.spreadingDuration} ${options.spreadingTimingFunction} ${options.spreadingDelay
+      },opacity ${options.clearingDuration} ${options.clearingTimingFunction} ${options.clearingDelay}`
     rippletStyle.transform                  = 'scale(0)'
 
     // reflect styles by force layout
     // tslint:disable-next-line:no-unused-expression
     rippletElement.offsetTop
+    rippletStyle.transform                  = ''
 
     rippletElement.addEventListener('transitionend', event => {
       if (event.propertyName === 'opacity' && removingElement.parentElement) {
         removingElement.parentElement.removeChild(removingElement)
       }
     })
-    rippletStyle.transform                  = ''
-    rippletStyle.opacity                    = '0'
+    if (options.clearing && options.clearing !== 'false') {
+      rippletStyle.opacity                    = '0'
+    } else {
+      let container2ripplet = target2container2ripplet.get(currentTarget)
+      if (!container2ripplet) {
+        target2container2ripplet.set(currentTarget, container2ripplet =  new Map<RippletContainerElement, HTMLElement>())
+      }
+      container2ripplet.set(containerElement, rippletElement)
+    }
   }
   return containerElement
 }
 
-function copyStyles<T>(destination: T, source: Readonly<T>, properties: (keyof T)[]) {
-  for (const property of properties) {
-    destination[property] = source[property]
+ripplet.clear = (targetElement?: Element, rippletContainerElement?: RippletContainerElement) => {
+  if (targetElement) {
+    const container2ripplet = target2container2ripplet.get(targetElement)
+    if (container2ripplet) {
+      if (rippletContainerElement) {
+        const rippletElement = container2ripplet.get(rippletContainerElement)
+        rippletElement && (rippletElement.style.opacity = '0')
+        container2ripplet.delete(rippletContainerElement)
+        container2ripplet.size === 0 && target2container2ripplet.delete(targetElement)
+      } else {
+        container2ripplet.forEach(r => r.style.opacity = '0')
+        target2container2ripplet.delete(targetElement)
+      }
+    }
+  } else {
+    target2container2ripplet.forEach(container2ripplet => container2ripplet.forEach(r => r.style.opacity = '0'))
+    target2container2ripplet.clear()
   }
 }
+
+ripplet.defaultOptions = defaultOptions
+ripplet._ripplets = target2container2ripplet
+
+export default ripplet

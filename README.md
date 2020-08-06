@@ -17,14 +17,14 @@ $ npm install ripplet.js
 ```javascript
 import ripplet from 'ripplet.js';
 
-element.addEventListener('mousedown', ripplet);
+element.addEventListener('pointerdown', ripplet);
 ```
 
 ### via CDN
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/ripplet.js@0.2.1"></script>
-<button onmousedown="ripplet(arguments[0])">Click me!</button>
+<button onpointerdown="ripplet(arguments[0])">Click me!</button>
 ```
 
 ### Download directly
@@ -34,14 +34,14 @@ element.addEventListener('mousedown', ripplet);
 
 ## API
 
-### ripplet(targetSuchAsMouseEvent[, options]) => HTMLElement
+### ripplet(targetSuchAsPointerEvent, options?) => HTMLElement
 
 Generate a ripplet immediately.  
 In particular, create two elements (one is a circular enlarging element representing ripplet, and the other is a container element to restrict visible area) and remove them when the animation ends. Do nothing else.
 
 #### Parameters
 
-* targetSuchAsMouseEvent: Object (required) (in most cases, pass the received MouseEvent object)
+* targetSuchAsPointerEvent: Object (required) (in most cases, pass the received PointerEvent object)
 
 | Property name           | Description                              |
 | ----------------------- | ---------------------------------------- |
@@ -59,6 +59,7 @@ In particular, create two elements (one is a circular enlarging element represen
 | spreadingDuration       | ".4s"          | As its name suggests. |
 | spreadingDelay          | "0s"           | As its name suggests. |
 | spreadingTimingFunction | "linear"       | As its name suggests. See https://developer.mozilla.org/docs/Web/CSS/transition-timing-function |
+| clearing                | true           | Whether or not to clear automatically. If `false` is specified, the ripple effect should be cleared using `ripplet.clear(currentTarget)` |
 | clearingDuration        | "1s"           | As its name suggests. |
 | clearingDelay           | "0s"           | As its name suggests. |
 | clearingTimingFunction  | "ease-in-out"  | As its name suggests. See https://developer.mozilla.org/docs/Web/CSS/transition-timing-function  |
@@ -70,33 +71,49 @@ In particular, create two elements (one is a circular enlarging element represen
 Generated container element (having one child element representing ripplet)
 
 
-### defaultOptions
+### ripplet.clear(currentTarget?, generatedContainerElement?) => void
+
+Fade out and remove the ripplet. Use only when the option `clearing` is false.
+
+#### Parameters
+
+* currentTarget: Element (optional)
+
+The target element that was passed to `ripplet()`. If this parameter is not passed, all the ripplets are cleared.
+
+* generatedContainerElement: Element (optional)
+
+The generated element that was returned by `ripplet()`. If this parameter is not passed, all the ripplets are cleared.
+
+#### Example
+
+<script src="https://cdn.jsdelivr.net/npm/ripplet.js@0.2.1"></script>
+<button
+  onpointerdown="ripplet(arguments[0], { clearing: false })"
+  onpointerup="ripplet.clear(this)"
+  onpointerleave="ripplet.clear(this)"
+>Keep pressing!</button>
+
+
+### ripplet.defaultOptions
 
 You can change the default ripplet options for your app.  
 For example:
 
 ```javascript
-import { defaultOptions } from 'ripplet';
+import ripplet from 'ripplet';
 
-defaultOptions.color = 'rgb(64, 128, 255)';
-```
-
-or
-
-```html
-<script src="https://cdn.jsdelivr.net/npm/ripplet.js@0.2.1"></script>
-<script>
-  ripplet.defaultOptions.color = 'rgb(64, 128, 255)';
-</script>
+ripplet.defaultOptions.color = 'rgb(64, 128, 255)';
 ```
 
 
 ## Declarative Edition
 
-If you don't need detailed control, you can use declarative edition that captures mousedown events.  
+If you don't need detailed control, you can use declarative edition that captures pointerdown events.  
 Load `"ripplet-declarative.js"` and add `data-ripplet` attribute to html elements with/without options.  
 Elements dynamically appended also have the ripple effect if `data-ripplet` attribute is available.
 
+In declarative edition, the ripple effect remains until the `pointerup` or `pointerleave` event occurs.
 
 ### Example Usage
 

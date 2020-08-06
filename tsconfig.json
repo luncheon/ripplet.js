@@ -10,6 +10,7 @@
     "noUnusedLocals": false,
     "experimentalDecorators": true,
     "baseUrl": ".",
+    "lib": ["dom", "es5", "es2015.collection"],
     "types": []
   },
   "include": [
