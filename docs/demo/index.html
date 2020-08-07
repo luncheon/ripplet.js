@@ -151,7 +151,7 @@
           <h3>Origin</h3>
           <div class="buttons">
             <button type="button" class="default" onpointerdown="ripplet(arguments[0])">Click me!</button>
-            <button type="button" class="default" onpointerdown="ripplet(arguments[0], { clearing: false, clearingDuration: '.4s' })" onpointerup="ripplet.clear(this)" onpointerleave="ripplet.clear(this)">Keep pressing!</button>
+            <button type="button" class="default" onpointerdown="ripplet(arguments[0], { clearing: false })" onpointerup="ripplet.clear(this)" onpointerleave="ripplet.clear(this)">Keep pressing!</button>
             <button type="button" class="default" onpointerdown="ripplet(arguments[0], { centered: true })">Centered!</button>
           </div>
         </div>
@@ -232,7 +232,7 @@
           <h3>Events</h3>
           <div class="buttons">
             <button type="button" class="default" onpointerenter="ripplet(arguments[0], { clearing: false })" onpointerleave="ripplet.clear(this)">Enter mouse!</button>
-            <button type="button" class="default" onpointerleave="ripplet(arguments[0], { clearing: false })">Leave mouse!</button>
+            <button type="button" class="default" onpointerleave="ripplet(arguments[0])">Leave mouse!</button>
             <table style="text-align: center; font-size: 14px;">
               <tr onpointerenter="ripplet(arguments[0], { color: 'rgb(255,   0,   0)', opacity: .3, clearing: false })" onpointerleave="ripplet.clear(this)"><td style="padding: 2px 12px; border-bottom: 1px solid #ccc;">Hover mouse!</td></tr>
               <tr onpointerenter="ripplet(arguments[0], { color: 'rgb(255, 255,   0)', opacity: .3, clearing: false })" onpointerleave="ripplet.clear(this)"><td style="padding: 2px 12px; border-bottom: 1px solid #ccc;">Hover mouse!</td></tr>
