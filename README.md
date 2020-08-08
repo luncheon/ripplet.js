@@ -83,17 +83,17 @@ The target element that was passed to `ripplet()`. If this parameter is not pass
 
 * generatedContainerElement: Element (optional)
 
-The generated element that was returned by `ripplet()`. If this parameter is not passed, all the ripplets are cleared.
+The generated element that was returned by `ripplet()`. If this parameter is not passed, all the ripplets (of the `currentTarget` above) are cleared.
 
 #### Example
 
-<script src="https://cdn.jsdelivr.net/npm/ripplet.js@0.3.0"></script>
+```html
 <button
   onpointerdown="ripplet(arguments[0], { clearing: false })"
   onpointerup="ripplet.clear(this)"
   onpointerleave="ripplet.clear(this)"
 >Keep pressing!</button>
-
+```
 
 ### ripplet.defaultOptions
 
