@@ -1,5 +1,7 @@
 # ![ripplet.js](https://luncheon.github.io/ripplet.js/logo.gif)
 
+[![BundlePhobia](https://badgen.net/bundlephobia/minzip/ripplet.js)](https://bundlephobia.com/result?p=ripplet.js) ![Types: included](https://badgen.net/npm/types/ripplet.js) ![License: WTFPL](https://badgen.net/npm/license/ripplet.js)
+
 Fully controllable vanilla-js material design ripple effect generator.  
 This can be used with any JavaScript framework and/or any CSS framework.
 
@@ -8,10 +10,10 @@ This can be used with any JavaScript framework and/or any CSS framework.
 
 ## Installation
 
-### via npm
+### [npm](https://www.npmjs.com/package/ripplet.js)
 
 ```bash
-$ npm install ripplet.js
+$ npm i ripplet.js
 ```
 
 ```javascript
@@ -20,7 +22,7 @@ import ripplet from 'ripplet.js';
 element.addEventListener('pointerdown', ripplet);
 ```
 
-### via CDN
+### CDN ([jsDelivr](https://www.jsdelivr.com/package/npm/ripplet.js))
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/ripplet.js@0.3.0"></script>
