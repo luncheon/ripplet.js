@@ -120,8 +120,16 @@ function ripplet(
     const radius                            = Math.sqrt(distanceX * distanceX + distanceY * distanceY)
     const rippletElement                    = containerElement.appendChild(document.createElement('div'))
     const rippletStyle                      = rippletElement.style
+
+    const matchColorVariable                = options.color && options.color.match(/^var\((--.+)\)$/)
+    rippletStyle.backgroundColor            =
+      matchColorVariable
+        ? targetStyle.getPropertyValue(matchColorVariable[1])
+        : /^currentcolor$/i.test(options.color!)
+        ? targetStyle.color
+        : options.color!
+
     rippletElement.className                = options.className
-    rippletStyle.backgroundColor            = /^currentcolor$/i.test(options.color!) ? targetStyle.color : options.color!
     rippletStyle.width                      = rippletStyle.height
                                             = `${radius * 2}px`
     if (getComputedStyle(appendToParent ? currentTarget.parentElement! : body).direction === 'rtl') {
