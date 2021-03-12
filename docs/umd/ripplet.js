@@ -42,6 +42,10 @@
           return;
       }
       var targetStyle = getComputedStyle(currentTarget);
+      var applyCssVariable = function (value) {
+          var match = value && /^var\((--.+)\)$/.exec(value);
+          return match ? targetStyle.getPropertyValue(match[1]) : value;
+      };
       var documentElement = document.documentElement, body = document.body;
       var containerElement = document.createElement('div');
       var appendToParent = options.appendTo === 'parent';
@@ -92,7 +96,7 @@
           containerStyle.width = targetRect.width + "px";
           containerStyle.height = targetRect.height + "px";
           containerStyle.zIndex = (+targetStyle.zIndex || 0) + 1;
-          containerStyle.opacity = options.opacity;
+          containerStyle.opacity = applyCssVariable(options.opacity);
           copyStyles(containerStyle, targetStyle, ['borderTopLeftRadius', 'borderTopRightRadius', 'borderBottomLeftRadius', 'borderBottomRightRadius', 'webkitClipPath', 'clipPath']);
       }
       {
@@ -101,13 +105,8 @@
           var radius = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
           var rippletElement = containerElement.appendChild(document.createElement('div'));
           var rippletStyle = rippletElement.style;
-          var matchColorVariable = options.color && options.color.match(/^var\((--.+)\)$/);
-          rippletStyle.backgroundColor =
-              matchColorVariable
-                  ? targetStyle.getPropertyValue(matchColorVariable[1])
-                  : /^currentcolor$/i.test(options.color)
-                      ? targetStyle.color
-                      : options.color;
+          var color = applyCssVariable(options.color);
+          rippletStyle.backgroundColor = /^currentcolor$/i.test(color) ? targetStyle.color : color;
           rippletElement.className = options.className;
           rippletStyle.width = rippletStyle.height
               = radius * 2 + "px";
@@ -120,7 +119,7 @@
           rippletStyle.marginTop = clientY - targetRect.top - radius + "px";
           rippletStyle.borderRadius = '50%';
           rippletStyle.transition =
-              "transform " + options.spreadingDuration + " " + options.spreadingTimingFunction + " " + options.spreadingDelay + ",opacity " + options.clearingDuration + " " + options.clearingTimingFunction + " " + options.clearingDelay;
+              "transform " + applyCssVariable(options.spreadingDuration) + " " + applyCssVariable(options.spreadingTimingFunction) + " " + applyCssVariable(options.spreadingDelay) + ",opacity " + applyCssVariable(options.clearingDuration) + " " + applyCssVariable(options.clearingTimingFunction) + " " + applyCssVariable(options.clearingDelay);
           rippletStyle.transform = 'scale(0)';
           // reflect styles by force layout
           // tslint:disable-next-line:no-unused-expression

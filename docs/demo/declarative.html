@@ -22,6 +22,16 @@
         vertical-align: top;
         -webkit-tap-highlight-color: transparent;
       }
+      .vars {
+        --color: hsl(20, 100%, 50%);
+        --opacity: 1;
+        --spreading-duration: 1s;
+        --spreading-delay: .5s;
+        --spreading-timing-function: cubic-bezier(0.5, 1.5, .6, -1);
+        --clearing-duration: 4s;
+        --clearing-delay: 2s;
+        --clearing-timing-function: cubic-bezier(0.5, 1.5, .6, -1);
+      }
     </style>
   </head>
   <body>
@@ -30,5 +40,15 @@
     <script>ripplet.defaultOptions.color = 'rgb(255, 0, 255)';</script>
     <button data-ripplet>Default</button>
     <button data-ripplet="color: rgb( 64, 192, 255); spreading-duration: 2s; clearing-delay: 1.8s;">Sky Blue Slow</button>
+    <button class="vars" data-ripplet="
+        color: var(--color);
+        opacity: var(--opacity);
+        spreading-duration: var(--spreading-duration);
+        spreading-delay: var(--spreading-delay);
+        spreading-timing-function: var(--spreading-timing-function);
+        clearing-duration: var(--clearing-duration);
+        clearing-delay: var(--clearing-delay);
+        clearing-timing-function: var(--clearing-timing-function);
+    ">CSS Variables</button>
   </body>
 </html>

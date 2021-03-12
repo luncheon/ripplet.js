@@ -56,6 +56,10 @@ function ripplet(
   }
 
   const targetStyle                     = getComputedStyle(currentTarget)
+  const applyCssVariable                = (value: string | null | undefined) => {
+    const match = value && /^var\((--.+)\)$/.exec(value)
+    return match ? targetStyle.getPropertyValue(match[1]) : value
+  }
   const { documentElement, body }       = document
   const containerElement                = document.createElement('div') as any as RippletContainerElement
   const appendToParent                  = options.appendTo === 'parent'
@@ -106,7 +110,7 @@ function ripplet(
     containerStyle.width                    = `${targetRect.width}px`
     containerStyle.height                   = `${targetRect.height}px`
     containerStyle.zIndex                   = (+targetStyle.zIndex || 0) + 1 as string & number
-    containerStyle.opacity                  = options.opacity as string & number
+    containerStyle.opacity                  = applyCssVariable(options.opacity as string & number)!
     copyStyles(
       containerStyle,
       targetStyle,
@@ -121,13 +125,8 @@ function ripplet(
     const rippletElement                    = containerElement.appendChild(document.createElement('div'))
     const rippletStyle                      = rippletElement.style
 
-    const matchColorVariable                = options.color && options.color.match(/^var\((--.+)\)$/)
-    rippletStyle.backgroundColor            =
-      matchColorVariable
-        ? targetStyle.getPropertyValue(matchColorVariable[1])
-        : /^currentcolor$/i.test(options.color!)
-        ? targetStyle.color
-        : options.color!
+    const color                             = applyCssVariable(options.color)!
+    rippletStyle.backgroundColor            = /^currentcolor$/i.test(color) ? targetStyle.color : color
 
     rippletElement.className                = options.className
     rippletStyle.width                      = rippletStyle.height
@@ -140,8 +139,15 @@ function ripplet(
     rippletStyle.marginTop                  = `${clientY - targetRect.top  - radius}px`
     rippletStyle.borderRadius               = '50%'
     rippletStyle.transition                 =
-      `transform ${options.spreadingDuration} ${options.spreadingTimingFunction} ${options.spreadingDelay
-      },opacity ${options.clearingDuration} ${options.clearingTimingFunction} ${options.clearingDelay}`
+      `transform ${
+        applyCssVariable(options.spreadingDuration)} ${
+        applyCssVariable(options.spreadingTimingFunction)} ${
+        applyCssVariable(options.spreadingDelay)
+      },opacity ${
+        applyCssVariable(options.clearingDuration)} ${
+        applyCssVariable(options.clearingTimingFunction)} ${
+        applyCssVariable(options.clearingDelay)
+      }`
     rippletStyle.transform                  = 'scale(0)'
 
     // reflect styles by force layout
