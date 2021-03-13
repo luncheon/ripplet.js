@@ -1,5 +1,11 @@
 {
-  "editor.tabSize": 2,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true
+  },
+  "editor.formatOnSave": true,
+  "[markdown]": {
+    "editor.formatOnSave": false
+  },
   "search.exclude": {
     "**/node_modules": true,
     "dist": true,

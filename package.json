@@ -12,6 +12,14 @@
     "es",
     "src"
   ],
+  "prettier": {
+    "printWidth": 140,
+    "endOfLine": "lf",
+    "singleQuote": true,
+    "trailingComma": "all",
+    "semi": false,
+    "arrowParens": "avoid"
+  },
   "scripts": {
     "build": "npm run clean && npm run lint && npm run build:umd && npm run build:es && npm run build:demo",
     "build:umd": "npm run build:umd:types && npm run build:umd:main && npm run build:umd:declarative",
@@ -51,6 +59,7 @@
   "devDependencies": {
     "copyfiles": "^2.4.1",
     "opener": "^1.5.2",
+    "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
     "rollup": "^2.41.2",
     "rollup-plugin-summary": "^1.2.3",
