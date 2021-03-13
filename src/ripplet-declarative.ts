@@ -38,7 +38,7 @@ addEventListener(
       return
     }
     const options = parseOptions(currentTarget.getAttribute('data-ripplet'))
-    if (options.clearing !== 'true') {
+    if (options.clearing !== 'false') {
       options.clearing = 'false'
       const clear = () => {
         ripplet.clear(currentTarget, container)
