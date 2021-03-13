@@ -1,3 +1,5 @@
+import summary from 'rollup-plugin-summary'
+
 export default {
   output: {
     format: 'umd',
@@ -5,6 +7,7 @@ export default {
   plugins: [
     umdEntry(),
     typescript(),
+    summary(),
   ],
 }
 
