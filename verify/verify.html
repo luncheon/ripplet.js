@@ -90,6 +90,36 @@
       </div>
     </div>
 
+    <div>
+      <h5>scrolled parent</h5>
+      <div style="overflow: scroll; width: 200px; height: 200px; padding: 32px;">
+        <div style="overflow: scroll; width: 100px; padding: 32px;">
+          <button type="button" style="position: absolute; right:  10px; bottom: -10px;" data-ripplet="append-to: body;">position: absolute<br>appendTo: body</button>
+          <button type="button" style="position: absolute; right: 125px; bottom: -10px;" data-ripplet="append-to: parent;">position: absolute<br>appendTo: parent</button>
+          <button type="button" style="position: relative; right:  10px; bottom: -10px;" data-ripplet="append-to: body;">position: relative<br>appendTo: parent</button>
+          <button type="button" style="position: relative; right:  10px; bottom: -10px;" data-ripplet="append-to: parent;">position: relative<br>appendTo: parent</button>
+        </div>
+      </div>
+    </div>
+
+    <span>
+      <h5 style="display: inline;">inline</h5>
+      <span>
+        <span data-ripplet="append-to: parent" style="padding: 10px; border: 1px solid #ccc;">inline</span>
+        <span data-ripplet="append-to: parent" style="padding: 10px; border: 1px solid #ccc;">inline</span>
+      </span>
+      <span data-ripplet="append-to: parent" style="padding: 10px; border: 1px solid #ccc;">inline</span>
+    </span>
+
+    <span>
+      <h5 style="display: inline-block;">inline-block</h5>
+      <span>
+        <span data-ripplet="append-to: parent" style="display: inline-block; padding: 10px; border: 1px solid #ccc;">inline-block</span>
+        <span data-ripplet="append-to: parent" style="display: inline-block; padding: 10px; border: 1px solid #ccc;">inline-block</span>
+      </span>
+      <span data-ripplet="append-to: parent" style="display: inline-block; padding: 10px; border: 1px solid #ccc;">inline-block</span>
+    </span>
+
     <div style="position: fixed; background-color: rgba(0,0,0,.1); right: 10px; bottom: 10px; padding: 10px;">
       <h5>fixed ancestor</h5>
       <button type="button" data-ripplet></button>

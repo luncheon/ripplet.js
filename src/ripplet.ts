@@ -96,10 +96,8 @@ function ripplet(
           currentTarget,
         ))
         const containerContainerStyle = containerContainer.style
-        containerContainerStyle.display = 'inline-block'
+        containerContainerStyle.cssFloat = 'left'
         containerContainerStyle.position = 'relative'
-        containerContainerStyle.width = containerContainerStyle.height = '0'
-        containerContainerStyle.cssFloat = targetStyle.cssFloat
         const containerContainerRect = containerContainer.getBoundingClientRect() // this may be a slow operation...
         containerContainer.appendChild(containerElement)
         containerStyle.position = 'absolute'

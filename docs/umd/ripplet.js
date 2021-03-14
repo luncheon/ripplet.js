@@ -82,10 +82,8 @@
               else {
                   var containerContainer = (removingElement = currentTarget.parentElement.insertBefore(document.createElement('div'), currentTarget));
                   var containerContainerStyle = containerContainer.style;
-                  containerContainerStyle.display = 'inline-block';
+                  containerContainerStyle.cssFloat = 'left';
                   containerContainerStyle.position = 'relative';
-                  containerContainerStyle.width = containerContainerStyle.height = '0';
-                  containerContainerStyle.cssFloat = targetStyle.cssFloat;
                   var containerContainerRect = containerContainer.getBoundingClientRect(); // this may be a slow operation...
                   containerContainer.appendChild(containerElement);
                   containerStyle.position = 'absolute';
