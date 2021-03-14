@@ -1,6 +1,6 @@
 {
   "name": "ripplet.js",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "Fully controllable vanilla-js material design ripple effect generator",
   "main": "./umd/ripplet.js",
   "module": "./es/ripplet.js",
