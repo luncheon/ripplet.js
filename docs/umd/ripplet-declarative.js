@@ -116,7 +116,7 @@
           var distanceX = Math.max(clientX - targetRect.left, targetRect.right - clientX);
           var distanceY = Math.max(clientY - targetRect.top, targetRect.bottom - clientY);
           var radius = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-          var rippletElement = containerElement.appendChild(document.createElement('div'));
+          var rippletElement = document.createElement('div');
           var rippletStyle = rippletElement.style;
           var color = applyCssVariable(options.color);
           rippletStyle.backgroundColor = /^currentcolor$/i.test(color) ? targetStyle.color : color;
@@ -132,6 +132,7 @@
           rippletStyle.borderRadius = '50%';
           rippletStyle.transition = "transform " + applyCssVariable(options.spreadingDuration) + " " + applyCssVariable(options.spreadingTimingFunction) + " " + applyCssVariable(options.spreadingDelay) + ",opacity " + applyCssVariable(options.clearingDuration) + " " + applyCssVariable(options.clearingTimingFunction) + " " + applyCssVariable(options.clearingDelay);
           rippletStyle.transform = 'scale(0)';
+          containerElement.appendChild(rippletElement);
           // reflect styles by force layout
           // tslint:disable-next-line:no-unused-expression
           rippletElement.offsetTop;

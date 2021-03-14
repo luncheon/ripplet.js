@@ -130,7 +130,7 @@ function ripplet(
     const distanceX = Math.max(clientX - targetRect.left, targetRect.right - clientX)
     const distanceY = Math.max(clientY - targetRect.top, targetRect.bottom - clientY)
     const radius = Math.sqrt(distanceX * distanceX + distanceY * distanceY)
-    const rippletElement = containerElement.appendChild(document.createElement('div'))
+    const rippletElement = document.createElement('div')
     const rippletStyle = rippletElement.style
 
     const color = applyCssVariable(options.color)!
@@ -152,6 +152,7 @@ function ripplet(
     )} ${applyCssVariable(options.clearingDelay)}`
     rippletStyle.transform = 'scale(0)'
 
+    containerElement.appendChild(rippletElement)
     // reflect styles by force layout
     // tslint:disable-next-line:no-unused-expression
     rippletElement.offsetTop
