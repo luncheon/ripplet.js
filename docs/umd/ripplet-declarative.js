@@ -33,6 +33,9 @@
       var options = _options
           ? Object.keys(defaultOptions).reduce(function (merged, field) { return ((merged[field] = _options.hasOwnProperty(field) ? _options[field] : defaultOptions[field]), merged); }, {})
           : defaultOptions;
+      var documentElement = document.documentElement, body = document.body;
+      var zoom = +getComputedStyle(body).zoom || 1;
+      var zoomReciprocal = 1 / zoom;
       var targetRect = currentTarget.getBoundingClientRect();
       if (options.centered && options.centered !== 'false') {
           clientX = targetRect.left + targetRect.width * 0.5;
@@ -41,12 +44,15 @@
       else if (typeof clientX !== 'number' || typeof clientY !== 'number') {
           return;
       }
+      else {
+          clientX = clientX * zoomReciprocal;
+          clientY = clientY * zoomReciprocal;
+      }
       var targetStyle = getComputedStyle(currentTarget);
       var applyCssVariable = function (value) {
           var match = value && /^var\((--.+)\)$/.exec(value);
           return match ? targetStyle.getPropertyValue(match[1]) : value;
       };
-      var documentElement = document.documentElement, body = document.body;
       var containerElement = document.createElement('div');
       var appendToParent = options.appendTo === 'parent';
       var removingElement = containerElement;
@@ -94,8 +100,8 @@
           else {
               body.appendChild(containerElement);
               containerStyle.position = 'absolute';
-              containerStyle.left = targetRect.left + documentElement.scrollLeft + body.scrollLeft + "px";
-              containerStyle.top = targetRect.top + documentElement.scrollTop + body.scrollTop + "px";
+              containerStyle.left = targetRect.left + (documentElement.scrollLeft + body.scrollLeft) * zoomReciprocal + "px";
+              containerStyle.top = targetRect.top + (documentElement.scrollTop + body.scrollTop) * zoomReciprocal + "px";
           }
           containerStyle.overflow = 'hidden';
           containerStyle.pointerEvents = 'none';

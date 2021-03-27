@@ -47,20 +47,24 @@ function ripplet(
         {},
       )
     : defaultOptions
+  const { documentElement, body } = document
+  const zoom = +getComputedStyle(body).zoom || 1
+  const zoomReciprocal = 1 / zoom
   const targetRect = currentTarget.getBoundingClientRect()
   if (options.centered && options.centered !== 'false') {
     clientX = targetRect.left + targetRect.width * 0.5
     clientY = targetRect.top + targetRect.height * 0.5
   } else if (typeof clientX !== 'number' || typeof clientY !== 'number') {
     return
+  } else {
+    clientX = clientX * zoomReciprocal
+    clientY = clientY * zoomReciprocal
   }
-
   const targetStyle = getComputedStyle(currentTarget)
   const applyCssVariable = (value: string | null | undefined) => {
     const match = value && /^var\((--.+)\)$/.exec(value)
     return match ? targetStyle.getPropertyValue(match[1]) : value
   }
-  const { documentElement, body } = document
   const containerElement = (document.createElement('div') as any) as RippletContainerElement
   const appendToParent = options.appendTo === 'parent'
   let removingElement: HTMLElement = containerElement
@@ -107,8 +111,8 @@ function ripplet(
     } else {
       body.appendChild(containerElement)
       containerStyle.position = 'absolute'
-      containerStyle.left = `${targetRect.left + documentElement.scrollLeft + body.scrollLeft}px`
-      containerStyle.top = `${targetRect.top + documentElement.scrollTop + body.scrollTop}px`
+      containerStyle.left = `${targetRect.left + (documentElement.scrollLeft + body.scrollLeft) * zoomReciprocal}px`
+      containerStyle.top = `${targetRect.top + (documentElement.scrollTop + body.scrollTop) * zoomReciprocal}px`
     }
     containerStyle.overflow = 'hidden'
     containerStyle.pointerEvents = 'none'
