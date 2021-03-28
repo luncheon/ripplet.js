@@ -100,8 +100,8 @@
           else {
               body.appendChild(containerElement);
               containerStyle.position = 'absolute';
-              containerStyle.left = targetRect.left + (documentElement.scrollLeft + body.scrollLeft) * zoomReciprocal + "px";
-              containerStyle.top = targetRect.top + (documentElement.scrollTop + body.scrollTop) * zoomReciprocal + "px";
+              containerStyle.left = targetRect.left + documentElement.scrollLeft + body.scrollLeft * zoomReciprocal + "px";
+              containerStyle.top = targetRect.top + documentElement.scrollTop + body.scrollTop * zoomReciprocal + "px";
           }
           containerStyle.overflow = 'hidden';
           containerStyle.pointerEvents = 'none';
