@@ -4,6 +4,37 @@
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.ripplet = factory());
 }(this, (function () { 'use strict';
 
+  var Matrix = typeof DOMMatrix !== 'undefined' ? DOMMatrix : MSCSSMatrix; // tslint:disable-line:variable-name
+  var transformPoint = function (matrix, x, y) {
+      // IE doesn't support `DOMPoint` (and of course `DOMMatrix.prototype.transformPoint()` and `DOMPoint.prototype.matrixTransform()`).
+      if (matrix) {
+          var m = matrix.multiply(new Matrix().translate(x, y));
+          return { x: m.e, y: m.f };
+      }
+      else {
+          return { x: x, y: y };
+      }
+  };
+  var createTransformMatrix = function (style) {
+      if (style.transform === 'none') {
+          return;
+      }
+      var origin = style.transformOrigin.split(' ');
+      var xOrigin = parseFloat(origin[0]);
+      var yOrigin = parseFloat(origin[1]);
+      return new Matrix()
+          .translate(xOrigin + parseFloat(style.marginLeft), yOrigin + parseFloat(style.marginTop))
+          .multiply(new Matrix(style.transform))
+          .translate(-xOrigin, -yOrigin)
+          .inverse();
+  };
+  var createScaleMatrix = function (style) {
+      if (style.transform === 'none') {
+          return;
+      }
+      var matrix = new Matrix(style.transform);
+      return matrix.translate(-matrix.e, -matrix.f).inverse();
+  };
   var defaultOptions = {
       className: '',
       color: 'currentcolor',
@@ -34,8 +65,10 @@
           ? Object.keys(defaultOptions).reduce(function (merged, field) { return ((merged[field] = _options.hasOwnProperty(field) ? _options[field] : defaultOptions[field]), merged); }, {})
           : defaultOptions;
       var documentElement = document.documentElement, body = document.body;
-      var zoom = +getComputedStyle(body).zoom || 1;
+      var bodyStyle = getComputedStyle(body);
+      var zoom = +bodyStyle.zoom || 1;
       var zoomReciprocal = 1 / zoom;
+      var transformMatrix = createTransformMatrix(bodyStyle);
       var targetRect = currentTarget.getBoundingClientRect();
       if (options.centered && options.centered !== 'false') {
           clientX = targetRect.left + targetRect.width * 0.5;
@@ -100,13 +133,17 @@
           else {
               body.appendChild(containerElement);
               containerStyle.position = 'absolute';
-              containerStyle.left = targetRect.left + documentElement.scrollLeft + body.scrollLeft * zoomReciprocal + "px";
-              containerStyle.top = targetRect.top + documentElement.scrollTop + body.scrollTop * zoomReciprocal + "px";
+              var p = transformPoint(transformMatrix, targetRect.left + documentElement.scrollLeft + body.scrollLeft * zoomReciprocal, targetRect.top + documentElement.scrollTop + body.scrollTop * zoomReciprocal);
+              containerStyle.left = p.x + "px";
+              containerStyle.top = p.y + "px";
+          }
+          {
+              var size = transformPoint(createScaleMatrix(bodyStyle), targetRect.width, targetRect.height);
+              containerStyle.width = size.x + "px";
+              containerStyle.height = size.y + "px";
           }
           containerStyle.overflow = 'hidden';
           containerStyle.pointerEvents = 'none';
-          containerStyle.width = targetRect.width + "px";
-          containerStyle.height = targetRect.height + "px";
           containerStyle.zIndex = ((+targetStyle.zIndex || 0) + 1);
           containerStyle.opacity = applyCssVariable(options.opacity);
           copyStyles(containerStyle, targetStyle, [
@@ -119,8 +156,11 @@
           ]);
       }
       {
-          var distanceX = Math.max(clientX - targetRect.left, targetRect.right - clientX);
-          var distanceY = Math.max(clientY - targetRect.top, targetRect.bottom - clientY);
+          var p1 = transformPoint(transformMatrix, targetRect.left, targetRect.top);
+          var p2 = transformPoint(transformMatrix, targetRect.right, targetRect.bottom);
+          var client = transformPoint(transformMatrix, clientX, clientY);
+          var distanceX = Math.max(client.x - p1.x, p2.x - client.x);
+          var distanceY = Math.max(client.y - p1.y, p2.y - client.y);
           var radius = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
           var rippletElement = document.createElement('div');
           var rippletStyle = rippletElement.style;
@@ -129,12 +169,12 @@
           rippletElement.className = options.className;
           rippletStyle.width = rippletStyle.height = radius * 2 + "px";
           if (getComputedStyle(appendToParent ? currentTarget.parentElement : body).direction === 'rtl') {
-              rippletStyle.marginRight = targetRect.right - clientX - radius + "px";
+              rippletStyle.marginRight = p2.x - client.x - radius + "px";
           }
           else {
-              rippletStyle.marginLeft = clientX - targetRect.left - radius + "px";
+              rippletStyle.marginLeft = client.x - p1.x - radius + "px";
           }
-          rippletStyle.marginTop = clientY - targetRect.top - radius + "px";
+          rippletStyle.marginTop = client.y - p1.y - radius + "px";
           rippletStyle.borderRadius = '50%';
           rippletStyle.transition = "transform " + applyCssVariable(options.spreadingDuration) + " " + applyCssVariable(options.spreadingTimingFunction) + " " + applyCssVariable(options.spreadingDelay) + ",opacity " + applyCssVariable(options.clearingDuration) + " " + applyCssVariable(options.clearingTimingFunction) + " " + applyCssVariable(options.clearingDelay);
           rippletStyle.transform = 'scale(0)';

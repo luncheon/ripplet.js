@@ -1,6 +1,41 @@
 export type RippletOptions = Partial<typeof defaultOptions>
 export type RippletContainerElement = HTMLElement & { readonly __ripplet__: unique symbol }
 
+declare const MSCSSMatrix: typeof DOMMatrixReadOnly
+const Matrix = typeof DOMMatrix !== 'undefined' ? DOMMatrix : MSCSSMatrix // tslint:disable-line:variable-name
+
+const transformPoint = (matrix: DOMMatrixReadOnly | undefined, x: number, y: number) => {
+  // IE doesn't support `DOMPoint` (and of course `DOMMatrix.prototype.transformPoint()` and `DOMPoint.prototype.matrixTransform()`).
+  if (matrix) {
+    const m = matrix.multiply(new Matrix().translate(x, y))
+    return { x: m.e, y: m.f }
+  } else {
+    return { x, y }
+  }
+}
+
+const createTransformMatrix = (style: CSSStyleDeclaration) => {
+  if (style.transform === 'none') {
+    return
+  }
+  const origin = style.transformOrigin.split(' ')
+  const xOrigin = parseFloat(origin[0])
+  const yOrigin = parseFloat(origin[1])
+  return new Matrix()
+    .translate(xOrigin + parseFloat(style.marginLeft), yOrigin + parseFloat(style.marginTop))
+    .multiply(new Matrix(style.transform))
+    .translate(-xOrigin, -yOrigin)
+    .inverse()
+}
+
+const createScaleMatrix = (style: CSSStyleDeclaration) => {
+  if (style.transform === 'none') {
+    return
+  }
+  const matrix = new Matrix(style.transform)
+  return matrix.translate(-matrix.e, -matrix.f).inverse()
+}
+
 export const defaultOptions = {
   className: '',
   color: 'currentcolor' as string | null,
@@ -48,8 +83,10 @@ function ripplet(
       )
     : defaultOptions
   const { documentElement, body } = document
-  const zoom = +getComputedStyle(body).zoom || 1
+  const bodyStyle = getComputedStyle(body)
+  const zoom = +bodyStyle.zoom || 1
   const zoomReciprocal = 1 / zoom
+  const transformMatrix = createTransformMatrix(bodyStyle)
   const targetRect = currentTarget.getBoundingClientRect()
   if (options.centered && options.centered !== 'false') {
     clientX = targetRect.left + targetRect.width * 0.5
@@ -111,13 +148,21 @@ function ripplet(
     } else {
       body.appendChild(containerElement)
       containerStyle.position = 'absolute'
-      containerStyle.left = `${targetRect.left + documentElement.scrollLeft + body.scrollLeft * zoomReciprocal}px`
-      containerStyle.top = `${targetRect.top + documentElement.scrollTop + body.scrollTop * zoomReciprocal}px`
+      const p = transformPoint(
+        transformMatrix,
+        targetRect.left + documentElement.scrollLeft + body.scrollLeft * zoomReciprocal,
+        targetRect.top + documentElement.scrollTop + body.scrollTop * zoomReciprocal,
+      )
+      containerStyle.left = `${p.x}px`
+      containerStyle.top = `${p.y}px`
+    }
+    {
+      const size = transformPoint(createScaleMatrix(bodyStyle), targetRect.width, targetRect.height)
+      containerStyle.width = `${size.x}px`
+      containerStyle.height = `${size.y}px`
     }
     containerStyle.overflow = 'hidden'
     containerStyle.pointerEvents = 'none'
-    containerStyle.width = `${targetRect.width}px`
-    containerStyle.height = `${targetRect.height}px`
     containerStyle.zIndex = ((+targetStyle.zIndex || 0) + 1) as string & number
     containerStyle.opacity = applyCssVariable(options.opacity as string & number)!
     copyStyles(containerStyle, targetStyle, [
@@ -131,8 +176,11 @@ function ripplet(
   }
 
   {
-    const distanceX = Math.max(clientX - targetRect.left, targetRect.right - clientX)
-    const distanceY = Math.max(clientY - targetRect.top, targetRect.bottom - clientY)
+    const p1 = transformPoint(transformMatrix, targetRect.left, targetRect.top)
+    const p2 = transformPoint(transformMatrix, targetRect.right, targetRect.bottom)
+    const client = transformPoint(transformMatrix, clientX, clientY)
+    const distanceX = Math.max(client.x - p1.x, p2.x - client.x)
+    const distanceY = Math.max(client.y - p1.y, p2.y - client.y)
     const radius = Math.sqrt(distanceX * distanceX + distanceY * distanceY)
     const rippletElement = document.createElement('div')
     const rippletStyle = rippletElement.style
@@ -143,11 +191,11 @@ function ripplet(
     rippletElement.className = options.className
     rippletStyle.width = rippletStyle.height = `${radius * 2}px`
     if (getComputedStyle(appendToParent ? currentTarget.parentElement! : body).direction === 'rtl') {
-      rippletStyle.marginRight = `${targetRect.right - clientX - radius}px`
+      rippletStyle.marginRight = `${p2.x - client.x - radius}px`
     } else {
-      rippletStyle.marginLeft = `${clientX - targetRect.left - radius}px`
+      rippletStyle.marginLeft = `${client.x - p1.x - radius}px`
     }
-    rippletStyle.marginTop = `${clientY - targetRect.top - radius}px`
+    rippletStyle.marginTop = `${client.y - p1.y - radius}px`
     rippletStyle.borderRadius = '50%'
     rippletStyle.transition = `transform ${applyCssVariable(options.spreadingDuration)} ${applyCssVariable(
       options.spreadingTimingFunction,
