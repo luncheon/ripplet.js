@@ -146,8 +146,8 @@ or
 
 I recommend applying following styles to the ripple target elements:
 
-1. Erase tap highlight effect for iOS
-2. Disable tap-to-hover behavior and double-tap-to-zoom behavior for iOS
+1. Erase tap highlight effect for mobile devices
+2. Disable tap-to-hover behavior and double-tap-to-zoom behavior for mobile devices
 
 ```css
 /* Example for the declarative edition */
