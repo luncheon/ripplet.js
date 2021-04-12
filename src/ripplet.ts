@@ -2,7 +2,8 @@ export type RippletOptions = Partial<typeof defaultOptions>
 export type RippletContainerElement = HTMLElement & { readonly __ripplet__: unique symbol }
 
 declare const MSCSSMatrix: typeof DOMMatrixReadOnly
-const Matrix = typeof DOMMatrix !== 'undefined' ? DOMMatrix : MSCSSMatrix // tslint:disable-line:variable-name
+// tslint:disable-next-line:variable-name
+const Matrix = typeof DOMMatrix !== 'undefined' ? DOMMatrix : typeof MSCSSMatrix !== 'undefined' ? MSCSSMatrix : (undefined as never)
 
 const transformPoint = (matrix: DOMMatrixReadOnly | undefined, x: number, y: number) => {
   // IE doesn't support `DOMPoint` (and of course `DOMMatrix.prototype.transformPoint()` and `DOMPoint.prototype.matrixTransform()`).
