@@ -1,0 +1,18 @@
+{
+  "name": "verify-gatsby",
+  "version": "1.0.0",
+  "private": true,
+  "description": "verify-gatsby",
+  "scripts": {
+    "postinstall": "npm link ../..",
+    "start": "gatsby develop",
+    "build": "gatsby clean && gatsby build --prefix-paths",
+    "serve": "gatsby serve",
+    "clean": "gatsby clean"
+  },
+  "dependencies": {
+    "gatsby": "^3.2.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  }
+}
