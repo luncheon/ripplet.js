@@ -4,38 +4,6 @@
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.ripplet = factory());
 }(this, (function () { 'use strict';
 
-  // tslint:disable-next-line:variable-name
-  var Matrix = typeof DOMMatrix !== 'undefined' ? DOMMatrix : typeof MSCSSMatrix !== 'undefined' ? MSCSSMatrix : undefined;
-  var transformPoint = function (matrix, x, y) {
-      // IE doesn't support `DOMPoint` (and of course `DOMMatrix.prototype.transformPoint()` and `DOMPoint.prototype.matrixTransform()`).
-      if (matrix) {
-          var m = matrix.multiply(new Matrix().translate(x, y));
-          return { x: m.e, y: m.f };
-      }
-      else {
-          return { x: x, y: y };
-      }
-  };
-  var createTransformMatrix = function (style) {
-      if (style.transform === 'none') {
-          return;
-      }
-      var origin = style.transformOrigin.split(' ');
-      var xOrigin = parseFloat(origin[0]);
-      var yOrigin = parseFloat(origin[1]);
-      return new Matrix()
-          .translate(xOrigin + parseFloat(style.marginLeft), yOrigin + parseFloat(style.marginTop))
-          .multiply(new Matrix(style.transform))
-          .translate(-xOrigin, -yOrigin)
-          .inverse();
-  };
-  var createScaleMatrix = function (style) {
-      if (style.transform === 'none') {
-          return;
-      }
-      var matrix = new Matrix(style.transform);
-      return matrix.translate(-matrix.e, -matrix.f).inverse();
-  };
   var defaultOptions = {
       className: '',
       color: 'currentcolor',
@@ -48,15 +16,10 @@
       clearingDelay: '0s',
       clearingTimingFunction: 'ease-in-out',
       centered: false,
-      appendTo: 'body',
+      appendTo: 'target',
   };
   var target2container2ripplet = new Map();
-  var copyStyles = function (destination, source, properties) {
-      for (var _i = 0, properties_1 = properties; _i < properties_1.length; _i++) {
-          var property = properties_1[_i];
-          destination[property] = source[property];
-      }
-  };
+  var containerContainerTemplate;
   function ripplet(_a, _options) {
       var currentTarget = _a.currentTarget, clientX = _a.clientX, clientY = _a.clientY;
       if (!(currentTarget instanceof Element)) {
@@ -65,11 +28,12 @@
       var options = _options
           ? Object.keys(defaultOptions).reduce(function (merged, field) { return ((merged[field] = _options.hasOwnProperty(field) ? _options[field] : defaultOptions[field]), merged); }, {})
           : defaultOptions;
-      var documentElement = document.documentElement, body = document.body;
-      var bodyStyle = getComputedStyle(body);
-      var zoom = +bodyStyle.zoom || 1;
-      var zoomReciprocal = 1 / zoom;
-      var transformMatrix = createTransformMatrix(bodyStyle);
+      if (!containerContainerTemplate) {
+          var _containerContainerTemplate = document.createElement('div');
+          _containerContainerTemplate.innerHTML =
+              '<div style="float:left;position:relative;isolation:isolate;pointer-events:none"><div style="position:absolute;overflow:hidden;transform-origin:0 0"><div style="border-radius:50%;transform:scale(0)"></div></div></div>';
+          containerContainerTemplate = _containerContainerTemplate.firstChild;
+      }
       var targetRect = currentTarget.getBoundingClientRect();
       if (options.centered && options.centered !== 'false') {
           clientX = targetRect.left + targetRect.width * 0.5;
@@ -79,6 +43,7 @@
           return;
       }
       else {
+          var zoomReciprocal = 1 / (+getComputedStyle(document.body).zoom || 1);
           clientX = clientX * zoomReciprocal;
           clientY = clientY * zoomReciprocal;
       }
@@ -87,106 +52,50 @@
           var match = value && /^var\((--.+)\)$/.exec(value);
           return match ? targetStyle.getPropertyValue(match[1]) : value;
       };
-      var containerElement = document.createElement('div');
-      var appendToParent = options.appendTo === 'parent';
-      var removingElement = containerElement;
+      var appendTo = options.appendTo;
+      var elementAppendTo = appendTo === 'target' ? currentTarget : appendTo === 'parent' ? currentTarget.parentElement : document.querySelector(appendTo);
+      var containerContainerElement = elementAppendTo.appendChild(containerContainerTemplate.cloneNode(true));
+      containerContainerElement.style.zIndex = ((+targetStyle.zIndex || 0) + 1);
+      var containerElement = containerContainerElement.firstChild;
       {
+          var containerRect = containerElement.getBoundingClientRect();
           var containerStyle = containerElement.style;
-          if (targetStyle.position === 'fixed' || (targetStyle.position === 'absolute' && appendToParent)) {
-              if (appendToParent) {
-                  currentTarget.parentElement.insertBefore(containerElement, currentTarget);
-              }
-              else {
-                  body.appendChild(containerElement);
-              }
-              copyStyles(containerStyle, targetStyle, [
-                  'position',
-                  'left',
-                  'top',
-                  'right',
-                  'bottom',
-                  'marginLeft',
-                  'marginTop',
-                  'marginRight',
-                  'marginBottom',
-              ]);
-          }
-          else if (appendToParent) {
-              var parentStyle = getComputedStyle(currentTarget.parentElement);
-              if (parentStyle.display === 'flex' || parentStyle.display === 'inline-flex') {
-                  currentTarget.parentElement.insertBefore(containerElement, currentTarget);
-                  containerStyle.position = 'absolute';
-                  containerStyle.left = currentTarget.offsetLeft + "px";
-                  containerStyle.top = currentTarget.offsetTop + "px";
-              }
-              else {
-                  var containerContainer = (removingElement = currentTarget.parentElement.insertBefore(document.createElement('div'), currentTarget));
-                  var containerContainerStyle = containerContainer.style;
-                  containerContainerStyle.cssFloat = 'left';
-                  containerContainerStyle.position = 'relative';
-                  var containerContainerRect = containerContainer.getBoundingClientRect(); // this may be a slow operation...
-                  containerContainer.appendChild(containerElement);
-                  containerStyle.position = 'absolute';
-                  containerStyle.top = targetRect.top - containerContainerRect.top + "px";
-                  containerStyle.left = targetRect.left - containerContainerRect.left + "px";
-              }
-          }
-          else {
-              body.appendChild(containerElement);
-              containerStyle.position = 'absolute';
-              var p = transformPoint(transformMatrix, targetRect.left + documentElement.scrollLeft + body.scrollLeft * zoomReciprocal, targetRect.top + documentElement.scrollTop + body.scrollTop * zoomReciprocal);
-              containerStyle.left = p.x + "px";
-              containerStyle.top = p.y + "px";
-          }
-          {
-              var size = transformPoint(createScaleMatrix(bodyStyle), targetRect.width, targetRect.height);
-              containerStyle.width = size.x + "px";
-              containerStyle.height = size.y + "px";
-          }
-          containerStyle.overflow = 'hidden';
-          containerStyle.pointerEvents = 'none';
-          containerStyle.zIndex = ((+targetStyle.zIndex || 0) + 1);
+          containerStyle.top = targetRect.top - containerRect.top + "px";
+          containerStyle.left = targetRect.left - containerRect.left + "px";
+          containerStyle.width = targetRect.width + "px";
+          containerStyle.height = targetRect.height + "px";
           containerStyle.opacity = applyCssVariable(options.opacity);
-          copyStyles(containerStyle, targetStyle, [
-              'borderTopLeftRadius',
-              'borderTopRightRadius',
-              'borderBottomLeftRadius',
-              'borderBottomRightRadius',
-              'webkitClipPath',
-              'clipPath',
-          ]);
+          containerStyle.borderTopLeftRadius = targetStyle.borderTopLeftRadius;
+          containerStyle.borderTopRightRadius = targetStyle.borderTopRightRadius;
+          containerStyle.borderBottomLeftRadius = targetStyle.borderBottomLeftRadius;
+          containerStyle.borderBottomRightRadius = targetStyle.borderBottomRightRadius;
+          containerStyle.clipPath = targetStyle.clipPath;
+          containerRect = containerElement.getBoundingClientRect();
+          var scaleX = targetRect.width / containerRect.width;
+          var scaleY = targetRect.height / containerRect.height;
+          containerStyle.transform = "scale(" + scaleX + "," + scaleY + ") translate(" + (targetRect.left - containerRect.left) + "px," + (targetRect.top - containerRect.top) + "px)";
       }
       {
-          var p1 = transformPoint(transformMatrix, targetRect.left, targetRect.top);
-          var p2 = transformPoint(transformMatrix, targetRect.right, targetRect.bottom);
-          var client = transformPoint(transformMatrix, clientX, clientY);
-          var distanceX = Math.max(client.x - p1.x, p2.x - client.x);
-          var distanceY = Math.max(client.y - p1.y, p2.y - client.y);
+          var distanceX = Math.max(clientX - targetRect.left, targetRect.right - clientX);
+          var distanceY = Math.max(clientY - targetRect.top, targetRect.bottom - clientY);
           var radius = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-          var rippletElement = document.createElement('div');
+          var rippletElement = containerElement.firstChild;
           var rippletStyle = rippletElement.style;
           var color = applyCssVariable(options.color);
           rippletStyle.backgroundColor = /^currentcolor$/i.test(color) ? targetStyle.color : color;
           rippletElement.className = options.className;
-          rippletStyle.width = rippletStyle.height = radius * 2 + "px";
-          if (getComputedStyle(appendToParent ? currentTarget.parentElement : body).direction === 'rtl') {
-              rippletStyle.marginRight = p2.x - client.x - radius + "px";
+          rippletStyle.width = rippletStyle.height = radius + radius + "px";
+          if (getComputedStyle(elementAppendTo).direction === 'rtl') {
+              rippletStyle.marginRight = targetRect.right - clientX - radius + "px";
           }
           else {
-              rippletStyle.marginLeft = client.x - p1.x - radius + "px";
+              rippletStyle.marginLeft = clientX - targetRect.left - radius + "px";
           }
-          rippletStyle.marginTop = client.y - p1.y - radius + "px";
-          rippletStyle.borderRadius = '50%';
+          rippletStyle.marginTop = clientY - targetRect.top - radius + "px";
           rippletStyle.transition = "transform " + applyCssVariable(options.spreadingDuration) + " " + applyCssVariable(options.spreadingTimingFunction) + " " + applyCssVariable(options.spreadingDelay) + ",opacity " + applyCssVariable(options.clearingDuration) + " " + applyCssVariable(options.clearingTimingFunction) + " " + applyCssVariable(options.clearingDelay);
-          rippletStyle.transform = 'scale(0)';
-          containerElement.appendChild(rippletElement);
-          // reflect styles by force layout
-          // tslint:disable-next-line:no-unused-expression
-          rippletElement.offsetTop;
-          rippletStyle.transform = '';
           rippletElement.addEventListener('transitionend', function (event) {
-              if (event.propertyName === 'opacity' && removingElement.parentElement) {
-                  removingElement.parentElement.removeChild(removingElement);
+              if (event.propertyName === 'opacity' && containerContainerElement.parentElement) {
+                  containerContainerElement.parentElement.removeChild(containerContainerElement);
               }
           });
           if (options.clearing && options.clearing !== 'false') {
@@ -197,10 +106,13 @@
               if (!container2ripplet) {
                   target2container2ripplet.set(currentTarget, (container2ripplet = new Map()));
               }
-              container2ripplet.set(containerElement, rippletElement);
+              container2ripplet.set(containerContainerElement, rippletElement);
           }
+          // reflect styles by force layout and start transition
+          rippletElement.offsetWidth; // tslint:disable-line:no-unused-expression
+          rippletStyle.transform = '';
       }
-      return containerElement;
+      return containerContainerElement;
   }
   ripplet.clear = function (targetElement, rippletContainerElement) {
       if (targetElement) {

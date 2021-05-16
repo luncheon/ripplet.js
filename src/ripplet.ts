@@ -1,42 +1,6 @@
 export type RippletOptions = Partial<typeof defaultOptions>
 export type RippletContainerElement = HTMLElement & { readonly __ripplet__: unique symbol }
 
-declare const MSCSSMatrix: typeof DOMMatrixReadOnly
-// tslint:disable-next-line:variable-name
-const Matrix = typeof DOMMatrix !== 'undefined' ? DOMMatrix : typeof MSCSSMatrix !== 'undefined' ? MSCSSMatrix : (undefined as never)
-
-const transformPoint = (matrix: DOMMatrixReadOnly | undefined, x: number, y: number) => {
-  // IE doesn't support `DOMPoint` (and of course `DOMMatrix.prototype.transformPoint()` and `DOMPoint.prototype.matrixTransform()`).
-  if (matrix) {
-    const m = matrix.multiply(new Matrix().translate(x, y))
-    return { x: m.e, y: m.f }
-  } else {
-    return { x, y }
-  }
-}
-
-const createTransformMatrix = (style: CSSStyleDeclaration) => {
-  if (style.transform === 'none') {
-    return
-  }
-  const origin = style.transformOrigin.split(' ')
-  const xOrigin = parseFloat(origin[0])
-  const yOrigin = parseFloat(origin[1])
-  return new Matrix()
-    .translate(xOrigin + parseFloat(style.marginLeft), yOrigin + parseFloat(style.marginTop))
-    .multiply(new Matrix(style.transform))
-    .translate(-xOrigin, -yOrigin)
-    .inverse()
-}
-
-const createScaleMatrix = (style: CSSStyleDeclaration) => {
-  if (style.transform === 'none') {
-    return
-  }
-  const matrix = new Matrix(style.transform)
-  return matrix.translate(-matrix.e, -matrix.f).inverse()
-}
-
 export const defaultOptions = {
   className: '',
   color: 'currentcolor' as string | null,
@@ -49,16 +13,12 @@ export const defaultOptions = {
   clearingDelay: '0s' as string | null,
   clearingTimingFunction: 'ease-in-out' as string | null,
   centered: false as boolean | 'true' | 'false' | null,
-  appendTo: 'body' as 'body' | 'parent' | null,
+  appendTo: 'target' as 'target' | 'parent' | 'body' | string | null,
 }
 
 const target2container2ripplet = new Map<Element, Map<RippletContainerElement, HTMLElement>>()
 
-const copyStyles = <T>(destination: T, source: Readonly<T>, properties: (keyof T)[]) => {
-  for (const property of properties) {
-    destination[property] = source[property]
-  }
-}
+let containerContainerTemplate: HTMLElement
 
 function ripplet(
   targetSuchAsPointerEvent: MouseEvent | Readonly<{ currentTarget: Element; clientX: number; clientY: number }>,
@@ -83,11 +43,14 @@ function ripplet(
         {},
       )
     : defaultOptions
-  const { documentElement, body } = document
-  const bodyStyle = getComputedStyle(body)
-  const zoom = +bodyStyle.zoom || 1
-  const zoomReciprocal = 1 / zoom
-  const transformMatrix = createTransformMatrix(bodyStyle)
+
+  if (!containerContainerTemplate) {
+    const _containerContainerTemplate = document.createElement('div')
+    _containerContainerTemplate.innerHTML =
+      '<div style="float:left;position:relative;isolation:isolate;pointer-events:none"><div style="position:absolute;overflow:hidden;transform-origin:0 0"><div style="border-radius:50%;transform:scale(0)"></div></div></div>'
+    containerContainerTemplate = _containerContainerTemplate.firstChild as HTMLElement
+  }
+
   const targetRect = currentTarget.getBoundingClientRect()
   if (options.centered && options.centered !== 'false') {
     clientX = targetRect.left + targetRect.width * 0.5
@@ -95,125 +58,71 @@ function ripplet(
   } else if (typeof clientX !== 'number' || typeof clientY !== 'number') {
     return
   } else {
+    const zoomReciprocal = 1 / (+getComputedStyle(document.body).zoom || 1)
     clientX = clientX * zoomReciprocal
     clientY = clientY * zoomReciprocal
   }
   const targetStyle = getComputedStyle(currentTarget)
   const applyCssVariable = (value: string | null | undefined) => {
     const match = value && /^var\((--.+)\)$/.exec(value)
-    return match ? targetStyle.getPropertyValue(match[1]) : value
+    return match ? targetStyle.getPropertyValue(match[1]!) : value
   }
-  const containerElement = (document.createElement('div') as any) as RippletContainerElement
-  const appendToParent = options.appendTo === 'parent'
-  let removingElement: HTMLElement = containerElement
-  {
-    const containerStyle = containerElement.style
-    if (targetStyle.position === 'fixed' || (targetStyle.position === 'absolute' && appendToParent)) {
-      if (appendToParent) {
-        currentTarget.parentElement!.insertBefore(containerElement, currentTarget)
-      } else {
-        body.appendChild(containerElement)
-      }
-      copyStyles(containerStyle, targetStyle, [
-        'position',
-        'left',
-        'top',
-        'right',
-        'bottom',
-        'marginLeft',
-        'marginTop',
-        'marginRight',
-        'marginBottom',
-      ])
-    } else if (appendToParent) {
-      const parentStyle = getComputedStyle(currentTarget.parentElement!)
-      if (parentStyle.display === 'flex' || parentStyle.display === 'inline-flex') {
-        currentTarget.parentElement!.insertBefore(containerElement, currentTarget)
-        containerStyle.position = 'absolute'
-        containerStyle.left = `${(currentTarget as HTMLElement).offsetLeft}px`
-        containerStyle.top = `${(currentTarget as HTMLElement).offsetTop}px`
-      } else {
-        const containerContainer = (removingElement = currentTarget.parentElement!.insertBefore(
-          document.createElement('div'),
-          currentTarget,
-        ))
-        const containerContainerStyle = containerContainer.style
-        containerContainerStyle.cssFloat = 'left'
-        containerContainerStyle.position = 'relative'
-        const containerContainerRect = containerContainer.getBoundingClientRect() // this may be a slow operation...
-        containerContainer.appendChild(containerElement)
-        containerStyle.position = 'absolute'
-        containerStyle.top = `${targetRect.top - containerContainerRect.top}px`
-        containerStyle.left = `${targetRect.left - containerContainerRect.left}px`
-      }
-    } else {
-      body.appendChild(containerElement)
-      containerStyle.position = 'absolute'
-      const p = transformPoint(
-        transformMatrix,
-        targetRect.left + documentElement.scrollLeft + body.scrollLeft * zoomReciprocal,
-        targetRect.top + documentElement.scrollTop + body.scrollTop * zoomReciprocal,
-      )
-      containerStyle.left = `${p.x}px`
-      containerStyle.top = `${p.y}px`
-    }
-    {
-      const size = transformPoint(createScaleMatrix(bodyStyle), targetRect.width, targetRect.height)
-      containerStyle.width = `${size.x}px`
-      containerStyle.height = `${size.y}px`
-    }
-    containerStyle.overflow = 'hidden'
-    containerStyle.pointerEvents = 'none'
-    containerStyle.zIndex = ((+targetStyle.zIndex || 0) + 1) as string & number
-    containerStyle.opacity = applyCssVariable(options.opacity as string & number)!
-    copyStyles(containerStyle, targetStyle, [
-      'borderTopLeftRadius',
-      'borderTopRightRadius',
-      'borderBottomLeftRadius',
-      'borderBottomRightRadius',
-      'webkitClipPath',
-      'clipPath',
-    ])
-  }
+  const appendTo = options.appendTo
+  const elementAppendTo =
+    appendTo === 'target' ? currentTarget : appendTo === 'parent' ? currentTarget.parentElement! : document.querySelector(appendTo!)!
 
+  const containerContainerElement: RippletContainerElement = elementAppendTo.appendChild(containerContainerTemplate.cloneNode(true)) as any
+  containerContainerElement.style.zIndex = ((+targetStyle.zIndex || 0) + 1) as string & number
+  const containerElement = containerContainerElement.firstChild as HTMLElement
   {
-    const p1 = transformPoint(transformMatrix, targetRect.left, targetRect.top)
-    const p2 = transformPoint(transformMatrix, targetRect.right, targetRect.bottom)
-    const client = transformPoint(transformMatrix, clientX, clientY)
-    const distanceX = Math.max(client.x - p1.x, p2.x - client.x)
-    const distanceY = Math.max(client.y - p1.y, p2.y - client.y)
+    let containerRect = containerElement.getBoundingClientRect()
+    const containerStyle = containerElement.style
+    containerStyle.top = `${targetRect.top - containerRect.top}px`
+    containerStyle.left = `${targetRect.left - containerRect.left}px`
+    containerStyle.width = `${targetRect.width}px`
+    containerStyle.height = `${targetRect.height}px`
+    containerStyle.opacity = applyCssVariable(options.opacity as string & number)!
+    containerStyle.borderTopLeftRadius = targetStyle.borderTopLeftRadius
+    containerStyle.borderTopRightRadius = targetStyle.borderTopRightRadius
+    containerStyle.borderBottomLeftRadius = targetStyle.borderBottomLeftRadius
+    containerStyle.borderBottomRightRadius = targetStyle.borderBottomRightRadius
+    containerStyle.clipPath = targetStyle.clipPath
+
+    containerRect = containerElement.getBoundingClientRect()
+    const scaleX = targetRect.width / containerRect.width
+    const scaleY = targetRect.height / containerRect.height
+    containerStyle.transform = `scale(${scaleX},${scaleY}) translate(${targetRect.left - containerRect.left}px,${
+      targetRect.top - containerRect.top
+    }px)`
+  }
+  {
+    const distanceX = Math.max(clientX - targetRect.left, targetRect.right - clientX)
+    const distanceY = Math.max(clientY - targetRect.top, targetRect.bottom - clientY)
     const radius = Math.sqrt(distanceX * distanceX + distanceY * distanceY)
-    const rippletElement = document.createElement('div')
+
+    const rippletElement = containerElement.firstChild as HTMLElement
     const rippletStyle = rippletElement.style
 
     const color = applyCssVariable(options.color)!
     rippletStyle.backgroundColor = /^currentcolor$/i.test(color) ? targetStyle.color : color
 
     rippletElement.className = options.className
-    rippletStyle.width = rippletStyle.height = `${radius * 2}px`
-    if (getComputedStyle(appendToParent ? currentTarget.parentElement! : body).direction === 'rtl') {
-      rippletStyle.marginRight = `${p2.x - client.x - radius}px`
+    rippletStyle.width = rippletStyle.height = `${radius + radius}px`
+    if (getComputedStyle(elementAppendTo).direction === 'rtl') {
+      rippletStyle.marginRight = `${targetRect.right - clientX - radius}px`
     } else {
-      rippletStyle.marginLeft = `${client.x - p1.x - radius}px`
+      rippletStyle.marginLeft = `${clientX - targetRect.left - radius}px`
     }
-    rippletStyle.marginTop = `${client.y - p1.y - radius}px`
-    rippletStyle.borderRadius = '50%'
+    rippletStyle.marginTop = `${clientY - targetRect.top - radius}px`
     rippletStyle.transition = `transform ${applyCssVariable(options.spreadingDuration)} ${applyCssVariable(
       options.spreadingTimingFunction,
     )} ${applyCssVariable(options.spreadingDelay)},opacity ${applyCssVariable(options.clearingDuration)} ${applyCssVariable(
       options.clearingTimingFunction,
     )} ${applyCssVariable(options.clearingDelay)}`
-    rippletStyle.transform = 'scale(0)'
-
-    containerElement.appendChild(rippletElement)
-    // reflect styles by force layout
-    // tslint:disable-next-line:no-unused-expression
-    rippletElement.offsetTop
-    rippletStyle.transform = ''
 
     rippletElement.addEventListener('transitionend', event => {
-      if (event.propertyName === 'opacity' && removingElement.parentElement) {
-        removingElement.parentElement.removeChild(removingElement)
+      if (event.propertyName === 'opacity' && containerContainerElement.parentElement) {
+        containerContainerElement.parentElement.removeChild(containerContainerElement)
       }
     })
     if (options.clearing && options.clearing !== 'false') {
@@ -223,10 +132,14 @@ function ripplet(
       if (!container2ripplet) {
         target2container2ripplet.set(currentTarget, (container2ripplet = new Map<RippletContainerElement, HTMLElement>()))
       }
-      container2ripplet.set(containerElement, rippletElement)
+      container2ripplet.set(containerContainerElement, rippletElement)
     }
+
+    // reflect styles by force layout and start transition
+    rippletElement.offsetWidth // tslint:disable-line:no-unused-expression
+    rippletStyle.transform = ''
   }
-  return containerElement
+  return containerContainerElement
 }
 
 ripplet.clear = (targetElement?: Element, rippletContainerElement?: RippletContainerElement) => {

@@ -14,7 +14,7 @@ export declare const defaultOptions: {
     clearingDelay: string | null;
     clearingTimingFunction: string | null;
     centered: boolean | "true" | "false" | null;
-    appendTo: "body" | "parent" | null;
+    appendTo: string | null;
 };
 declare function ripplet(targetSuchAsPointerEvent: MouseEvent | Readonly<{
     currentTarget: Element;
@@ -35,7 +35,7 @@ declare namespace ripplet {
         clearingDelay: string | null;
         clearingTimingFunction: string | null;
         centered: boolean | "true" | "false" | null;
-        appendTo: "body" | "parent" | null;
+        appendTo: string | null;
     };
     var _ripplets: Map<Element, Map<RippletContainerElement, HTMLElement>>;
 }
@@ -56,7 +56,7 @@ declare namespace ripplet {
         clearingDelay: string | null;
         clearingTimingFunction: string | null;
         centered: boolean | "true" | "false" | null;
-        appendTo: "body" | "parent" | null;
+        appendTo: string | null;
     };
     var _ripplets: Map<Element, Map<RippletContainerElement, HTMLElement>>;
 }

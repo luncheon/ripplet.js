@@ -38,8 +38,7 @@ element.addEventListener('pointerdown', ripplet);
 
 ### ripplet(targetSuchAsPointerEvent, options?) => HTMLElement
 
-Generate a ripplet immediately.  
-In particular, create two elements (one is a circular enlarging element representing ripplet, and the other is a container element to restrict visible area) and remove them when the animation ends. Do nothing else.
+Generate a ripple effect.
 
 #### Parameters
 
@@ -66,14 +65,14 @@ In particular, create two elements (one is a circular enlarging element represen
 | clearingDelay           | "0s"           | As its name suggests. |
 | clearingTimingFunction  | "ease-in-out"  | As its name suggests. See https://developer.mozilla.org/docs/Web/CSS/transition-timing-function  |
 | centered                | false          | Whether to force the origin centered (and ignore `clientX` and `clientY`). |
-| appendTo                | "body"         | Either `"body"` or `"parent"`. Consider specifying `"parent"` if there are scrollable ancestors or `position: fixed` ancestors.<br>If the parent treats children as special (e.g. the parent is a flexbox on IE), specifying `"parent"` may cause the ripplet to be placed incorrectly. |
+| appendTo                | "target"       | `"target"` \| `"parent"` \| selector string like `"body"`. Specify the element to which the ripple effect element will be appended. |
 
 #### Return value
 
-Generated container element (having one child element representing ripplet)
+Generated element.
 
 
-### ripplet.clear(currentTarget?, generatedContainerElement?) => void
+### ripplet.clear(currentTarget?, generatedElement?) => void
 
 Fade out and remove the ripplet. Use only when the option `clearing` is false.
 
@@ -81,11 +80,11 @@ Fade out and remove the ripplet. Use only when the option `clearing` is false.
 
 * currentTarget: Element (optional)
 
-The target element that was passed to `ripplet()`. If this parameter is not passed, all the ripplets are cleared.
+The target element that was passed to `ripplet()`. If this parameter is not passed, all the ripplets will be cleared.
 
-* generatedContainerElement: Element (optional)
+* generatedElement: Element (optional)
 
-The generated element that was returned by `ripplet()`. If this parameter is not passed, all the ripplets (of the `currentTarget` above) are cleared.
+The generated element that was returned by `ripplet()`. If this parameter is not passed, all the ripplets (of the `currentTarget` above) will be cleared.
 
 #### Example
 

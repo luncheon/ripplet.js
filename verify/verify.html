@@ -5,11 +5,11 @@
     <title>ripplet.js build verification</title>
     <style>
       iframe { width: 120px; height: 80px; margin: 0 15px 15px 10px; display: block; }
-      button { width: 120px; height: 80px; margin: 0 15px 15px 10px; background-color: transparent; }
+      button { width: 120px; height: 80px; margin: 0 15px 15px 10px; background-color: transparent; color: inherit; }
       h5 { margin: 0; }
     </style>
   </head>
-  <body style="min-height: 1080px; max-width: 1024px;">
+  <body style="min-height: 1080px; max-width: 1024px; zoom: 0.75; transform: scale(2); transform-origin: 0 0;">
     <script src="../umd/ripplet-declarative.min.js"></script>
     <script>
       ripplet.defaultOptions.spreadingDuration = '2s'
@@ -54,6 +54,8 @@
       <button type="button" style="float: right;" data-ripplet>float: right</button>
       <button type="button" style="float: left;"  data-ripplet="append-to: parent;">float: left<br>appendTo: parent</button>
       <button type="button" style="float: right;" data-ripplet="append-to: parent;">float: right<br>appendTo: parent</button>
+      <button type="button" style="float: left;"  data-ripplet="append-to: target;">float: left<br>appendTo: target</button>
+      <button type="button" style="float: right;" data-ripplet="append-to: target;">float: right<br>appendTo: target</button>
     </div>
 
     <div>
@@ -61,6 +63,7 @@
       <div style="overflow: scroll; width: fit-content; height: 60px;">
         <button type="button" data-ripplet="append-to: body;">appendTo: body</button>
         <button type="button" data-ripplet="append-to: parent;">appendTo: parent</button>
+        <button type="button" data-ripplet="append-to: target;">appendTo: target</button>
       </div>
     </div>
 
@@ -69,6 +72,7 @@
       <div style="display: flex;">
         <button type="button" data-ripplet="append-to: body;">appendTo: body</button>
         <button type="button" data-ripplet="append-to: parent;">appendTo: parent</button>
+        <button type="button" data-ripplet="append-to: target;">appendTo: target</button>
       </div>
     </div>
 
@@ -77,6 +81,7 @@
       <div style="display: flex; justify-content: space-around;">
         <button type="button" data-ripplet="append-to: body;">appendTo: body</button>
         <button type="button" data-ripplet="append-to: parent;">appendTo: parent</button>
+        <button type="button" data-ripplet="append-to: target;">appendTo: target</button>
       </div>
     </div>
 
@@ -85,8 +90,10 @@
       <div style="position: relative;">
         <button type="button" style="position: absolute; right:  10px; bottom: -10px;" data-ripplet="append-to: body;">position: absolute<br>appendTo: body</button>
         <button type="button" style="position: absolute; right: 125px; bottom: -10px;" data-ripplet="append-to: parent;">position: absolute<br>appendTo: parent</button>
-        <button type="button" style="position: relative; right:  10px; bottom: -10px;" data-ripplet="append-to: body;">position: relative<br>appendTo: parent</button>
+        <button type="button" style="position: absolute; right: 240px; bottom: -10px;" data-ripplet="append-to: target;">position: absolute<br>appendTo: target</button>
+        <button type="button" style="position: relative; right:  10px; bottom: -10px;" data-ripplet="append-to: body;">position: relative<br>appendTo: body</button>
         <button type="button" style="position: relative; right:  10px; bottom: -10px;" data-ripplet="append-to: parent;">position: relative<br>appendTo: parent</button>
+        <button type="button" style="position: relative; right:  10px; bottom: -10px;" data-ripplet="append-to: target;">position: relative<br>appendTo: target</button>
       </div>
     </div>
 
@@ -96,8 +103,10 @@
         <div style="overflow: scroll; width: 100px; padding: 32px;">
           <button type="button" style="position: absolute; right:  10px; bottom: -10px;" data-ripplet="append-to: body;">position: absolute<br>appendTo: body</button>
           <button type="button" style="position: absolute; right: 125px; bottom: -10px;" data-ripplet="append-to: parent;">position: absolute<br>appendTo: parent</button>
+          <button type="button" style="position: absolute; right: 240px; bottom: -10px;" data-ripplet="append-to: target;">position: absolute<br>appendTo: target</button>
           <button type="button" style="position: relative; right:  10px; bottom: -10px;" data-ripplet="append-to: body;">position: relative<br>appendTo: parent</button>
           <button type="button" style="position: relative; right:  10px; bottom: -10px;" data-ripplet="append-to: parent;">position: relative<br>appendTo: parent</button>
+          <button type="button" style="position: relative; right:  10px; bottom: -10px;" data-ripplet="append-to: target;">position: relative<br>appendTo: target</button>
         </div>
       </div>
     </div>
@@ -105,10 +114,15 @@
     <span>
       <h5 style="display: inline;">inline</h5>
       <span>
-        <span data-ripplet="append-to: parent" style="padding: 10px; border: 1px solid #ccc;">inline</span>
-        <span data-ripplet="append-to: parent" style="padding: 10px; border: 1px solid #ccc;">inline</span>
+        <span data-ripplet="append-to: parent" style="padding: 10px; border: 1px solid #ccc;">inline parent</span>
+        <span data-ripplet="append-to: parent" style="padding: 10px; border: 1px solid #ccc;">inline parent</span>
       </span>
-      <span data-ripplet="append-to: parent" style="padding: 10px; border: 1px solid #ccc;">inline</span>
+      <span data-ripplet="append-to: parent" style="padding: 10px; border: 1px solid #ccc;">inline parent</span>
+      <span>
+        <span data-ripplet="append-to: target" style="padding: 10px; border: 1px solid #ccc;">inline target</span>
+        <span data-ripplet="append-to: target" style="padding: 10px; border: 1px solid #ccc;">inline target</span>
+      </span>
+      <span data-ripplet="append-to: target" style="padding: 10px; border: 1px solid #ccc;">inline target</span>
     </span>
 
     <span>
@@ -120,10 +134,11 @@
       <span data-ripplet="append-to: parent" style="display: inline-block; padding: 10px; border: 1px solid #ccc;">inline-block</span>
     </span>
 
-    <div style="position: fixed; background-color: rgba(0,0,0,.1); right: 10px; bottom: 10px; padding: 10px;">
+    <div style="position: fixed; background-color: rgba(0,0,0,.1); right: 10px; bottom: 200px; padding: 10px;">
       <h5>fixed ancestor</h5>
       <button type="button" data-ripplet></button>
       <button type="button" data-ripplet="append-to: parent;">appendTo: parent</button>
+      <button type="button" data-ripplet="append-to: target;">appendTo: target</button>
     </div>
   </body>
 </html>

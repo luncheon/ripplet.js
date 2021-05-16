@@ -20,7 +20,7 @@ const parseOptions = (optionsString: string | null) => {
         s
           .slice(0, index)
           .trim()
-          .replace(/[a-zA-Z0-9_]-[a-z]/g, $0 => $0[0] + $0[2].toUpperCase())
+          .replace(/[a-zA-Z0-9_]-[a-z]/g, $0 => $0[0] + $0[2]!.toUpperCase())
       ] = s.slice(index + 1).trim()
     }
   }
