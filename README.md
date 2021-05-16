@@ -25,13 +25,13 @@ element.addEventListener('pointerdown', ripplet);
 ### CDN ([jsDelivr](https://www.jsdelivr.com/package/npm/ripplet.js))
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ripplet.js@0.5.4"></script>
+<script src="https://cdn.jsdelivr.net/npm/ripplet.js@1.0.0"></script>
 <button onpointerdown="ripplet(arguments[0])">Click me!</button>
 ```
 
 ### Download directly
 
-<a target="_blank" download="ripplet.min.js" href="https://cdn.jsdelivr.net/npm/ripplet.js@0.5.4/umd/ripplet.min.js">Download ripplet.min.js</a>
+<a target="_blank" download="ripplet.min.js" href="https://cdn.jsdelivr.net/npm/ripplet.js@1.0.0/umd/ripplet.min.js">Download ripplet.min.js</a>
 
 
 ## API
@@ -119,7 +119,7 @@ In declarative edition, the ripple effect remains until the `pointerup` or `poin
 ### Example Usage
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ripplet.js@0.5.4/umd/ripplet-declarative.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ripplet.js@1.0.0/umd/ripplet-declarative.min.js"></script>
 <!-- <script>ripplet.defaultOptions.color = 'rgb(0, 255, 0)';</script> -->
 
 <button data-ripplet>Default</button>
@@ -138,7 +138,7 @@ import 'ripplet.js/es/ripplet-declarative';
 
 or
 
-<a target="_blank" download="ripplet-declarative.min.js" href="https://cdn.jsdelivr.net/npm/ripplet.js@0.5.4/umd/ripplet-declarative.min.js">Download ripplet-declarative.min.js</a>
+<a target="_blank" download="ripplet-declarative.min.js" href="https://cdn.jsdelivr.net/npm/ripplet.js@1.0.0/umd/ripplet-declarative.min.js">Download ripplet-declarative.min.js</a>
 
 
 ## Tips
