@@ -13,12 +13,30 @@ export const defaultOptions = {
   clearingDelay: '0s' as string | null,
   clearingTimingFunction: 'ease-in-out' as string | null,
   centered: false as boolean | 'true' | 'false' | null,
-  appendTo: 'target' as 'target' | 'parent' | 'body' | string | null,
+  appendTo: 'auto' as 'auto' | 'target' | 'parent' | 'body' | string | null,
 }
 
 const target2container2ripplet = new Map<Element, Map<RippletContainerElement, HTMLElement>>()
 
 let containerContainerTemplate: HTMLElement
+
+const findElementAppendTo = (target: Element, appendTo: string | null): Element => {
+  if (appendTo && appendTo !== 'auto') {
+    return appendTo === 'target' ? target : appendTo === 'parent' ? target.parentElement! : document.querySelector(appendTo)!
+  }
+  while (
+    target &&
+    (target instanceof SVGElement ||
+      target instanceof HTMLInputElement ||
+      target instanceof HTMLSelectElement ||
+      target instanceof HTMLTextAreaElement ||
+      target instanceof HTMLImageElement ||
+      target instanceof HTMLHRElement)
+  ) {
+    target = target.parentElement!
+  }
+  return target
+}
 
 function ripplet(
   targetSuchAsPointerEvent: MouseEvent | Readonly<{ currentTarget: Element; clientX: number; clientY: number }>,
@@ -67,9 +85,7 @@ function ripplet(
     const match = value && /^var\((--.+)\)$/.exec(value)
     return match ? targetStyle.getPropertyValue(match[1]!) : value
   }
-  const appendTo = options.appendTo
-  const elementAppendTo =
-    appendTo === 'target' ? currentTarget : appendTo === 'parent' ? currentTarget.parentElement! : document.querySelector(appendTo!)!
+  const elementAppendTo = findElementAppendTo(currentTarget, options.appendTo)
 
   const containerContainerElement: RippletContainerElement = elementAppendTo.appendChild(containerContainerTemplate.cloneNode(true)) as any
   containerContainerElement.style.zIndex = ((+targetStyle.zIndex || 0) + 1) as string & number

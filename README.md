@@ -65,7 +65,7 @@ Generate a ripple effect.
 | clearingDelay           | "0s"           | As its name suggests. |
 | clearingTimingFunction  | "ease-in-out"  | As its name suggests. See https://developer.mozilla.org/docs/Web/CSS/transition-timing-function  |
 | centered                | false          | Whether to force the origin centered (and ignore `clientX` and `clientY`). |
-| appendTo                | "target"       | `"target"` \| `"parent"` \| selector string like `"body"`. Specify the element to which the ripple effect element will be appended. |
+| appendTo                | "auto"         | `"auto"` \| `"target"` \| `"parent"` \| CSS selector string like `"body"`. Specify the element to which the ripple effect element will be appended. If `"auto"` is specified, it will be the target or its closest ancestor that is not an instance of `HTMLInputElement`, `HTMLSelectElement`, `HTMLTextAreaElement`, `HTMLImageElement`, `HTMLHRElement` or `SVGElement`.  |
 
 #### Return value
 

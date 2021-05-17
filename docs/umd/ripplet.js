@@ -16,10 +16,25 @@
       clearingDelay: '0s',
       clearingTimingFunction: 'ease-in-out',
       centered: false,
-      appendTo: 'target',
+      appendTo: 'auto',
   };
   var target2container2ripplet = new Map();
   var containerContainerTemplate;
+  var findElementAppendTo = function (target, appendTo) {
+      if (appendTo && appendTo !== 'auto') {
+          return appendTo === 'target' ? target : appendTo === 'parent' ? target.parentElement : document.querySelector(appendTo);
+      }
+      while (target &&
+          (target instanceof SVGElement ||
+              target instanceof HTMLInputElement ||
+              target instanceof HTMLSelectElement ||
+              target instanceof HTMLTextAreaElement ||
+              target instanceof HTMLImageElement ||
+              target instanceof HTMLHRElement)) {
+          target = target.parentElement;
+      }
+      return target;
+  };
   function ripplet(_a, _options) {
       var currentTarget = _a.currentTarget, clientX = _a.clientX, clientY = _a.clientY;
       if (!(currentTarget instanceof Element)) {
@@ -52,8 +67,7 @@
           var match = value && /^var\((--.+)\)$/.exec(value);
           return match ? targetStyle.getPropertyValue(match[1]) : value;
       };
-      var appendTo = options.appendTo;
-      var elementAppendTo = appendTo === 'target' ? currentTarget : appendTo === 'parent' ? currentTarget.parentElement : document.querySelector(appendTo);
+      var elementAppendTo = findElementAppendTo(currentTarget, options.appendTo);
       var containerContainerElement = elementAppendTo.appendChild(containerContainerTemplate.cloneNode(true));
       containerContainerElement.style.zIndex = ((+targetStyle.zIndex || 0) + 1);
       var containerElement = containerContainerElement.firstChild;
