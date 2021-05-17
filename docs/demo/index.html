@@ -129,7 +129,7 @@
       {
         // Usage: index.html?version=dev&style=body{direction:rtl}
         const params = new URLSearchParams(location.search);
-        const version = params.get('version') || '1.0.0';
+        const version = params.get('version') || '1.1.0';
         document.body.appendChild(document.createElement('script')).src = version === 'dev' ? '../umd/ripplet.js' : 'https://cdn.jsdelivr.net/npm/ripplet.js@' + version;
         document.head.appendChild(document.createElement('style')).textContent = params.get('style')
       }
